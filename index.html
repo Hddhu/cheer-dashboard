@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cheer Coach">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="description" content="Cheerleading strength, conditioning, mobility and nutrition dashboard.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<title>Cheer S&C Coach</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --surface: #16161f;
+    --surface2: #1e1e2a;
+    --surface3: #252535;
+    --border: rgba(255,255,255,0.06);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0f0f8;
+    --text2: #9898b8;
+    --text3: #5a5a7a;
+    --accent: #c084fc;
+    --accent2: #a855f7;
+    --accent-bg: rgba(192,132,252,0.08);
+    --accent-border: rgba(192,132,252,0.2);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,0.08);
+    --red-border: rgba(248,113,113,0.2);
+    --orange: #fb923c;
+    --orange-bg: rgba(251,146,60,0.08);
+    --orange-border: rgba(251,146,60,0.2);
+    --green: #4ade80;
+    --green-bg: rgba(74,222,128,0.08);
+    --green-border: rgba(74,222,128,0.2);
+    --yellow: #fbbf24;
+    --yellow-bg: rgba(251,191,36,0.08);
+    --yellow-border: rgba(251,191,36,0.2);
+    --r: 10px;
+    --r2: 14px;
+    --font: 'Inter', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a0a2e 0%, #0f0a1e 50%, #0a0f1e 100%);
+    padding: 48px 20px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(192,132,252,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .header p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+  .header-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .hstat {
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--r);
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .hstat-val {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .hstat-lab {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  /* NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 0.5px solid var(--border2);
+    display: flex;
+    padding: 8px 0 24px;
+    z-index: 100;
+  }
+  .bnav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text3);
+    font-size: 10px;
+    font-family: var(--font);
+    transition: color 0.2s;
+  }
+  .bnav-btn.active { color: var(--accent); }
+  .bnav-icon { font-size: 20px; line-height: 1; }
+
+  /* MAIN */
+  .main {
+    padding: 16px 16px 120px;
+  }
+
+  /* SECTIONS */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r2);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon { font-size: 16px; }
+
+  /* BADGE */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .badge.red { background: var(--red-bg); color: var(--red); border: 0.5px solid var(--red-border); }
+  .badge.orange { background: var(--orange-bg); color: var(--orange); border: 0.5px solid var(--orange-border); }
+  .badge.yellow { background: var(--yellow-bg); color: var(--yellow); border: 0.5px solid var(--yellow-border); }
+  .badge.purple { background: var(--accent-bg); color: var(--accent); border: 0.5px solid var(--accent-border); }
+  .badge.green { background: var(--green-bg); color: var(--green); border: 0.5px solid var(--green-border); }
+
+  /* ALERT */
+  .alert {
+    background: var(--red-bg);
+    border: 0.5px solid var(--red-border);
+    border-radius: var(--r);
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--red);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .alert.orange {
+    background: var(--orange-bg);
+    border-color: var(--orange-border);
+    color: var(--orange);
+  }
+  .alert.purple {
+    background: var(--accent-bg);
+    border-color: var(--accent-border);
+    color: var(--accent);
+  }
+
+  /* ROWS */
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 9px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .row:last-child { border-bottom: none; }
+  .row-left {}
+  .row-name { font-size: 13px; color: var(--text); font-weight: 500; }
+  .row-sub { font-size: 11px; color: var(--text3); margin-top: 2px; line-height: 1.5; }
+  .row-right { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; flex-shrink: 0; }
+
+  /* PHASE TIMELINE */
+  .phase-block {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+  .phase-block::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 24px; bottom: -16px;
+    width: 1px;
+    background: var(--border2);
+  }
+  .phase-block:last-child::before { display: none; }
+  .phase-dot {
+    position: absolute;
+    left: 0; top: 16px;
+    width: 15px; height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--border2);
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+  }
+  .phase-dot.active-dot { background: var(--accent); border-color: var(--accent); }
+  .phase-inner {
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r);
+    padding: 12px;
+  }
+  .phase-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .phase-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .phase-weeks { font-size: 11px; color: var(--text3); margin-left: auto; }
+  .phase-items { display: flex; flex-direction: column; gap: 4px; }
+  .phase-item { font-size: 12px; color: var(--text2); line-height: 1.4; display: flex; gap: 6px; }
+  .phase-item::before { content: '·'; color: var(--accent); flex-shrink: 0; }
+
+  /* WEEK GRID */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .week-chip {
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r);
+    padding: 8px;
+    font-size: 11px;
+  }
+  .week-chip.deload { border-color: var(--yellow-border); background: var(--yellow-bg); }
+  .week-chip.event { border-color: var(--accent-border); background: var(--accent-bg); }
+  .week-chip.vacation { border-color: var(--green-border); background: var(--green-bg); }
+  .week-chip-label { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 2px; }
+  .week-chip.deload .week-chip-label { color: var(--yellow); }
+  .week-chip.event .week-chip-label { color: var(--accent); }
+  .week-chip.vacation .week-chip-label { color: var(--green); }
+  .week-chip-type { color: var(--text3); font-size: 10px; margin-bottom: 4px; }
+  .week-chip-note { color: var(--text2); line-height: 1.4; }
+
+  /* TAB SWITCHER */
+  .tab-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 0.5px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text2);
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-color: var(--accent-border);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* EXERCISE BLOCK */
+  .ex-block {
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .ex-block:last-child { border-bottom: none; }
+  .ex-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .ex-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .ex-where { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .ex-sets { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; flex-shrink: 0; }
+  .ex-prog { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+  .prog-row { font-size: 11px; color: var(--text2); display: flex; gap: 6px; line-height: 1.4; }
+  .prog-week { color: var(--accent); min-width: 70px; flex-shrink: 0; font-weight: 500; }
+
+  /* STEP */
+  .step {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    border: 0.5px solid var(--accent-border);
+  }
+  .step-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .step-desc { font-size: 12px; color: var(--text2); margin-top: 3px; line-height: 1.5; }
+
+  /* PRIO */
+  .prio-row {
+    display: flex;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+  .prio-row:last-child { border-bottom: none; }
+  .prio-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .prio-dot.red { background: var(--red); }
+  .prio-dot.orange { background: var(--orange); }
+  .prio-dot.yellow { background: var(--yellow); }
+  .prio-label { font-size: 13px; font-weight: 500; color: var(--text); min-width: 150px; }
+  .prio-desc { font-size: 12px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
+
+  /* GOAL GRID */
+  .goal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .goal-card {
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r);
+    padding: 12px;
+  }
+  .goal-card h4 { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .goal-card ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .goal-card li { font-size: 11px; color: var(--text2); display: flex; gap: 5px; line-height: 1.4; }
+  .goal-card li::before { content: '✓'; color: var(--accent); flex-shrink: 0; }
+
+  /* EVAL */
+  .eval-q {
+    font-size: 13px;
+    color: var(--text2);
+    padding: 9px 0;
+    border-bottom: 0.5px solid var(--border);
+    line-height: 1.5;
+    display: flex;
+    gap: 8px;
+  }
+  .eval-q:last-child { border-bottom: none; }
+  .eval-q::before { content: attr(data-n); color: var(--accent); font-weight: 600; flex-shrink: 0; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin: 20px 0 10px;
+  }
+  .section-title:first-child { margin-top: 4px; }
+
+  /* MACRO ROW */
+  .macro-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .macro-row:last-child { border-bottom: none; }
+  .macro-val { color: var(--accent); font-weight: 500; }
+
+  /* STRETCH ROW */
+  .stretch-block {
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .stretch-block:last-child { border-bottom: none; }
+  .stretch-top { display: flex; justify-content: space-between; gap: 8px; }
+  .stretch-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .stretch-why { font-size: 11px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
+  .stretch-dose { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; flex-shrink: 0; }
+
+  /* DAY BLOCK */
+  .day-block { margin-bottom: 14px; }
+  .day-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+  .day-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text2);
+    padding: 5px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .day-row:last-child { border-bottom: none; }
+  .day-row span { color: var(--text3); font-size: 11px; }
+
+  /* POLS */
+  .pols-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .pols-row:last-child { border-bottom: none; }
+  .pols-val { font-size: 11px; color: var(--text3); }
+
+  /* EXPOSURE */
+  .exp-row {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+  .exp-row:last-child { border-bottom: none; }
+  .exp-week { font-size: 11px; font-weight: 600; color: var(--accent); min-width: 70px; flex-shrink: 0; padding-top: 1px; }
+  .exp-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  /* BRUG */
+  .brug-row { display: flex; gap: 8px; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+  .brug-row:last-child { border-bottom: none; }
+  .brug-week { font-size: 11px; color: var(--accent); font-weight: 600; min-width: 70px; flex-shrink: 0; }
+  .brug-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+
+  /* SKILL PHASE */
+  .skill-phase {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 12px;
+  }
+  .skill-phase:last-child { border-bottom: none; }
+  .skill-f { color: var(--accent); font-weight: 600; min-width: 65px; flex-shrink: 0; }
+  .skill-d { color: var(--text2); line-height: 1.4; }
+
+  /* NEC */
+  .nek-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nek-row:last-child { border-bottom: none; }
+  .nek-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .nek-why { font-size: 11px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
+  .nek-dose { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; flex-shrink: 0; }
+
+  /* DEADLIFT INTRO */
+  .dl-row { display: flex; gap: 8px; padding: 7px 0; border-bottom: 0.5px solid var(--border); }
+  .dl-row:last-child { border-bottom: none; }
+  .dl-w { font-size: 11px; color: var(--accent); font-weight: 600; min-width: 70px; flex-shrink: 0; }
+  .dl-d { font-size: 12px; color: var(--text2); line-height: 1.4; }
+
+  .send-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: var(--r);
+    border: 0.5px solid var(--accent-border);
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--font);
+    cursor: pointer;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Strength & Conditioning · Cheerleading</div>
+  <h1>Jouw 12-weken programma</h1>
+  <p>Nationaal niveau · Base · Start zomer 2025</p>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-val">12</div><div class="hstat-lab">weken</div></div>
+    <div class="hstat"><div class="hstat-val">2</div><div class="hstat-lab">kracht­sessies</div></div>
+    <div class="hstat"><div class="hstat-val">2</div><div class="hstat-lab">deload­weken</div></div>
+    <div class="hstat"><div class="hstat-val">6+</div><div class="hstat-lab">skill­doelen</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ===== PAGE: PROGRAMMA ===== -->
+  <div class="page active" id="page-programma">
+
+    <div class="alert">⚠️ Polsen: geen belastende polsposities totdat je groen licht hebt van de specialist. Alle alternatieven staan per training aangegeven.</div>
+
+    <div class="section-title">Faseoverzicht</div>
+
+    <div class="phase-block">
+      <div class="phase-dot active-dot">1</div>
+      <div class="phase-inner">
+        <div class="phase-header">
+          <span class="badge yellow">Fase 1</span>
+          <div class="phase-title">Aanloop & fundament</div>
+          <div class="phase-weeks">Wk 1–3</div>
+        </div>
+        <div class="phase-items">
+          <div class="phase-item">Polsvriendelijke alternatieven voor alle oefeningen</div>
+          <div class="phase-item">Core activatiepatronen aanleren (dead bug, hollow body)</div>
+          <div class="phase-item">Eiwitinname opbouwen naar 110-120g/dag</div>
+          <div class="phase-item">Dagelijkse mobiliteitsroutine instellen (10 min)</div>
+          <div class="phase-item">Handstand prep: schouders & wrist conditioning</div>
+          <div class="phase-item">Kettlebell deadlift introduceren (heupscharnierpatroon)</div>
+          <div class="phase-item">Dropback to wall (opgewarmd, voorzichtig)</div>
+        </div>
+        <div class="week-grid">
+          <div class="week-chip"><div class="week-chip-label">Week 1</div><div class="week-chip-type">Aanloop</div><div class="week-chip-note">Oefeningen leren, lage gewichten</div></div>
+          <div class="week-chip"><div class="week-chip-label">Week 2</div><div class="week-chip-type">Opbouw</div><div class="week-chip-note">Schooldeadline voorbij, meer focus</div></div>
+          <div class="week-chip"><div class="week-chip-label">Week 3</div><div class="week-chip-type">Opbouw</div><div class="week-chip-note">Ritme vastleggen, intensiteit omhoog</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-dot">2</div>
+      <div class="phase-inner">
+        <div class="phase-header">
+          <span class="badge purple">Fase 2</span>
+          <div class="phase-title">Kracht & mobiliteit</div>
+          <div class="phase-weeks">Wk 4–6</div>
+        </div>
+        <div class="phase-items">
+          <div class="phase-item">Jefferson curl introduceren (week 4, zonder gewicht)</div>
+          <div class="phase-item">Elevated pigeon & couch stretch met 8kg kettlebell</div>
+          <div class="phase-item">Pancake drill met gewicht op rug</div>
+          <div class="phase-item">Lunge + hamstring elevated met kettlebell</div>
+          <div class="phase-item">Pull-up: van -40kg naar -30kg assistance</div>
+          <div class="phase-item">Push-ups: van verhoogd naar vlak</div>
+          <div class="phase-item">Handstand tegen muur, shape leren</div>
+        </div>
+        <div class="week-grid">
+          <div class="week-chip"><div class="week-chip-label">Week 4</div><div class="week-chip-type">Kracht</div><div class="week-chip-note">Gewichten omhoog, techniek bewaken</div></div>
+          <div class="week-chip event"><div class="week-chip-label">Week 5</div><div class="week-chip-type">Cheer event</div><div class="week-chip-note">10-12 juli · lichte week</div></div>
+          <div class="week-chip"><div class="week-chip-label">Week 6</div><div class="week-chip-type">Herstel+push</div><div class="week-chip-note">Na event opnieuw opbouwen</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-dot">D</div>
+      <div class="phase-inner">
+        <div class="phase-header">
+          <span class="badge yellow">Deload</span>
+          <div class="phase-title">Herstelweek</div>
+          <div class="phase-weeks">Wk 7</div>
+        </div>
+        <div class="phase-items">
+          <div class="phase-item">Volume 40% omlaag, geen PR-pogingen</div>
+          <div class="phase-item">Focus op mobiliteit, handstand techniek, splits</div>
+          <div class="phase-item">Extra slaap en herstel prioriteit</div>
+        </div>
+        <div class="week-grid">
+          <div class="week-chip deload"><div class="week-chip-label">Week 7</div><div class="week-chip-type">Deload</div><div class="week-chip-note">Bewust rustiger, lichaam laten herstellen</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-dot">3</div>
+      <div class="phase-inner">
+        <div class="phase-header">
+          <span class="badge orange">Fase 3</span>
+          <div class="phase-title">Intensivering</div>
+          <div class="phase-weeks">Wk 8–10</div>
+        </div>
+        <div class="phase-items">
+          <div class="phase-item">Plyometrics en explosiviteit toevoegen</div>
+          <div class="phase-item">Conditioning: interval work</div>
+          <div class="phase-item">Pull-ups: eerste bodyweight pogingen (wk 10+)</div>
+          <div class="phase-item">Jefferson curl opbouwen naar 8-12kg</div>
+          <div class="phase-item">Handstand vrijstaand proberen</div>
+          <div class="phase-item">Brug kickover met hulp</div>
+          <div class="phase-item">Seated leg raises met ankle weights (2kg)</div>
+        </div>
+        <div class="week-grid">
+          <div class="week-chip event"><div class="week-chip-label">Week 8</div><div class="week-chip-type">Cheer event</div><div class="week-chip-note">1-2 aug · lichte week ervoor</div></div>
+          <div class="week-chip vacation"><div class="week-chip-label">Week 9</div><div class="week-chip-type">Vakantie</div><div class="week-chip-note">5-12 aug · mini bodyweight</div></div>
+          <div class="week-chip"><div class="week-chip-label">Week 10</div><div class="week-chip-type">Intensief</div><div class="week-chip-note">Terugkeer, pieken</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-dot">✦</div>
+      <div class="phase-inner">
+        <div class="phase-header">
+          <span class="badge green">Finale</span>
+          <div class="phase-title">Piek & showcase</div>
+          <div class="phase-weeks">Wk 11–12</div>
+        </div>
+        <div class="phase-items">
+          <div class="phase-item">Volume omlaag, kwaliteit omhoog</div>
+          <div class="phase-item">Skills scherpstellen voor seizoensstart</div>
+          <div class="phase-item">Week 12: splits check, push-up max, pull-up test</div>
+          <div class="phase-item">Dropback zonder muur eerste pogingen</div>
+        </div>
+        <div class="week-grid">
+          <div class="week-chip event"><div class="week-chip-label">Week 11</div><div class="week-chip-type">Cheer event</div><div class="week-chip-note">14-16 aug · taper week</div></div>
+          <div class="week-chip deload"><div class="week-chip-label">Week 12</div><div class="week-chip-type">Piekweek</div><div class="week-chip-note">Evalueer, showcase alles</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Prioriteiten</div>
+    <div class="card">
+      <div class="badge red">🔴 Kritiek — direct</div>
+      <div class="prio-row"><div class="prio-dot red"></div><div><div class="prio-label">Eiwitinname verhogen</div><div class="prio-desc">Van ~50g naar 110-120g/dag. Grootste hefboom voor herstel én kracht</div></div></div>
+      <div class="prio-row"><div class="prio-dot red"></div><div><div class="prio-label">Core kracht & integratie</div><div class="prio-desc">Juryfeedback: meer uit core & benen. Elke training core blok</div></div></div>
+      <div class="prio-row"><div class="prio-dot red"></div><div><div class="prio-label">Polsen beschermen</div><div class="prio-desc">Nul polsbelasting tot specialist groen licht geeft</div></div></div>
+    </div>
+    <div class="card">
+      <div class="badge orange">🟠 Hoog</div>
+      <div class="prio-row"><div class="prio-dot orange"></div><div><div class="prio-label">Push-ups → 15 reps</div><div class="prio-desc">Van 10 naar 15 in 12 weken</div></div></div>
+      <div class="prio-row"><div class="prio-dot orange"></div><div><div class="prio-label">Pull-ups → 2-3 bodyweight</div><div class="prio-desc">Van -40kg assisted naar eerste vrije reps</div></div></div>
+      <div class="prio-row"><div class="prio-dot orange"></div><div><div class="prio-label">Nekversterking</div><div class="prio-desc">Stabiliteit als base, vertrouwen bij nieuwe stunts</div></div></div>
+      <div class="prio-row"><div class="prio-dot orange"></div><div><div class="prio-label">Schouder & thoracale mobiliteit</div><div class="prio-desc">Rem op brug, extensie en handstand</div></div></div>
+    </div>
+    <div class="card">
+      <div class="badge yellow">🟡 Skill doelen</div>
+      <div class="prio-row"><div class="prio-dot yellow"></div><div><div class="prio-label">Splits plat (beide kanten)</div><div class="prio-desc">Dagelijks 10 min stretchen — rechts doel wk 8-10</div></div></div>
+      <div class="prio-row"><div class="prio-dot yellow"></div><div><div class="prio-label">Handstand leren</div><div class="prio-desc">Fase 1: schouders. Fase 2: muur. Fase 3: vrij</div></div></div>
+      <div class="prio-row"><div class="prio-dot yellow"></div><div><div class="prio-label">Front walkover</div><div class="prio-desc">Brug → kickover → walkover met spotter</div></div></div>
+      <div class="prio-row"><div class="prio-dot yellow"></div><div><div class="prio-label">Lichaamscompositie</div><div class="prio-desc">Recompositie via eiwit + kracht + licht tekort</div></div></div>
+    </div>
+
+    <div class="goal-grid">
+      <div class="goal-card"><h4>Na 12 weken</h4><ul><li>15 push-ups achter elkaar</li><li>2-3 pull-ups zonder hulp</li><li>Splits plat (rechts)</li><li>Handstand 10 sec muur</li><li>110-120g eiwit gewoon</li><li>Dead hang 40+ sec</li></ul></div>
+      <div class="goal-card"><h4>Cheer resultaat</h4><ul><li>Meer kracht uit core in stunts</li><li>Betere base stabiliteit</li><li>Hogere jumps</li><li>Walkover progressie</li><li>Hogere stunts met vertrouwen</li><li>Wow-factor bij terugkeer</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: TRAININGEN ===== -->
+  <div class="page" id="page-trainingen">
+    <div class="alert orange">⚡ Fase 1 (wk 1-3): polsvriendelijke versies. Na groen licht specialist: push-ups op handen, plank op handen, handstand grondwerk toevoegen.</div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick=\"showTab('tr','A', this)\">Kracht A</button>
+      <button class="tab-btn" onclick=\"showTab('tr','B', this)\">Kracht B</button>
+      <button class="tab-btn" onclick=\"showTab('tr','V', this)\">Vakantie</button>
+      <button class="tab-btn" onclick=\"showTab('tr','S', this)\">Sessie schema</button>
+    </div>
+
+    <div class="tab-content active" id="tr-A">
+      <div class="card">
+        <div class="card-title"><span class="icon">🦵</span> Kracht A · onderlichaam + core · 60-75 min</div>
+        <div class="badge purple">Warming-up — 10 min</div>
+        <div class="row"><div class="row-left"><div class="row-name">Hip circles + been swings</div></div><div class="row-right">2 × 10/kant</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Glute bridges op grond</div></div><div class="row-right">2 × 15</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">World's greatest stretch</div></div><div class="row-right">5/kant</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Squat to stand</div></div><div class="row-right">10 reps</div></div>
+      </div>
+      <div class="card">
+        <div class="badge orange">Kracht — 35 min</div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Barbell squat</div></div><div class="ex-sets">4 sets</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>65kg × 4×6</div>
+            <div class="prog-row"><span class="prog-week">Wk 4-6:</span>70kg × 4×5</div>
+            <div class="prog-row"><span class="prog-week">Wk 8-10:</span>75kg × 5×4</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Hip thrust machine</div></div><div class="ex-sets">4 sets</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>100kg × 4×10</div>
+            <div class="prog-row"><span class="prog-week">Wk 4-6:</span>110kg × 4×8</div>
+            <div class="prog-row"><span class="prog-week">Wk 8+:</span>120kg × 4×6</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Bulgaarse split squat (dumbbells)</div><div class="ex-where">Balans = directe base skill</div></div><div class="ex-sets">3 × 8/kant</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Kettlebell deadlift → Romanian DL</div></div><div class="ex-sets">3 sets</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>16kg KB — heupscharnierpatroon leren</div>
+            <div class="prog-row"><span class="prog-week">Wk 4-6:</span>Romanian DL 40-50kg barbell</div>
+            <div class="prog-row"><span class="prog-week">Wk 7+:</span>Conventional DL opbouwen</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Jefferson curl</div><div class="ex-where">Start week 4 — altijd langzaam</div></div><div class="ex-sets">3 sets</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 4-5:</span>Geen gewicht — techniek leren</div>
+            <div class="prog-row"><span class="prog-week">Wk 6-7:</span>5kg — 3 sec omlaag, 3 sec omhoog</div>
+            <div class="prog-row"><span class="prog-week">Wk 8-10:</span>8-12kg — nooit tot pijn</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Nordic curl of leg curl machine</div><div class="ex-where">Hamstring kracht voor walkover & stabiliteit</div></div><div class="ex-sets">3 × 8</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Calf raises (staand)</div><div class="ex-where">Explosiviteit voor jumps</div></div><div class="ex-sets">3 × 15</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge purple">Plyometrics — 10 min</div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Box jumps of squat jumps</div></div><div class="ex-sets">4 × 5</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>Squat jumps bodyweight</div>
+            <div class="prog-row"><span class="prog-week">Wk 4+:</span>Box jumps</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Lateral bounds</div><div class="ex-where">Stabiliteit bij landing = base skill</div></div><div class="ex-sets">3 × 6/kant</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge red">Core — 10 min</div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Dead bug</div><div class="ex-where">Polsvriendelijk · fundamentele core activatie</div></div><div class="ex-sets">3 × 10/kant</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Hollow body hold</div><div class="ex-where">Direct cheerleading carryover</div></div><div class="ex-sets">3 × 20 sec</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 4+:</span>Ophogen naar 30-40 sec</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Side plank op onderarm</div><div class="ex-where">Polsvriendelijk · laterale stabiliteit</div></div><div class="ex-sets">3 × 25 sec</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Hanging knee raises aan bar</div><div class="ex-where">Ook grip training!</div></div><div class="ex-sets">3 × 10</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 4+:</span>Benen gestrekt</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Seated leg raises straddle (9+)</div><div class="ex-where">Actieve flexibiliteit voor jumps</div></div><div class="ex-sets">3 × 10/kant</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>Been omhoog, houd 2 sec vast</div>
+            <div class="prog-row"><span class="prog-week">Wk 4-6:</span>Ankle weight 1-2kg</div>
+            <div class="prog-row"><span class="prog-week">Wk 7+:</span>Vanuit pancake positie</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge green">Cool-down & mobiliteit — 10 min</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Couch stretch met muur + 8kg KB</div><div class="stretch-why">Heupflexor diepte — directe splits carryover</div></div><div class="stretch-dose">90 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Lunge + hamstring elevated met KB</div><div class="stretch-why">Combo stretch — heup én hamstring</div></div><div class="stretch-dose">60 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Elevated / active pigeon</div><div class="stretch-why">Heupopener, piriformis</div></div><div class="stretch-dose">90 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Dropback to wall (opgewarmd!)</div><div class="stretch-why">Brug progressie — altijd na warming-up</div></div><div class="stretch-dose">5-8 herh.</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Rechter + linker splits progressie</div></div><div class="stretch-dose">3 × 45 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Pancake drill</div><div class="stretch-why">Midden splits & jumps</div></div><div class="stretch-dose">3 × 45 sec</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tr-B">
+      <div class="card">
+        <div class="card-title"><span class="icon">💪</span> Kracht B · bovenlichaam + core + nek · 60-75 min</div>
+        <div class="badge purple">Warming-up — 10 min</div>
+        <div class="row"><div class="row-left"><div class="row-name">Band pull-aparts</div></div><div class="row-right">3 × 15</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Schouder circles + arm swings</div></div><div class="row-right">2 × 10</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Cat-cow + thoracale rotaties</div></div><div class="row-right">10 reps</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Dead hang (passief)</div><div class="row-sub">Grip + schouder decompressie</div></div><div class="row-right">2 × max</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Chin tucks (staand)</div><div class="row-sub">Diepe cervicale stabilisatoren</div></div><div class="row-right">3 × 12</div></div>
+      </div>
+      <div class="card">
+        <div class="badge red">Nekversterking — 8 min (altijd eerst)</div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Cervicale flexie met handweerstand</div><div class="ex-where">Diepe nekflexoren — beschermt bij impact</div></div><div class="ex-sets">3 × 10/richting</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Nek laterale weerstand (hand)</div><div class="ex-where">Zijwaartse stabiliteit — jouw blessurehoek</div></div><div class="ex-sets">3 × 10/kant</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Scapulaire retractie (band)</div><div class="ex-where">Bovenrug + nek basis</div></div><div class="ex-sets">3 × 15</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Farmers carry / suitcase carry</div><div class="ex-where">Trapezius & nek onder belasting</div></div><div class="ex-sets">3 × 20m/kant</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge orange">Trek — 20 min</div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Assisted pull-up</div></div><div class="ex-sets">4 sets</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>-40kg × 4×5</div>
+            <div class="prog-row"><span class="prog-week">Wk 4-6:</span>-30kg × 4×5</div>
+            <div class="prog-row"><span class="prog-week">Wk 7-9:</span>-20kg × 4×4</div>
+            <div class="prog-row"><span class="prog-week">Wk 10+:</span>Eerste bodyweight pogingen</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Kabel seated row (neutral grip)</div><div class="ex-where">Polsvriendelijk</div></div><div class="ex-sets">3 × 10</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Face pulls (kabel)</div><div class="ex-where">Schoudergezondheid + thoracale extensie</div></div><div class="ex-sets">3 × 15</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Single-arm dumbbell row</div></div><div class="ex-sets">3 × 10/kant</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge orange">Duw — 12 min</div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Push-up progressie</div></div><div class="ex-sets">3 × max</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 1-2:</span>Verhoogd (handen op bank)</div>
+            <div class="prog-row"><span class="prog-week">Wk 3-4:</span>Vlak op de grond</div>
+            <div class="prog-row"><span class="prog-week">Wk 5+:</span>Voeten verhoogd (doel: 15 reps)</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Dumbbell shoulder press</div></div><div class="ex-sets">3 × 8</div></div>
+          <div class="ex-prog">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>25kg stang equivalent × 3×8</div>
+            <div class="prog-row"><span class="prog-week">Wk 4+:</span>Opbouwen naar 30-32.5kg</div>
+          </div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Lateral raises</div><div class="ex-where">Schouder stabiliteit</div></div><div class="ex-sets">3 × 15</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge red">Core — 8 min</div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Ab wheel op knieën / TRX fallout</div><div class="ex-where">Pols check: alleen pijnvrij</div></div><div class="ex-sets">3 × 8</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Russian twist (zonder gewicht)</div></div><div class="ex-sets">3 × 20</div></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-top"><div><div class="ex-name">Leg raises hangend aan bar</div></div><div class="ex-sets">3 × 10</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge green">Handstand prep + mobiliteit — 10 min</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Foam roller thoracaal</div><div class="stretch-why">Verplicht vóór elke dropback</div></div><div class="stretch-dose">90 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Dropback to wall</div><div class="stretch-why">Na warming-up — brug progressie</div></div><div class="stretch-dose">5-8 herh.</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Handstand shrugs (op vuisten/sticks)</div><div class="stretch-why">Polsvriendelijk — schouder elevatie</div></div><div class="stretch-dose">3 × 10</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Doorway chest stretch</div><div class="stretch-why">Overhead mobiliteit voor handstand</div></div><div class="stretch-dose">2 × 30 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Schouder cross-body stretch</div></div><div class="stretch-dose">45 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Pols mobilisaties (voorzichtig)</div><div class="stretch-why">Cirkels, extensie/flexie — altijd pijnvrij</div></div><div class="stretch-dose">2 min zacht</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tr-V">
+      <div class="card">
+        <div class="card-title"><span class="icon">🏖️</span> Vakantie mini-sessie · kamertje · 25-30 min</div>
+        <div class="badge green">Sessie A — dag 1, 3, 5</div>
+        <div class="row"><div class="row-left"><div class="row-name">Squat jumps</div></div><div class="row-right">4 × 10</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Bulgaarse split squat (bodyweight)</div></div><div class="row-right">3 × 12/kant</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Éénbenige glute bridge</div></div><div class="row-right">3 × 12/kant</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Dead bug</div></div><div class="row-right">3 × 10/kant</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Seated leg raises straddle</div></div><div class="row-right">3 × 10/kant</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Splits progressie (beide kanten)</div></div><div class="row-right">3 × 45 sec</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Pancake drill</div></div><div class="row-right">3 × 45 sec</div></div>
+      </div>
+      <div class="card">
+        <div class="badge purple">Sessie B — dag 2, 4</div>
+        <div class="row"><div class="row-left"><div class="row-name">Push-ups max reps</div></div><div class="row-right">4 sets</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Pike push-ups</div></div><div class="row-right">3 × 8</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Hollow body hold</div></div><div class="row-right">3 × 25 sec</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Handstand tegen de muur</div><div class="row-sub">Alleen als polsen OK zijn</div></div><div class="row-right">3 × 15 sec</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Dropback to wall</div></div><div class="row-right">5 herh.</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Couch stretch (zonder KB)</div></div><div class="row-right">90 sec/kant</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Nekversterking (hand weerstand)</div></div><div class="row-right">3 × 10/richting</div></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tr-S">
+      <div class="card">
+        <div class="card-title">Sessies per dag plannen</div>
+        <div class="alert orange">Plan op basis van sessietypes, niet vaste dagen. Nooit Kracht A of B de dag vóór of ná cheer als je je moe voelt.</div>
+        <div class="day-block">
+          <div class="day-label">Maandag</div>
+          <div class="day-row">Zwemmen (schoolslag — polsvriendelijk)<span>Vast</span></div>
+          <div class="day-row">Dagelijkse mobiliteitsroutine<span>10 min</span></div>
+        </div>
+        <div class="day-block">
+          <div class="day-label">Dinsdag</div>
+          <div class="day-row">Kracht A of B<span>Optioneel</span></div>
+          <div class="day-row">Na training: training-specifieke stretches<span>10-15 min</span></div>
+        </div>
+        <div class="day-block">
+          <div class="day-label">Woensdag</div>
+          <div class="day-row">Cheer training<span>Vast</span></div>
+          <div class="day-row">Na cheer: splits + foam roller + brug<span>10-15 min</span></div>
+        </div>
+        <div class="day-block">
+          <div class="day-label">Donderdag</div>
+          <div class="day-row">Reformer pilates<span>Vast</span></div>
+          <div class="day-row">Dagelijkse mobiliteitsroutine<span>10 min</span></div>
+        </div>
+        <div class="day-block">
+          <div class="day-label">Vrijdag</div>
+          <div class="day-row">Kracht A of B<span>Optioneel</span></div>
+          <div class="day-row">Na training: training-specifieke stretches<span>10-15 min</span></div>
+        </div>
+        <div class="day-block">
+          <div class="day-label">Zaterdag</div>
+          <div class="day-row">Cheer training<span>Vast</span></div>
+          <div class="day-row">Na cheer: splits + foam roller + brug<span>10-15 min</span></div>
+        </div>
+        <div class="day-block">
+          <div class="day-label">Zondag</div>
+          <div class="day-row">Kracht A of B (voorkeur)<span>Optioneel</span></div>
+          <div class="day-row">Of: langere mobiliteitsessie<span>20-25 min</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Regels</div>
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">2 vaste krachtsessies per week</div><div class="step-desc">De derde (zondag) is écht optioneel — alleen als je je uitgerust voelt</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Open gym telt als cheer sessie</div><div class="step-desc">Plan die week geen zware krachtsessie op dezelfde dag</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Stuntfest week = automatische deload</div><div class="step-desc">Geen zware kracht die week — mobiliteit en herstel prioriteit</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Kracht A en B afwisselen</div><div class="step-desc">Nooit twee keer A of twee keer B achter elkaar</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: SKILLS ===== -->
+  <div class="page" id="page-skills">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick=\"showTab('sk','handstand', this)\">Handstand</button>
+      <button class="tab-btn" onclick=\"showTab('sk','splits', this)\">Splits</button>
+      <button class="tab-btn" onclick=\"showTab('sk','brug', this)\">Brug & walkover</button>
+      <button class="tab-btn" onclick=\"showTab('sk','jumps', this)\">Jumps</button>
+      <button class="tab-btn" onclick=\"showTab('sk','exposure', this)\">Exposure plan</button>
+    </div>
+
+    <div class="tab-content active" id="sk-handstand">
+      <div class="card">
+        <div class="card-title"><span class="icon">🤸</span> Handstand — progressie per fase</div>
+        <div class="alert orange">Polsen: start met vuisten of parallettes. Pas overstappen naar vlakke hand na groen licht specialist.</div>
+        <div class="skill-phase"><span class="skill-f">Fase 1 (wk 1-3)</span><div class="skill-d">Schouder protractie/retractie oefeningen · wrist conditioning · headstand tegen muur · handstand shrugs op vuisten</div></div>
+        <div class="skill-phase"><span class="skill-f">Fase 2 (wk 4-6)</span><div class="skill-d">Handstand op vuisten/parallettes tegen muur · shape leren (holle rug vermijden) · 10 sec vasthouden</div></div>
+        <div class="skill-phase"><span class="skill-f">Fase 3 (wk 7-9)</span><div class="skill-d">Langer houden (15-20 sec) · kickup techniek oefenen · balance taps tegen muur</div></div>
+        <div class="skill-phase"><span class="skill-f">Fase 4 (wk 10-12)</span><div class="skill-d">Eerste vrije handstand pogingen · balance taps · handstand pirouette prep</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Dagelijkse handstand prep (5 min)</div>
+        <div class="row"><div class="row-left"><div class="row-name">Schouder protractie/retractie</div><div class="row-sub">In plank positie op onderarmen</div></div><div class="row-right">3 × 10</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Handstand shrugs (muur, op vuisten)</div></div><div class="row-right">3 × 10</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Handstand vasthouden (muur)</div></div><div class="row-right">3 × max sec</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Pols mobilisaties</div><div class="row-sub">Altijd voorzichtig</div></div><div class="row-right">2 min</div></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="sk-splits">
+      <div class="card">
+        <div class="card-title"><span class="icon">🦋</span> Splits — dagelijkse routine (10 min)</div>
+        <div class="alert purple">Elke dag — ook op rustdagen. Hier zit de meeste progressie.</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Lunge hip flexor stretch</div><div class="stretch-why">Heupflexoren openen — cruciaal voor splits diepte</div></div><div class="stretch-dose">60 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Rechter splits progressie</div><div class="stretch-why">Zo diep als pijnvrij — gebruik blokken</div></div><div class="stretch-dose">3 × 45 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Linker splits progressie</div><div class="stretch-why">Beide kanten gelijkmatig</div></div><div class="stretch-dose">3 × 45 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Pancake drill</div><div class="stretch-why">Midden splits & jumps</div></div><div class="stretch-dose">3 × 45 sec</div></div>
+          <div class="ex-prog" style="margin-top:6px">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>Passief zakken, handen op grond</div>
+            <div class="prog-row"><span class="prog-week">Wk 4-6:</span>Gewicht op rug (plaat of KB)</div>
+            <div class="prog-row"><span class="prog-week">Wk 7+:</span>Actieve pulsaties + chest to floor</div>
+          </div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Seated leg raises straddle</div><div class="stretch-why">Actieve flexibiliteit — been omhoog hóuden</div></div><div class="stretch-dose">3 × 10/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Hamstring stretch (zittend/liggend)</div></div><div class="stretch-dose">2 × 45 sec/kant</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Doelstelling</div>
+        <div class="skill-phase"><span class="skill-f">Wk 6-8</span><div class="skill-d">Rechter splits plat</div></div>
+        <div class="skill-phase"><span class="skill-f">Wk 10-12</span><div class="skill-d">Linker splits plat</div></div>
+        <div class="skill-phase"><span class="skill-f">Wk 12</span><div class="skill-d">Midden splits 80%+ — zichtbaar in jumps</div></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="sk-brug">
+      <div class="card">
+        <div class="card-title"><span class="icon">🌉</span> Dropback to wall — progressie</div>
+        <div class="alert orange">Altijd na volledige warming-up. Nooit als eerste oefening. Altijd foam roller thoracaal eerst.</div>
+        <div class="brug-row"><span class="brug-week">Wk 1-3</span><div class="brug-desc">Dichtbij muur starten — handen landen hoog, langzaam naar beneden lopen</div></div>
+        <div class="brug-row"><span class="brug-week">Wk 4-6</span><div class="brug-desc">Verder van muur starten — handen lager op muur landen</div></div>
+        <div class="brug-row"><span class="brug-week">Wk 7-9</span><div class="brug-desc">Zo ver dat handen bijna de grond raken met muursteun</div></div>
+        <div class="brug-row"><span class="brug-week">Wk 10+</span><div class="brug-desc">Eerste pogingen zonder muur — alleen als je je veilig voelt</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Front walkover — opbouwstappen</div>
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Brug volledig gestrekt</div><div class="step-desc">Armen én benen gestrekt, borst open — doel week 6-7</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Brug kickover met hulp</div><div class="step-desc">Spotter aan de heupen — week 8-9</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Handstand naar brug</div><div class="step-desc">Week 9-10 — afhankelijk van polsen en schouders</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Front walkover met spotter</div><div class="step-desc">Week 10-12 — altijd met spotter of op trampoline/mat</div></div></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="sk-jumps">
+      <div class="card">
+        <div class="card-title"><span class="icon">⬆️</span> Jumps — kracht & techniek</div>
+        <div class="row"><div class="row-left"><div class="row-name">Dagelijks als opwarming</div><div class="row-sub">20 toe touches + 10 herkys</div></div><div class="row-right">Elke dag</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Kracht: squat jumps, box jumps, calf raises</div><div class="row-sub">In Kracht A verwerkt</div></div><div class="row-right">2×/week</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Seated leg raises straddle</div><div class="row-sub">Actieve flexibiliteit voor hoogte</div></div><div class="row-right">Elke dag</div></div>
+        <div class="row"><div class="row-left"><div class="row-name">Pancake drill</div><div class="row-sub">Midden splits = jump hoogte</div></div><div class="row-right">Elke dag</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Techniekpunten</div>
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Arm swing timing</div><div class="step-desc">Arms omhoog = kracht omlaag. Oefen de swing apart voor je springt</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Core in de lucht (hollow)</div><div class="step-desc">Geen holle rug in de sprong — hollow body shape vasthouden</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Splits volgt vanzelf</div><div class="step-desc">Grondse splits verbeteren → jumps verbeteren. Stretch elke dag</div></div></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="sk-exposure">
+      <div class="card">
+        <div class="card-title"><span class="icon">🏟️</span> Exposure plan — stunts & angst</div>
+        <div class="alert purple">Jouw coach heeft gelijk: exposure is de enige weg. Maar gestructureerd, niet zomaar.</div>
+        <div class="exp-row"><span class="exp-week">Wk 1-3</span><div class="exp-desc">Begin bij open gym met stunts die je al 100% vertrouwt. Positieve ervaringen stapelen als basis</div></div>
+        <div class="exp-row"><span class="exp-week">Wk 4-6</span><div class="exp-desc">Voeg één nieuwe stunt toe per open gym. Vertel je partner van tevoren: "Ik wil dit proberen, ik ben er nog niet zeker van"</div></div>
+        <div class="exp-row"><span class="exp-week">Stuntfest</span><div class="exp-desc">Maximaal gebruik maken. Stunt met verschillende mensen. Vraag actief om hogere stunts</div></div>
+        <div class="exp-row"><span class="exp-week">Wk 8-10</span><div class="exp-desc">Hogere en complexere stunts als base. Nekversterking is nu 8 weken verder — je bent letterlijk beter beschermd</div></div>
+        <div class="exp-row"><span class="exp-week">Wk 12</span><div class="exp-desc">Evalueer: welke stunts die voorheen spannend waren zijn nu gewoon? Dat is je échte progressie</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Mindset tools</div>
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Vertel het altijd van tevoren</div><div class="step-desc">Zeg: "Dit is nieuw voor mij, ik wil het rustig opbouwen." Dat is professioneel communiceren, geen zwakte</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Het 3-keer principe</div><div class="step-desc">Doe elke nieuwe stunt minstens 3× achter elkaar. De eerste keer is alarm. De tweede begint leren. De derde begint vertrouwen. Stop nooit na één poging</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Angst vs gevaar</div><div class="step-desc">Vraag jezelf: is dit écht onveilig, of voelt het alleen spannend? Als de opstelling goed is — is het angst, niet gevaar. Angst mag er zijn, maar hoeft je niet te stoppen</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Noteer elke overwinning</div><div class="step-desc">Na elke open gym: één ding dat vorige maand spannender was. Hoe klein ook. Je hersenen leren van bewuste bevestiging</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: MOBILITEIT ===== -->
+  <div class="page" id="page-mobiliteit">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick=\"showTab('mob','dagelijks', this)\">Elke dag</button>
+      <button class="tab-btn" onclick=\"showTab('mob','naA', this)\">Na Kracht A</button>
+      <button class="tab-btn" onclick=\"showTab('mob','naB', this)\">Na Kracht B</button>
+      <button class="tab-btn" onclick=\"showTab('mob','nek', this)\">Nek & polsen</button>
+      <button class="tab-btn" onclick=\"showTab('mob','freq', this)\">Frequentie</button>
+    </div>
+
+    <div class="tab-content active" id="mob-dagelijks">
+      <div class="card">
+        <div class="card-title"><span class="icon">🌅</span> Dagelijkse routine — 10-12 min</div>
+        <div class="alert purple">Elke dag, ook op rustdagen. 's Ochtends of 's avonds — maak er een vaste gewoonte van.</div>
+        <div class="badge red">Splits & heupen</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Lunge hip flexor stretch</div><div class="stretch-why">Heupflexoren — basis voor splits en brug</div></div><div class="stretch-dose">60 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Rechter splits progressie</div><div class="stretch-why">Zo diep als pijnvrij, blokken gebruiken</div></div><div class="stretch-dose">3 × 45 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Linker splits progressie</div></div><div class="stretch-dose">3 × 45 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Pancake drill</div><div class="stretch-why">Midden splits & jumps</div></div><div class="stretch-dose">3 × 45 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Seated leg raises straddle (9+)</div><div class="stretch-why">Actieve flexibiliteit voor jumps</div></div><div class="stretch-dose">3 × 10/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Hamstring stretch</div></div><div class="stretch-dose">2 × 45 sec/kant</div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="badge orange">Schouders & thoracaal</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Chest opener op foam roller</div><div class="stretch-why">Thoracale extensie — grootste rem op brug & extensie</div></div><div class="stretch-dose">90 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Thread the needle</div><div class="stretch-why">Thoracale rotatie — direct zichtbaar in extensie</div></div><div class="stretch-dose">5×/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Doorway chest stretch</div><div class="stretch-why">Schouder en pec — overhead mobiliteit</div></div><div class="stretch-dose">2 × 30 sec</div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="badge red">Nek — 3 min</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Nek laterale stretch</div><div class="stretch-why">Oor naar schouder — nooit forceren</div></div><div class="stretch-dose">30 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Nek rotatie (langzaam)</div><div class="stretch-why">Kin naar schouder, 5× per kant</div></div><div class="stretch-dose">5×/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Levator scapulae stretch</div><div class="stretch-why">Kin naar oksel — jouw blessurehoek</div></div><div class="stretch-dose">45 sec/kant</div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="badge purple">Polsen — 5 min (coach advies)</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Pols cirkels (beide richtingen)</div></div><div class="stretch-dose">10×/richting</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Pols extensie stretch</div><div class="stretch-why">Vingers omhoog — nooit forceren</div></div><div class="stretch-dose">3 × 20 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Pols flexie stretch</div><div class="stretch-why">Vingers omlaag — altijd beide richtingen</div></div><div class="stretch-dose">3 × 20 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Vingerspreiding en vuist</div><div class="stretch-why">Onderarmspieren activeren</div></div><div class="stretch-dose">10× open/dicht</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Onderarm rotaties (supinatie/pronatie)</div></div><div class="stretch-dose">10×/kant</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="mob-naA">
+      <div class="card">
+        <div class="card-title"><span class="icon">🦵</span> Na Kracht A — 10-12 min extra</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Couch stretch met muur + 8kg KB</div><div class="stretch-why">Warm lichaam = diepste rek</div></div><div class="stretch-dose">90 sec/kant</div></div>
+          <div class="ex-prog" style="margin-top:6px">
+            <div class="prog-row"><span class="prog-week">Wk 1-2:</span>Zonder KB, techniek leren</div>
+            <div class="prog-row"><span class="prog-week">Wk 3-5:</span>8kg KB op bovenbeen</div>
+            <div class="prog-row"><span class="prog-week">Wk 6+:</span>Actieve glute contractie toevoegen</div>
+          </div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Lunge + hamstring elevated met KB</div><div class="stretch-why">Combo stretch heup + hamstring</div></div><div class="stretch-dose">60 sec/kant</div></div>
+          <div class="ex-prog" style="margin-top:6px">
+            <div class="prog-row"><span class="prog-week">Wk 1-2:</span>Zonder KB, voet op bank</div>
+            <div class="prog-row"><span class="prog-week">Wk 3-5:</span>8kg KB in hand</div>
+            <div class="prog-row"><span class="prog-week">Wk 6+:</span>Romp naar voren — dual stretch</div>
+          </div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Elevated / active pigeon</div><div class="stretch-why">Heup en piriformis — stabielere heupen als base</div></div><div class="stretch-dose">90 sec/kant</div></div>
+          <div class="ex-prog" style="margin-top:6px">
+            <div class="prog-row"><span class="prog-week">Wk 1-3:</span>Passieve pigeon op grond</div>
+            <div class="prog-row"><span class="prog-week">Wk 4-6:</span>Elevated (voet op bank)</div>
+            <div class="prog-row"><span class="prog-week">Wk 7+:</span>Active pigeon met pulsaties</div>
+          </div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Diepe squat hold</div><div class="stretch-why">Enkels, heupen, lage rug</div></div><div class="stretch-dose">2 × 45 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Liggend quadriceps stretch</div></div><div class="stretch-dose">45 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Midden splits progressie</div><div class="stretch-why">Voorbereiding toe touch en herky</div></div><div class="stretch-dose">2 × 30 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Dropback to wall</div><div class="stretch-why">Lichaam is warm — beste moment voor brug</div></div><div class="stretch-dose">5-8 herh.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="mob-naB">
+      <div class="card">
+        <div class="card-title"><span class="icon">💪</span> Na Kracht B — 10 min extra</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Foam roller thoracaal</div><div class="stretch-why">Verplicht vóór dropback</div></div><div class="stretch-dose">90 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Dropback to wall</div></div><div class="stretch-dose">5-8 herh.</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Schouder cross-body stretch</div><div class="stretch-why">Posterior schouder capsule</div></div><div class="stretch-dose">45 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Overhead triceps stretch</div><div class="stretch-why">Overhead mobiliteit voor handstand</div></div><div class="stretch-dose">45 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Kinderpose (child's pose)</div><div class="stretch-why">Lats en schouders na pull werk</div></div><div class="stretch-dose">60 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Handstand schouderrek (muur)</div><div class="stretch-why">Schouder elevatie range</div></div><div class="stretch-dose">3 × 30 sec</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Pols mobilisaties</div><div class="stretch-why">Altijd voorzichtig — nooit pijn</div></div><div class="stretch-dose">2 min</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="mob-nek">
+      <div class="card">
+        <div class="card-title"><span class="icon">🦺</span> Nekversterking — in Kracht B</div>
+        <div class="nek-row"><div><div class="nek-name">Cervicale flexie handweerstand</div><div class="nek-why">Diepe nekflexoren — beschermt bij impact van voren</div></div><div class="nek-dose">3 × 10/richting</div></div>
+        <div class="nek-row"><div><div class="nek-name">Nek laterale weerstand (hand)</div><div class="nek-why">Zijwaartse stabiliteit — jouw blessurehoek</div></div><div class="nek-dose">3 × 10/kant</div></div>
+        <div class="nek-row"><div><div class="nek-name">Scapulaire retractie (band)</div><div class="nek-why">Bovenrug + nek basis</div></div><div class="nek-dose">3 × 15</div></div>
+        <div class="nek-row"><div><div class="nek-name">Chin tucks</div><div class="nek-why">Diepe cervicale stabilisatoren</div></div><div class="nek-dose">3 × 12</div></div>
+        <div class="nek-row"><div><div class="nek-name">Farmers carry / suitcase carry</div><div class="nek-why">Trapezius & nek onder belasting</div></div><div class="nek-dose">3 × 20m/kant</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Dagelijkse nekmobiliteit — 3 min</div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Nek laterale stretch</div><div class="stretch-why">Oor naar schouder, 30 sec — nooit forceren</div></div><div class="stretch-dose">30 sec/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Nek rotatie langzaam</div></div><div class="stretch-dose">5×/kant</div></div>
+        </div>
+        <div class="stretch-block">
+          <div class="stretch-top"><div><div class="stretch-name">Levator scapulae stretch</div><div class="stretch-why">Kin naar oksel — jouw blessurehoek (90°)</div></div><div class="stretch-dose">45 sec/kant</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Dagelijkse pols routine — 5 min</div>
+        <div class="alert purple">Coach advies: oefen je polsen als je vrije tijd hebt. Achter je bureau, voor cheer, 's ochtends.</div>
+        <div class="stretch-block"><div class="stretch-top"><div><div class="stretch-name">Pols cirkels</div></div><div class="stretch-dose">10×/richting</div></div></div>
+        <div class="stretch-block"><div class="stretch-top"><div><div class="stretch-name">Pols extensie stretch (vingers omhoog)</div></div><div class="stretch-dose">3 × 20 sec</div></div></div>
+        <div class="stretch-block"><div class="stretch-top"><div><div class="stretch-name">Pols flexie stretch (vingers omlaag)</div></div><div class="stretch-dose">3 × 20 sec</div></div></div>
+        <div class="stretch-block"><div class="stretch-top"><div><div class="stretch-name">Vingerspreiding + vuist</div></div><div class="stretch-dose">10× open/dicht</div></div></div>
+        <div class="stretch-block"><div class="stretch-top"><div><div class="stretch-name">Onderarm rotaties</div></div><div class="stretch-dose">10×/kant</div></div></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="mob-freq">
+      <div class="card">
+        <div class="card-title">Frequentie overzicht</div>
+        <div class="macro-row"><span>Splits (beide kanten)</span><span class="macro-val">7×/week</span></div>
+        <div class="macro-row"><span>Hip flexor + hamstring</span><span class="macro-val">7×/week</span></div>
+        <div class="macro-row"><span>Thoracaal (foam roller + thread needle)</span><span class="macro-val">7×/week</span></div>
+        <div class="macro-row"><span>Nek stretch routine</span><span class="macro-val">7×/week</span></div>
+        <div class="macro-row"><span>Pols routine</span><span class="macro-val">7×/week</span></div>
+        <div class="macro-row"><span>Pancake drill</span><span class="macro-val">7×/week</span></div>
+        <div class="macro-row"><span>Seated leg raises straddle</span><span class="macro-val">7×/week</span></div>
+        <div class="macro-row"><span>Dropback to wall</span><span class="macro-val">4×/week</span></div>
+        <div class="macro-row"><span>Brug progressie</span><span class="macro-val">4×/week</span></div>
+        <div class="macro-row"><span>Couch stretch + lunge KB</span><span class="macro-val">2-4×/week</span></div>
+        <div class="macro-row"><span>Pigeon (elevated/active)</span><span class="macro-val">2-4×/week</span></div>
+        <div class="macro-row"><span>Foam roller herstel</span><span class="macro-val">2×/week (na cheer)</span></div>
+        <div class="macro-row"><span>Midden splits</span><span class="macro-val">4×/week</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: VOEDING ===== -->
+  <div class="page" id="page-voeding">
+    <div class="alert">Jouw grootste bottleneck: ~50g eiwit/dag is de helft van wat je nodig hebt. Dit remt herstel, spieropbouw én lichaamscompositie direct.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> Dagelijkse doelwaarden</div>
+      <div class="macro-row"><span>Eiwit</span><span class="macro-val">110-120g per dag</span></div>
+      <div class="macro-row"><span>Water</span><span class="macro-val">2-2.5L per dag</span></div>
+      <div class="macro-row"><span>Maaltijden</span><span class="macro-val">3 vaste momenten</span></div>
+      <div class="macro-row"><span>Calorieën</span><span class="macro-val">Licht tekort (~200 kcal)</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🍗</span> Dagstructuur</div>
+      <div class="macro-row"><span>Ontbijt</span><span class="macro-val">~38g eiwit</span></div>
+      <div class="row"><div class="row-left"><div class="row-sub">Bijv: 3 eieren + 200g Griekse yoghurt</div></div></div>
+      <div class="macro-row"><span>Lunch</span><span class="macro-val">~45g eiwit</span></div>
+      <div class="row"><div class="row-left"><div class="row-sub">Bijv: 150g kip of zalm + rijst/aardappel</div></div></div>
+      <div class="macro-row"><span>Diner</span><span class="macro-val">~30g eiwit</span></div>
+      <div class="row"><div class="row-left"><div class="row-sub">Bijv: eiwit + groenten</div></div></div>
+      <div class="macro-row"><span>Totaal</span><span class="macro-val">~113g ✓</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span> Eiwitbronnen</div>
+      <div class="macro-row"><span>Kipfilet (150g)</span><span class="macro-val">~45g</span></div>
+      <div class="macro-row"><span>Zalm (125g)</span><span class="macro-val">~25g</span></div>
+      <div class="macro-row"><span>Eieren (3 stuks)</span><span class="macro-val">~18g</span></div>
+      <div class="macro-row"><span>Griekse yoghurt (200g)</span><span class="macro-val">~20g</span></div>
+      <div class="macro-row"><span>Kwark (150g)</span><span class="macro-val">~18g</span></div>
+      <div class="macro-row"><span>Clear whey (1 scoop)</span><span class="macro-val">~20-25g</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">💊</span> Supplementen</div>
+      <div class="macro-row"><span>Creatine monohydraat</span><span class="macro-val">✓ 3-5g/dag</span></div>
+      <div class="macro-row"><span>Magnesium</span><span class="macro-val">✓ Herstel & slaap</span></div>
+      <div class="macro-row"><span>Multivitamine</span><span class="macro-val">✓ Prima als backup</span></div>
+      <div class="macro-row"><span>Ashwagandha</span><span class="macro-val">✓ Zinvol bij stress</span></div>
+      <div class="macro-row"><span>Clear whey</span><span class="macro-val">✓ Gebruik bewust voor eiwitdoel</span></div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: EVALUATIE ===== -->
+  <div class="page" id="page-evaluatie">
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> Wekelijkse check-in — elke zondag</div>
+      <div class="eval-q" data-n="1">Hoeveel keer heb ik getraind en hoe voelde elke sessie?</div>
+      <div class="eval-q" data-n="2">Heb ik mijn eiwitdoel (110-120g) gemiddeld gehaald?</div>
+      <div class="eval-q" data-n="3">Hoe was mijn energieniveau tijdens cheer training?</div>
+      <div class="eval-q" data-n="4">Heb ik dagelijks mijn splits- en mobiliteitsroutine gedaan?</div>
+      <div class="eval-q" data-n="5">Hoe voelen mijn polsen? Pijn, druk of verbetering?</div>
+      <div class="eval-q" data-n="6">Hoe voelt mijn nek? Meer stabiliteit en vertrouwen bij stunts?</div>
+      <div class="eval-q" data-n="7">Wat ging goed? Wat wil ik volgende week anders?</div>
+      <div class="eval-q" data-n="8">Slaap gemiddeld (uur)? Stressniveau (1-10)?</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📏</span> Maandelijkse tests — week 4, 8, 12</div>
+      <div class="row"><div class="row-name">Push-ups max reps achter elkaar</div></div>
+      <div class="row"><div class="row-name">Pull-up test: hoeveel kg assistance?</div></div>
+      <div class="row"><div class="row-name">Splits: foto rechter en linker splits</div></div>
+      <div class="row"><div class="row-name">Dead hang: hoeveel seconden?</div></div>
+      <div class="row"><div class="row-name">Handstand: hoe lang vasthouden?</div></div>
+      <div class="row"><div class="row-name">Exposure: welke nieuwe stunts als base?</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> Progressie doelen week 12</div>
+      <div class="macro-row"><span>Push-ups</span><span class="macro-val">15 reps</span></div>
+      <div class="macro-row"><span>Pull-ups</span><span class="macro-val">2-3 bodyweight</span></div>
+      <div class="macro-row"><span>Dead hang</span><span class="macro-val">40+ seconden</span></div>
+      <div class="macro-row"><span>Rechter splits</span><span class="macro-val">Plat</span></div>
+      <div class="macro-row"><span>Handstand (muur)</span><span class="macro-val">15-20 sec</span></div>
+      <div class="macro-row"><span>Brug</span><span class="macro-val">Volledig gestrekt</span></div>
+      <div class="macro-row"><span>Eiwit</span><span class="macro-val">110-120g gewoon</span></div>
+    </div>
+
+    <button class="send-btn">📝 Weekcheck starten met Claude</button>
+    <button class="send-btn" style="margin-top:8px">💬 Coachfeedback verwerken</button>
+    <button class="send-btn" style="margin-top:8px">🏥 Polsspecialist uitslag verwerken</button>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="bnav-btn active" onclick="showPage('programma', this)">
+    <div class="bnav-icon">📅</div>Programma
+  </button>
+  <button class="bnav-btn" onclick="showPage('trainingen', this)">
+    <div class="bnav-icon">🏋️</div>Trainingen
+  </button>
+  <button class="bnav-btn" onclick="showPage('skills', this)">
+    <div class="bnav-icon">🤸</div>Skills
+  </button>
+  <button class="bnav-btn" onclick="showPage('mobiliteit', this)">
+    <div class="bnav-icon">🧘</div>Stretch
+  </button>
+  <button class="bnav-btn" onclick="showPage('voeding', this)">
+    <div class="bnav-icon">🍗</div>Voeding
+  </button>
+  <button class="bnav-btn" onclick="showPage('evaluatie', this)">
+    <div class="bnav-icon">✅</div>Check-in
+  </button>
+</div>
+
+<script>
+function showPage(id, button) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (button) button.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function showTab(group, id, button) {
+  const prefix = group + '-';
+  document.querySelectorAll('[id^="' + prefix + '"]').forEach(t => t.classList.remove('active'));
+  const page = button ? button.closest('.page') : document;
+  page.querySelectorAll('.tab-bar').forEach(bar => {
+    bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  });
+  document.getElementById(prefix + id).classList.add('active');
+  if (button) button.classList.add('active');
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .catch(error => console.log('Service worker registratie mislukt:', error));
+  });
+}
+</script>
+</body>
+</html>
