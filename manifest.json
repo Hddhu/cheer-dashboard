@@ -1,14 +1,14 @@
 {
   "name": "Cheer S&C Coach",
   "short_name": "Cheer Coach",
-  "description": "Cheerleading strength, conditioning, mobility and nutrition dashboard.",
-  "lang": "nl",
-  "start_url": "./index.html",
+  "description": "Persoonlijke cheerleading strength & conditioning coach met checklist en weektracker.",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0a0f",
   "theme_color": "#0a0a0f",
+  "lang": "nl",
   "icons": [
     {
       "src": "icon-192.png",
@@ -21,6 +21,11 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
   ]
 }
