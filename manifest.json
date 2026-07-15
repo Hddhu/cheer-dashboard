@@ -1,22 +1,22 @@
 {
   "name": "Cheer S&C Coach",
   "short_name": "Cheer Coach",
-  "description": "Persoonlijk cheerleading strength & conditioning dashboard",
+  "description": "Persoonlijk cheerleading strength and conditioning dashboard",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0a0a0f",
   "theme_color": "#0a0a0f",
-  "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
