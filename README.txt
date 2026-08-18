@@ -1,4 +1,4 @@
-Cheer Coach PWA v2
+Cheer Coach PWA v7
 
 Upload deze bestanden los in de hoofdmap van je GitHub repository:
 - index.html
