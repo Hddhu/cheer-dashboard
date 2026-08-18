@@ -39,7 +39,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
 .hs-l{font-size:10px;color:var(--tx3);margin-top:2px}
 .bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--brd2);display:flex;padding:8px 0 env(safe-area-inset-bottom,16px);z-index:100}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;background:none;border:none;cursor:pointer;color:var(--tx3);font-size:9px;font-family:var(--font);transition:color .15s}
-.nb.active{color:var(--ac)}
+.nb.active{color:var(--ac2)}
 .nb-ic{font-size:18px;line-height:1}
 .main{padding:14px 14px 110px}
 .pg{display:none}.pg.active{display:block}
@@ -51,6 +51,8 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
 .bdg.g{background:var(--gr-bg);color:var(--gr);border:0.5px solid var(--gr-brd)}
 .bdg.p{background:var(--ac-bg);color:var(--ac);border:0.5px solid var(--ac-brd)}
 .bdg.y{background:var(--yw-bg);color:var(--yw);border:0.5px solid var(--yw-brd)}
+.bdg.b{background:var(--ac2-bg);color:var(--ac2);border:0.5px solid var(--ac2-brd)}
+.skill-tag{display:inline-block;font-size:10px;font-weight:600;background:var(--ac2-bg);border:0.5px solid var(--ac2-brd);border-radius:5px;padding:1px 6px;color:var(--ac2);margin-left:4px}
 .alt{border-radius:var(--r);padding:10px 12px;font-size:12px;line-height:1.6;margin-bottom:10px}
 .alt.r{background:var(--red-bg);border:0.5px solid var(--red-brd);color:var(--red)}
 .alt.o{background:var(--or-bg);border:0.5px solid var(--or-brd);color:var(--or)}
@@ -138,15 +140,15 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
 .stitle:first-child{margin-top:2px}
 .sk-ph{display:flex;gap:6px;padding:8px 0;border-bottom:0.5px solid var(--brd);font-size:12px}
 .sk-ph:last-child{border-bottom:none}
-.sk-f{color:var(--ac);font-weight:600;min-width:70px;flex-shrink:0}
+.sk-f{color:var(--ac2);font-weight:600;min-width:70px;flex-shrink:0}
 .sk-d{color:var(--tx2);line-height:1.4}
 .br-row{display:flex;gap:7px;padding:7px 0;border-bottom:0.5px solid var(--brd)}
 .br-row:last-child{border-bottom:none}
-.br-w{font-size:11px;color:var(--ac);font-weight:600;min-width:65px;flex-shrink:0}
+.br-w{font-size:11px;color:var(--ac2);font-weight:600;min-width:65px;flex-shrink:0}
 .br-d{font-size:12px;color:var(--tx2);line-height:1.4}
 .exp-row{display:flex;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--brd);align-items:flex-start}
 .exp-row:last-child{border-bottom:none}
-.exp-w{font-size:11px;font-weight:600;color:var(--ac);min-width:65px;flex-shrink:0}
+.exp-w{font-size:11px;font-weight:600;color:var(--ac2);min-width:65px;flex-shrink:0}
 .exp-d{font-size:12px;color:var(--tx2);line-height:1.5}
 /* CHECKLIST */
 .cl-date{font-size:12px;color:var(--tx2);margin-bottom:12px;text-align:center}
@@ -204,8 +206,8 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
 <!-- VANDAAG -->
 <div class="pg active" id="pg-check">
   <div id="cl-date-display" class="cl-date"></div>
-  <div class="card" style="padding:10px 12px">
-    <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin-bottom:4px">Skill focus deze fase</div>
+  <div class="card" style="padding:10px 12px;border-left:2.5px solid var(--ac2)">
+    <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ac2);margin-bottom:4px">🎯 Skill focus deze fase</div>
     <div class="skill-focus-text" style="font-size:12px;color:var(--tx2);line-height:1.5"></div>
   </div>
   <div class="alt y">🤚 Duim — zolang gevoelig: vermijd volle grip op barbells, pull-ups en farmers carry (straps/kabel i.p.v.). Gebruik bij voorkeur machines met pin-selectie in plaats van losse plates, om het laden zelf te vermijden.</div>
@@ -220,7 +222,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
     <div class="cl-label">Dagelijkse kern — elke dag (5-6 min)</div>
     <div class="cl-item" onclick="toggle(this)" data-id="d1">
       <div class="cl-check"></div>
-      <div><div class="cl-text">Splits routine</div><div class="cl-sub">Rechts + links 2×30 sec · lunge hip flexor 30 sec/kant</div></div>
+      <div><div class="cl-text">Splits routine <span class="skill-tag">Splits</span></div><div class="cl-sub">Rechts + links 2×30 sec · lunge hip flexor 30 sec/kant</div></div>
     </div>
     <div class="cl-item" onclick="toggle(this)" data-id="d2">
       <div class="cl-check"></div>
@@ -487,7 +489,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
     <div class="card">
       <div class="bdg o">Duw — 30 min</div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Push-up progressie <span class="work-tag">4-5 sets × max</span></div><div class="ex-s">Meer volume dan in de combi-versie</div></div></div>
+        <div class="ex-top"><div><div class="ex-n">Push-up progressie <span class="work-tag">4-5 sets × max</span><span class="skill-tag">Doel: 15 reps</span></div><div class="ex-s">Meer volume dan in de combi-versie</div></div></div>
         <div class="pr">
           <div class="pr-row"><span class="pr-w">Wk 1-2:</span>Verhoogd (handen op bank)</div>
           <div class="pr-row"><span class="pr-w">Wk 3-4:</span>Vlak op de grond</div>
@@ -522,7 +524,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
     <div class="card">
       <div class="bdg o">Trek — 30 min</div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Assisted pull-up <span class="warm-tag">1 warm-up</span><span class="work-tag">3-4 werksets</span></div><div class="ex-s">Gebruik straps om duim te ontlasten</div></div></div>
+        <div class="ex-top"><div><div class="ex-n">Assisted pull-up <span class="warm-tag">1 warm-up</span><span class="work-tag">3-4 werksets</span><span class="skill-tag">Doel: 2-3 unassisted</span></div><div class="ex-s">Gebruik straps om duim te ontlasten</div></div></div>
         <div class="pr">
           <div class="pr-row"><span class="pr-w">Wk 1-3:</span>Warm-up -50kg · werk -40kg × 3×5</div>
           <div class="pr-row"><span class="pr-w">Wk 4-6:</span>Warm-up -40kg · werk -30kg × 3×5</div>
@@ -549,7 +551,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
   <div class="tc" id="train-PM">
     <div class="alt p">Geen vaste dag — plan dit los, bijvoorbeeld voor/na een cheer- of krachtsessie, of op je rustdag. Dit is waar plyo, core/abs, handstand en alle mobiliteit samenkomen.</div>
     <div class="card">
-      <div class="bdg o">Plyometrics — 10-15 min</div>
+      <div class="bdg o">Plyometrics — 10-15 min <span class="skill-tag">Explosiviteit (coach)</span></div>
       <div class="ex">
         <div class="ex-top"><div><div class="ex-n">Kies 3 uit onderstaande lijst</div><div class="ex-s">3-4 sets × 8-10 reps of 20 sec · 30 sec rust</div></div></div>
         <div class="pr">
@@ -582,7 +584,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
       <div class="rw"><div><div class="rn">Scapula squeeze (staand of zittend)</div></div><div class="rv">3×15</div></div>
     </div>
     <div class="card">
-      <div class="bdg g">Handstand + algemene mobiliteit — 8 min</div>
+      <div class="bdg g">Handstand + algemene mobiliteit — 8 min <span class="skill-tag">Handstand</span></div>
       <div class="rw"><div><div class="rn">Dropback to wall</div><div class="rs">Foam roller thoracaal eerst</div></div><div class="rv">5-8 herh.</div></div>
       <div class="rw"><div><div class="rn">Handstand shrugs op vuisten</div><div class="rs">Polsvriendelijk — schouder elevatie</div></div><div class="rv">3×10</div></div>
       <div class="rw"><div><div class="rn">Doorway chest stretch</div></div><div class="rv">2×30 sec</div></div>
@@ -593,8 +595,8 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
       <div class="rw"><div><div class="rn">Hamstring stretch elevated (hiel op bank)</div><div class="rs">Wk 3+: 8kg KB als gewicht</div></div><div class="rv">60 sec/kant</div></div>
     </div>
     <div class="card">
-      <div class="bdg p">Spagaat — extra dieptewerk</div>
-      <div class="rw"><div><div class="rn">Pancake met arch in de rug</div><div class="rs">Benen wijd, rug bol/arch trekken i.p.v. plat naar voren — traint de rug-mobiliteit die je nodig hebt voor front walkover én diepte in de pancake zelf</div></div><div class="rv">2×30-45 sec</div></div>
+      <div class="bdg p">Spagaat — extra dieptewerk <span class="skill-tag">Splits</span></div>
+      <div class="rw"><div><div class="rn">Pancake met arch in de rug</div><div class="rs">Benen wijd, rug bol/arch trekken i.p.v. plat naar voren — traint de rug-mobiliteit die je nodig hebt voor front walkover én diepte in de pancake zelf <span class="skill-tag">Front walkover</span></div></div><div class="rv">2×30-45 sec</div></div>
       <div class="rw"><div><div class="rn">Lunge elevated</div></div><div class="rv">60 sec/kant</div></div>
       <div class="rw"><div><div class="rn">Elevated pigeon</div></div><div class="rv">90 sec/kant</div></div>
     </div>
