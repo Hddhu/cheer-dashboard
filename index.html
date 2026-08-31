@@ -109,7 +109,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
 .phd{position:absolute;left:0;top:14px;width:13px;height:13px;border-radius:50%;border:0.5px solid var(--brd2);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:7px;color:var(--tx3)}
 .phd.a{background:var(--ac2-bg);border-color:var(--ac2-brd);color:var(--ac2)}
 .pi{background:var(--surf);border:0.5px solid var(--brd);border-radius:var(--r);padding:10px}
-.ph-h{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap}
+.ph-h{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap;cursor:pointer}
+.ph-chev{color:var(--tx3);font-size:11px;transition:transform .2s;flex-shrink:0}
+.ph.collapsed .ph-chev{transform:rotate(-90deg)}
+.ph.collapsed .pi-body{display:none}
 .ph-t{font-size:13px;font-weight:600}
 .ph-w{font-size:10px;color:var(--tx3);margin-left:auto}
 .ph-items{display:flex;flex-direction:column;gap:3px}
@@ -284,8 +287,9 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
   <div class="alt y">🤚 Duim — zolang gevoelig: geen volle grip op barbells of pull-ups, gebruik kabels met touw/neutral handle en machines i.p.v. losse plates.</div>
 
   <div class="stitle">Faseoverzicht</div>
-  <div class="ph"><div class="phd a">1</div><div class="pi">
-    <div class="ph-h"><span class="bdg o">Fase 1</span><div class="ph-t">Aanloop & fundament</div><div class="ph-w">Wk 1–3</div></div>
+  <div class="ph collapsed"><div class="phd a">1</div><div class="pi">
+    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg o">Fase 1</span><div class="ph-t">Aanloop & fundament</div><div class="ph-w">Wk 1–3</div><span class="ph-chev">▾</span></div>
+    <div class="pi-body">
     <div class="ph-items">
       <div class="ph-item">Front squat leren (begin met stang only)</div>
       <div class="ph-item">Core activatiepatronen: dead bug, hollow rock</div>
@@ -293,10 +297,12 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
       <div class="ph-item">Dropback to wall (opgewarmd, voorzichtig)</div>
     </div>
     <div class="wk-list" data-phase="f1"></div>
+    </div>
   </div></div>
 
-  <div class="ph"><div class="phd">2</div><div class="pi">
-    <div class="ph-h"><span class="bdg p">Fase 2</span><div class="ph-t">Kracht & mobiliteit</div><div class="ph-w">Wk 4–6</div></div>
+  <div class="ph collapsed"><div class="phd">2</div><div class="pi">
+    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg p">Fase 2</span><div class="ph-t">Kracht & mobiliteit</div><div class="ph-w">Wk 4–6</div><span class="ph-chev">▾</span></div>
+    <div class="pi-body">
     <div class="ph-items">
       <div class="ph-item">Jefferson curl introduceren (wk 4, geen gewicht)</div>
       <div class="ph-item">Pull-up: van -40kg naar -30kg assistance</div>
@@ -304,19 +310,23 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
       <div class="ph-item">Handstand tegen muur, shape leren</div>
     </div>
     <div class="wk-list" data-phase="f2"></div>
+    </div>
   </div></div>
 
-  <div class="ph"><div class="phd">D</div><div class="pi">
-    <div class="ph-h"><span class="bdg y">Deload</span><div class="ph-t">Herstelweek</div><div class="ph-w">Wk 7</div></div>
+  <div class="ph collapsed"><div class="phd">D</div><div class="pi">
+    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg y">Deload</span><div class="ph-t">Herstelweek</div><div class="ph-w">Wk 7</div><span class="ph-chev">▾</span></div>
+    <div class="pi-body">
     <div class="ph-items">
       <div class="ph-item">Volume 40% omlaag, geen PR pogingen</div>
       <div class="ph-item">Focus op mobiliteit, handstand, splits</div>
     </div>
     <div class="wk-list" data-phase="dl"></div>
+    </div>
   </div></div>
 
   <div class="ph"><div class="phd">3</div><div class="pi">
-    <div class="ph-h"><span class="bdg r">Fase 3</span><div class="ph-t">Intensivering</div><div class="ph-w">Wk 8–10</div></div>
+    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg r">Fase 3</span><div class="ph-t">Intensivering</div><div class="ph-w">Wk 8–10</div><span class="ph-chev">▾</span></div>
+    <div class="pi-body">
     <div class="ph-items">
       <div class="ph-item">Alle 7 plyometrics beschikbaar incl. tuck jumps</div>
       <div class="ph-item">Bulgarian split squat met jump introduceren</div>
@@ -325,15 +335,18 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
       <div class="ph-item">Handstand vrijstaand proberen</div>
     </div>
     <div class="wk-list" data-phase="f3"></div>
+    </div>
   </div></div>
 
   <div class="ph"><div class="phd">✦</div><div class="pi">
-    <div class="ph-h"><span class="bdg g">Finale</span><div class="ph-t">Piek & showcase</div><div class="ph-w">Wk 11–12</div></div>
+    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg g">Finale</span><div class="ph-t">Piek & showcase</div><div class="ph-w">Wk 11–12</div><span class="ph-chev">▾</span></div>
+    <div class="pi-body">
     <div class="ph-items">
       <div class="ph-item">Volume omlaag, kwaliteit omhoog</div>
       <div class="ph-item">Week 12: splits check, push-up max, pull-up test</div>
     </div>
     <div class="wk-list" data-phase="fin"></div>
+    </div>
   </div></div>
 
   <div class="stitle">Prioriteiten</div>
@@ -375,58 +388,49 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
     <button class="tb" onclick="switchTab('train','Push',this)">Push</button>
     <button class="tb" onclick="switchTab('train','Pull',this)">Pull</button>
     <button class="tb" onclick="switchTab('train','PM',this)">Plyo + Mobiliteit</button>
-    <button class="tb" onclick="switchTab('train','V',this)">Vakantie</button>
+    <button class="tb" onclick="switchTab('train','Billen',this)">Billen</button>
     <button class="tb" onclick="switchTab('train','S',this)">Schema</button>
   </div>
 
   <!-- KRACHT A: UPPER -->
   <div class="tc active" id="train-A">
-    <div class="alt p">Dit is de gecombineerde upper-sessie voor zondag. Liever in twee losse sessies? Zie de <b>Push</b>- en <b>Pull</b>-tab. Core, handstand en mobiliteit staan niet meer hier — die zitten in <b>Plyo + Mobiliteit</b>.</div>
     <div class="card">
-      <div class="ct">Upper body · zondag</div>
+      <div class="ct">Upper body</div>
       <div class="bdg p">Warming-up — 8 min</div>
       <div class="rw"><div><div class="rn">Band pull-aparts</div></div><div class="rv">3×15</div></div>
       <div class="rw"><div><div class="rn">Schouder circles + arm swings</div></div><div class="rv">2×10</div></div>
       <div class="rw"><div><div class="rn">Cat-cow + thoracale rotaties</div></div><div class="rv">10 reps</div></div>
       <div class="rw"><div><div class="rn">Dead hang (passief)</div><div class="rs">Grip + schouder decompressie</div></div><div class="rv">2×max</div></div>
-      <div class="rw"><div><div class="rn">Chin tucks (staand)</div></div><div class="rv">3×12</div></div>
     </div>
     <div class="card">
-      <div class="bdg o">Trek — 15 min</div>
+      <div class="bdg o">Werkblok — 30-35 min</div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Assisted pull-up <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Deze week: gebruik straps om duim te ontlasten</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Wk 1-3:</span>Warm-up -50kg · werk -40kg × 3×5</div>
-          <div class="pr-row"><span class="pr-w">Wk 4-6:</span>Warm-up -40kg · werk -30kg × 3×5</div>
-          <div class="pr-row"><span class="pr-w">Wk 7-9:</span>Werk -20kg × 3×4</div>
-          <div class="pr-row"><span class="pr-w">Wk 10+:</span>Eerste bodyweight pogingen</div>
-        </div>
+        <div class="ex-top"><div><div class="ex-n">1. Push-up progressie <span class="work-tag">2-3 sets × max</span><span class="skill-tag">Doel: 15 reps</span></div><div class="ex-s">Vooraan terwijl je fris bent</div></div></div>
       </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Kabel seated row (neutral grip) <span class="work-tag">2-3×10</span></div><div class="ex-s">Polsvriendelijk</div></div></div></div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Bicep curl (dumbbell) <span class="work-tag">2-3×10-12</span></div><div class="ex-s">Bij duimpijn: dikkere grip/straps of overhand pak lichter</div></div></div>
+        <div class="ex-top"><div><div class="ex-n">2. Lat Pulldown <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Jouw voorkeur boven pull-up — primaire trekoefening</div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Start:</span>Bepaal werkgewicht op gevoel, 3×8-10, log in Hevy</div></div>
+      </div>
+      <div class="ex">
+        <div class="ex-top"><div><div class="ex-n">3. Seated Cable Row - V Grip <span class="work-tag">2-3 sets</span></div><div class="ex-s">Polsvriendelijk</div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>42,5-50kg × 5-8 reps</div></div>
+      </div>
+      <div class="ex">
+        <div class="ex-top"><div><div class="ex-n">4. Standing Military Press (Barbell) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Warm-up 20kg × 8 · werk 25kg × 5-6</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">5. Single Arm Lateral Raise (Cable) <span class="work-tag">2 sets</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>3,75-6,25kg × 7-8/kant</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">6. Triceps Pushdown <span class="work-tag">2 sets</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>15-17,5kg × 7-8</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">7. Bicep Curl (Dumbbell) <span class="work-tag">2 sets</span></div><div class="ex-s">Bij duimpijn: dikkere grip/straps</div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>9-10kg × 5-10</div></div>
       </div>
     </div>
-    <div class="card">
-      <div class="bdg o">Duw + kabel schouder — 15 min</div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Push-up progressie <span class="work-tag">2-3 sets × max</span></div><div class="ex-s">Nu: 8 reps (wk2) — netjes op schema</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Wk 1-2:</span>Verhoogd (handen op bank)</div>
-          <div class="pr-row"><span class="pr-w">Wk 3-4:</span>Vlak op de grond</div>
-          <div class="pr-row"><span class="pr-w">Wk 5+:</span>Voeten verhoogd — doel 15 reps</div>
-          <div class="pr-row"><span class="pr-w">Fase 3:</span>Ring push-ups na polsgoedkeuring</div>
-        </div>
-      </div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Bench press (Smith machine) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Nieuw — start licht en bepaal gevoelsmatig je werkgewicht, log in Hevy</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Sessie 1-2:</span>Techniek — leeg/licht (bijv. 20kg) × 3×8-10</div>
-          <div class="pr-row"><span class="pr-w">Daarna:</span>Verhogen op gevoel, 3×6-8, PR's noteren</div>
-        </div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Kabel single-arm overhead press <span class="work-tag">2-3×10/kant</span></div><div class="ex-s">Armen strekken in extended — direct cheer carryover</div></div></div></div>
-    </div>
+    <div class="alt p">Elke paar weken 1x Pull Up (Assisted) proberen om het doel (2-3 unassisted) bij te houden — zie Skills-tab. Hoeft niet elke sessie.</div>
+    <div class="alt p">Na deze sessie: kort abs-blok (zie Plyo + Mobiliteit), 2x/week is genoeg.</div>
   </div>
 
   <!-- KRACHT B: LEGS -->
@@ -441,46 +445,37 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
     <div class="card">
       <div class="bdg o">Kracht — 30 min</div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Front squat <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Wk 1-3: leg press als alternatief bij duimpijn (verleng zolang nodig)</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Wk 1-2:</span>Warm-up 20kg · werk 20-30kg × 3×8</div>
-          <div class="pr-row"><span class="pr-w">Wk 3-5:</span>Warm-up 30kg · werk 40kg × 3×6</div>
-          <div class="pr-row"><span class="pr-w">Wk 6+:</span>Warm-up 40kg · werk 50kg × 3×5</div>
-        </div>
+        <div class="ex-top"><div><div class="ex-n">1. Jump Squat <span class="work-tag">2-3 sets × 8-10</span></div><div class="ex-s">Opener — bodyweight, explosief</div></div></div>
       </div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Hip thrust machine <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Wk 1-3:</span>Warm-up 80kg · werk 100kg × 3×10</div>
-          <div class="pr-row"><span class="pr-w">Wk 4-6:</span>Warm-up 90kg · werk 110kg × 3×8</div>
-          <div class="pr-row"><span class="pr-w">Wk 8+:</span>Warm-up 100kg · werk 120kg × 3×6</div>
-        </div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Bulgarian split squat <span class="work-tag">2-3 sets × 8/kant</span></div><div class="ex-s">Wk 1-3: bodyweight · daarna dumbbells · fase 3: jump variant</div></div></div></div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Romanian deadlift <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Straps of overhand grip toegestaan bij duimpijn</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Wk 1-3:</span>Dumbbells 20kg</div>
-          <div class="pr-row"><span class="pr-w">Wk 4+:</span>Barbell 40-50kg opbouwen</div>
-        </div>
+        <div class="ex-top"><div><div class="ex-n">2. Leg Press (Machine) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Je hoofdlift — vervangt front squat, hier zit je progressie</div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Warm-up 50kg × 8 · werk 150-180kg × 8-10 — flink gestegen, ga door op gevoel</div></div>
       </div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Jefferson curl <span class="work-tag">2-3 sets</span></div><div class="ex-s">Start wk 4 · nooit snel · nooit tot pijn</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Wk 4-5:</span>Geen gewicht — 3 sec omlaag</div>
-          <div class="pr-row"><span class="pr-w">Wk 6-7:</span>5kg — tempo blijft langzaam</div>
-          <div class="pr-row"><span class="pr-w">Wk 8+:</span>8-12kg</div>
-        </div>
+        <div class="ex-top"><div><div class="ex-n">3. Romanian Deadlift (Barbell) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Straps of overhand grip toegestaan bij duimpijn</div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Werk 40-50kg × 6-10</div></div>
       </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Leg curl machine <span class="work-tag">2-3 sets × 8</span></div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Calf raises <span class="work-tag">2-3 sets × 15</span></div></div></div></div>
+      <div class="ex">
+        <div class="ex-top"><div><div class="ex-n">4. Hip Thrust (Machine) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Warm-up 40-50kg · werk tot 130kg × 3-8</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">5. Bulgarian Split Squat <span class="work-tag">2-3 sets × 5-8/kant</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>14-16kg (barbell of dumbbell)</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">6. Standing Cable Glute Kickbacks <span class="work-tag">2 sets × 8/kant</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>11-16kg</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">7. Standing Calf Raise (Machine) <span class="work-tag">2-3 sets × 8-10</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>67-97kg</div></div>
+      </div>
     </div>
+    <div class="alt p">Na deze sessie: plyo hoort hierbij (zie Plyo + Mobiliteit) + kort abs-blok (2x/week).</div>
   </div>
 
   <!-- PUSH -->
   <div class="tc" id="train-Push">
-    <div class="alt o">⚠️ Uit je Hevy-data: sinds 6 juli veel meer pull- dan push-volume gelogd. Push heeft nu prioriteit — pak deze sessie liever een keer extra dan dat 'ie sneuvelt.</div>
-    <div class="alt p">Losse push-sessie — gebruik deze i.p.v. de combi-Upper als je 2 upper-momenten in een week hebt (min. 48u tussen push en pull).</div>
+    <div class="alt o">⚠️ Push loopt achter op pull in je Hevy-data — pak deze sessie liever een keer extra.</div>
+
     <div class="card">
       <div class="ct">Push · warming-up — 8 min</div>
       <div class="rw"><div><div class="rn">Band pull-aparts</div></div><div class="rv">3×15</div></div>
@@ -490,17 +485,19 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
     <div class="card">
       <div class="bdg o">Duw — 30 min</div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Push-up progressie <span class="work-tag">4-5 sets × max</span><span class="skill-tag">Doel: 15 reps</span></div><div class="ex-s">Meer volume dan in de combi-versie</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Wk 1-2:</span>Verhoogd (handen op bank)</div>
-          <div class="pr-row"><span class="pr-w">Wk 3-4:</span>Vlak op de grond</div>
-          <div class="pr-row"><span class="pr-w">Wk 5+:</span>Voeten verhoogd — doel 15 reps</div>
-          <div class="pr-row"><span class="pr-w">Fase 3:</span>Ring push-ups na polsgoedkeuring</div>
-        </div>
+        <div class="ex-top"><div><div class="ex-n">1. Standing Military Press (Barbell) <span class="warm-tag">1 warm-up</span><span class="work-tag">3-4 werksets</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Warm-up 20kg × 8 · werk 25kg × 5-6</div></div>
       </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Bench press (Smith machine) <span class="warm-tag">1 warm-up</span><span class="work-tag">3-4 werksets</span></div><div class="ex-s">Log werkgewicht in Hevy, verhoog op gevoel</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Kabel single-arm overhead press <span class="work-tag">3×10/kant</span></div><div class="ex-s">Armen strekken in extended — directe cheer carryover</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Chest fly (kabel/machine) <span class="work-tag">3×10</span></div></div></div></div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">2. Kabel single-arm overhead press <span class="work-tag">3×10/kant</span></div><div class="ex-s">Armen strekken in extended — directe cheer carryover</div></div></div></div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">3. Single Arm Lateral Raise (Cable) <span class="work-tag">3×8</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>3,75-6,25kg/kant</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">4. Triceps Pushdown <span class="work-tag">3×8</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>15-17,5kg</div></div>
+      </div>
+      <div class="ex">
+        <div class="ex-top"><div><div class="ex-n">Push-up progressie <span class="work-tag">4-5 sets × max</span><span class="skill-tag">Doel: 15 reps</span></div><div class="ex-s">Extra volume, aan het einde als je nog energie hebt — dit is waar je 'm in de praktijk vaak liet liggen</div></div></div>
+      </div>
     </div>
     <div class="card">
       <div class="bdg r">Core — 6 min</div>
@@ -515,7 +512,6 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
 
   <!-- PULL -->
   <div class="tc" id="train-Pull">
-    <div class="alt p">Losse pull-sessie — gebruik deze i.p.v. de combi-Upper als je 2 upper-momenten in een week hebt (min. 48u tussen push en pull).</div>
     <div class="card">
       <div class="ct">Pull · warming-up — 8 min</div>
       <div class="rw"><div><div class="rn">Band pull-aparts</div></div><div class="rv">3×15</div></div>
@@ -525,18 +521,17 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
     <div class="card">
       <div class="bdg o">Trek — 30 min</div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Assisted pull-up <span class="warm-tag">1 warm-up</span><span class="work-tag">3-4 werksets</span><span class="skill-tag">Doel: 2-3 unassisted</span></div><div class="ex-s">Gebruik straps om duim te ontlasten</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Wk 1-3:</span>Warm-up -50kg · werk -40kg × 3×5</div>
-          <div class="pr-row"><span class="pr-w">Wk 4-6:</span>Warm-up -40kg · werk -30kg × 3×5</div>
-          <div class="pr-row"><span class="pr-w">Wk 7-9:</span>Werk -20kg × 3×4</div>
-          <div class="pr-row"><span class="pr-w">Wk 10+:</span>Eerste bodyweight pogingen</div>
-        </div>
+        <div class="ex-top"><div><div class="ex-n">1. Lat Pulldown <span class="warm-tag">1 warm-up</span><span class="work-tag">3-4 werksets</span></div><div class="ex-s">Jouw voorkeur — primaire trekoefening</div></div></div>
       </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Kabel seated row (neutral/duimloze grip) <span class="work-tag">3-4×10</span></div><div class="ex-s">Polsvriendelijk</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Straight arm lat pulldown <span class="work-tag">3×10</span></div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Bicep curl (dumbbell) <span class="work-tag">3×10-12</span></div><div class="ex-s">Bij duimpijn: dikkere grip/straps of overhand pak lichter</div></div></div></div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">2. Seated Cable Row - V Grip <span class="work-tag">3-4×8</span></div><div class="ex-s">Polsvriendelijk</div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>42,5-50kg × 5-8</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">3. Straight arm lat pulldown <span class="work-tag">3×10</span></div></div></div></div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">4. Bicep curl (dumbbell) <span class="work-tag">3×8-10</span></div><div class="ex-s">Bij duimpijn: dikkere grip/straps of overhand pak lichter</div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>9-10kg</div></div>
+      </div>
     </div>
+    <div class="alt p">Elke paar weken 1x Pull Up (Assisted) proberen om het doel (2-3 unassisted) bij te houden — zie Skills-tab. Huidig: ~40-47kg assistentie.</div>
     <div class="card">
       <div class="bdg r">Core — 6 min</div>
       <div class="ex"><div class="ex-top"><div><div class="ex-n">Dead bug <span class="work-tag">3×10/kant</span></div><div class="ex-s">Polsvriendelijk</div></div></div></div>
@@ -550,19 +545,22 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
 
   <!-- PLYO + MOBILITEIT -->
   <div class="tc" id="train-PM">
-    <div class="alt p">Geen vaste dag — plan dit los, bijvoorbeeld voor/na een cheer- of krachtsessie, of op je rustdag. Dit is waar plyo, core/abs, handstand en alle mobiliteit samenkomen.</div>
+    <div class="alt p"><b>Wanneer?</b> Niet na elke training. Plyo hoort bij Legday (doe je al — jump squats zitten er al in). Abs: 2x/week, een kort blokje na Legday én na Upper. Handstand/postuur/spagaat: dagelijks kort, los van trainingsdagen.</div>
     <div class="card">
       <div class="bdg o">Plyometrics — 10-15 min <span class="skill-tag">Explosiviteit (coach)</span></div>
       <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Kies 3 uit onderstaande lijst</div><div class="ex-s">3-4 sets × 8-10 reps of 20 sec · 30 sec rust</div></div></div>
+        <div class="ex-top"><div><div class="ex-n">Vast — elke keer</div><div class="ex-s">3-4 sets × 8-10 reps · 30 sec rust</div></div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">Kniezit → opspringen naar staand</div><div class="ex-s">Vanuit zit op je knieën, zonder handen, explosief opspringen naar een staande positie. Directe rate-of-force-development drill — sluit aan bij coach-feedback over explosiviteit uit de benen.</div></div></div></div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">Box jumps</div><div class="ex-s">Begin met een lage box, stap er altijd rustig af (nooit terugspringen) om de knieën te sparen.</div></div></div></div>
+      <div class="ex">
+        <div class="ex-top"><div><div class="ex-n">Kies er 1 bij, fase-afhankelijk</div><div class="ex-s">Optioneel — mag ook overgeslagen als de twee vaste genoeg zijn</div></div></div>
         <div class="pr">
-          <div class="pr-row"><span class="pr-w">Fase 1:</span>Pogos · lateral line jumps · squat jumps · <b>kniezit → opspringen naar staand</b></div>
-          <div class="pr-row"><span class="pr-w">Fase 2:</span>Ook: skater jumps · plate hops · <b>box jumps</b></div>
+          <div class="pr-row"><span class="pr-w">Fase 1:</span>Pogos · lateral line jumps · squat jumps</div>
+          <div class="pr-row"><span class="pr-w">Fase 2:</span>Ook: skater jumps · plate hops</div>
           <div class="pr-row"><span class="pr-w">Fase 3:</span>Ook: tuck jumps · alternating hops · Bulgarian met jump</div>
         </div>
       </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Kniezit → opspringen naar staand <span class="work-tag">nieuw</span></div><div class="ex-s">Vanuit zit op je knieën, zonder handen, explosief opspringen naar een staande positie. Directe rate-of-force-development drill — sluit aan bij coach-feedback over explosiviteit uit de benen.</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Box jumps <span class="work-tag">nieuw</span></div><div class="ex-s">Begin met een lage box, stap er altijd rustig af (nooit terugspringen) om de knieën te sparen.</div></div></div></div>
     </div>
     <div class="card">
       <div class="bdg r">Abs — dedicated blok</div>
@@ -608,27 +606,35 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
     </div>
   </div>
 
-  <!-- VAKANTIE -->
-  <div class="tc" id="train-V">
+  <!-- BILLEN -->
+  <div class="tc" id="train-Billen">
+    <div class="alt p">Geen vaste dag — pak 'm als het uitkomt, bijvoorbeeld extra op een Legday of los op een rustmoment.</div>
     <div class="card">
-      <div class="ct">Vakantie mini-sessie · 25-30 min</div>
-      <div class="bdg g">Sessie A — dag 1, 3, 5 (legs)</div>
-      <div class="rw"><div class="rn">Squat jumps</div><div class="rv">3×10</div></div>
-      <div class="rw"><div class="rn">Bulgaarse split squat (bodyweight)</div><div class="rv">3×12/kant</div></div>
-      <div class="rw"><div class="rn">Éénbenige glute bridge</div><div class="rv">3×12/kant</div></div>
-      <div class="rw"><div class="rn">Dead bug</div><div class="rv">3×10/kant</div></div>
-      <div class="rw"><div class="rn">Hollow rock</div><div class="rv">3×20 sec</div></div>
-      <div class="rw"><div class="rn">Splits progressie</div><div class="rv">2×45 sec/kant</div></div>
-      <div class="rw"><div class="rn">Pancake drill</div><div class="rv">2×45 sec</div></div>
+      <div class="ct">Activatie — 5 min</div>
+      <div class="rw"><div><div class="rn">Band walks (zij, mini-band)</div></div><div class="rv">2×12/kant</div></div>
+      <div class="rw"><div><div class="rn">Glute bridge (bodyweight)</div></div><div class="rv">2×15</div></div>
     </div>
     <div class="card">
-      <div class="bdg p">Sessie B — dag 2, 4 (upper)</div>
-      <div class="rw"><div class="rn">Push-ups max reps</div><div class="rv">3 sets</div></div>
-      <div class="rw"><div class="rn">Pike push-ups</div><div class="rv">3×8</div></div>
-      <div class="rw"><div class="rn">Side plank op onderarm</div><div class="rv">3×25 sec</div></div>
-      <div class="rw"><div><div class="rn">Handstand tegen muur</div><div class="rs">Alleen als polsen OK zijn</div></div><div class="rv">3×15 sec</div></div>
-      <div class="rw"><div class="rn">Dropback to wall</div><div class="rv">5 herh.</div></div>
-      <div class="rw"><div class="rn">Nekversterking (handweerstand)</div><div class="rv">3×10/richting</div></div>
+      <div class="bdg o">Hoofdblok — 25-30 min</div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">1. Hip Thrust (Machine) <span class="warm-tag">1 warm-up</span><span class="work-tag">3 werksets</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Tot 130kg × 4-8 — je sterkste lift, hier zit ruimte</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">2. Standing Cable Glute Kickbacks <span class="work-tag">3×8/kant</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>11-16kg</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">3. Hip Abduction (Machine) <span class="work-tag">3×8-12</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>tot 102,5kg</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">4. Hip Adduction (Machine) <span class="work-tag">2-3×8-9</span></div></div></div>
+        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>~42,5kg</div></div>
+      </div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">5. Curtsy lunge (dumbbell) <span class="work-tag">3×10/kant</span></div><div class="ex-s">Nieuw — richt zich op bilspier medius, mist nog in je routine</div></div></div></div>
+      <div class="ex"><div class="ex-top"><div><div class="ex-n">6. Eenbenige glute bridge <span class="work-tag">3×12/kant</span></div></div></div></div>
+    </div>
+    <div class="card">
+      <div class="ct">Cooldown</div>
+      <div class="rw"><div><div class="rn">Pigeon stretch</div></div><div class="rv">45 sec/kant</div></div>
+      <div class="rw"><div><div class="rn">Couch stretch</div></div><div class="rv">45 sec/kant</div></div>
     </div>
   </div>
 
@@ -648,7 +654,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-heigh
       <div class="rw"><div><div class="rn">Donderdag</div><div class="rs">Reformer pilates</div></div><div class="rv">Vast</div></div>
       <div class="rw"><div><div class="rn">Vrijdag</div><div class="rs">Rust · optioneel korte Plyo+Mobiliteit (10-15 min)</div></div><div class="rv">Rust</div></div>
       <div class="rw"><div><div class="rn">Zaterdag</div><div class="rs">Cheer training</div></div><div class="rv">Vast</div></div>
-      <div class="rw"><div><div class="rn">Zondag</div><div class="rs">Upper — combi, of los Push/Pull bij extra tijd</div></div><div class="rv">Vast</div></div>
+      <div class="rw"><div><div class="rn">Zondag</div><div class="rs">Upper (of los Push/Pull)</div></div><div class="rv">Vast</div></div>
     </div>
     <div class="card">
       <div class="ct">Als je een training niet afmaakt</div>
