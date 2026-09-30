@@ -1,1070 +1,611 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5B4BC4">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Cheer Coach">
-<title>Cheer S&C Coach</title>
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0b0d17">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
-
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cheer">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<title>Cheer blok 2 · Hanne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0d17;--surf:#141726;--surf2:#1b1f34;
-  --brd:rgba(150,160,220,0.08);--brd2:rgba(150,160,220,0.15);
-  --tx:#eceefa;--tx2:#9498bd;--tx3:#565c80;
-  --ac:#a78bfa;--ac-bg:rgba(167,139,250,0.10);--ac-brd:rgba(167,139,250,0.24);
-  --ac2:#60a5fa;--ac2-bg:rgba(96,165,250,0.10);--ac2-brd:rgba(96,165,250,0.24);
-  --red:#e0838a;--red-bg:rgba(224,131,138,0.08);--red-brd:rgba(224,131,138,0.20);
-  --or:#e0a374;--or-bg:rgba(224,163,116,0.08);--or-brd:rgba(224,163,116,0.20);
-  --gr:#7fcfa0;--gr-bg:rgba(127,207,160,0.08);--gr-brd:rgba(127,207,160,0.20);
-  --yw:#d9be6e;--yw-bg:rgba(217,190,110,0.08);--yw-brd:rgba(217,190,110,0.20);
-  --r:10px;--font:'Inter',system-ui,sans-serif;
+  --bg:#F4F3FB; --surface:#FFFFFF; --surface2:#ECEAF8; --ink:#231F3D; --muted:#6D6989;
+  --line:#DEDBEF; --paars:#5B4BC4; --paars-soft:#E6E2FA; --blauw:#3D78D0; --blauw-soft:#E1ECFA;
+  --done:#4E9C80; --done-soft:#DDF1E9; --warm:#C79436; --warm-soft:#F8EDD6;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{background:var(--bg);color:var(--tx);font-family:var(--font);min-height:100vh;overflow-x:hidden}
-.hdr{background:linear-gradient(135deg,#181c33,#12162a,#0c1424);padding:52px 16px 24px;position:relative;overflow:hidden}
-.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(167,139,250,0.13),transparent 70%);pointer-events:none}
-.hdr::after{content:'';position:absolute;bottom:-50px;left:-30px;width:180px;height:180px;background:radial-gradient(circle,rgba(96,165,250,0.10),transparent 70%);pointer-events:none}
-.hdr-eye{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);margin-bottom:6px}
-.hdr h1{font-size:22px;font-weight:600;margin-bottom:4px}
-.hdr p{font-size:12px;color:var(--tx2);line-height:1.5}
-.hstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
-.hs{background:rgba(255,255,255,0.04);border:0.5px solid var(--brd2);border-radius:var(--r);padding:8px 4px;text-align:center}
-.hs-v{font-size:18px;font-weight:600;color:var(--ac)}
-.hs-l{font-size:10px;color:var(--tx3);margin-top:2px}
-.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--brd2);display:flex;padding:8px 0 env(safe-area-inset-bottom,16px);z-index:100}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;background:none;border:none;cursor:pointer;color:var(--tx3);font-size:9px;font-family:var(--font);transition:color .15s}
-.nb.active{color:var(--ac2)}
-.nb-ic{font-size:18px;line-height:1}
-.main{padding:14px 14px 110px}
-.pg{display:none}.pg.active{display:block}
-.card{background:var(--surf);border:0.5px solid var(--brd);border-radius:14px;padding:14px;margin-bottom:10px}
-.ct{font-size:14px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px}
-.bdg{display:inline-flex;align-items:center;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:6px;margin-bottom:8px}
-.bdg.r{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-brd)}
-.bdg.o{background:var(--or-bg);color:var(--or);border:0.5px solid var(--or-brd)}
-.bdg.g{background:var(--gr-bg);color:var(--gr);border:0.5px solid var(--gr-brd)}
-.bdg.p{background:var(--ac-bg);color:var(--ac);border:0.5px solid var(--ac-brd)}
-.bdg.y{background:var(--yw-bg);color:var(--yw);border:0.5px solid var(--yw-brd)}
-.bdg.b{background:var(--ac2-bg);color:var(--ac2);border:0.5px solid var(--ac2-brd)}
-.skill-tag{display:inline-block;font-size:10px;font-weight:600;background:var(--ac2-bg);border:0.5px solid var(--ac2-brd);border-radius:5px;padding:1px 6px;color:var(--ac2);margin-left:4px}
-.alt{border-radius:var(--r);padding:10px 12px;font-size:12px;line-height:1.6;margin-bottom:10px}
-.alt.r{background:var(--red-bg);border:0.5px solid var(--red-brd);color:var(--red)}
-.alt.o{background:var(--or-bg);border:0.5px solid var(--or-brd);color:var(--or)}
-.alt.p{background:var(--ac-bg);border:0.5px solid var(--ac-brd);color:var(--ac)}
-.alt.g{background:var(--gr-bg);border:0.5px solid var(--gr-brd);color:var(--gr)}
-.alt.y{background:var(--yw-bg);border:0.5px solid var(--yw-brd);color:var(--yw)}
-.rw{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--brd)}
-.rw:last-child{border-bottom:none}
-.rn{font-size:13px;font-weight:500}
-.rs{font-size:11px;color:var(--tx3);margin-top:2px;line-height:1.4}
-.rv{font-size:12px;color:var(--tx2);text-align:right;white-space:nowrap;flex-shrink:0}
-.warm-tag{display:inline-block;font-size:10px;font-weight:600;background:var(--or-bg);border:0.5px solid var(--or-brd);border-radius:5px;padding:1px 6px;color:var(--or);margin-left:4px}
-.work-tag{display:inline-block;font-size:10px;font-weight:600;background:var(--surf2);border:0.5px solid var(--brd2);border-radius:5px;padding:1px 6px;color:var(--tx2);margin-left:4px}
-.tabbar{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;padding-bottom:2px;-webkit-overflow-scrolling:touch}
-.tabbar::-webkit-scrollbar{display:none}
-.tb{white-space:nowrap;font-size:11px;font-weight:500;padding:6px 12px;border-radius:20px;border:0.5px solid var(--brd);background:var(--surf2);color:var(--tx2);cursor:pointer;font-family:var(--font);flex-shrink:0}
-.tb.active{background:var(--ac-bg);color:var(--ac);border-color:var(--ac-brd)}
-.tc{display:none}.tc.active{display:block}
-.ex{padding:10px 0;border-bottom:0.5px solid var(--brd)}
-.ex:last-child{border-bottom:none}
-.ex-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-.ex-n{font-size:13px;font-weight:500}
-.ex-s{font-size:11px;color:var(--tx3);margin-top:2px;line-height:1.4}
-.pr{margin-top:7px;display:flex;flex-direction:column;gap:3px}
-.pr-row{font-size:11px;color:var(--tx2);display:flex;gap:5px;line-height:1.4}
-.pr-w{color:var(--ac);min-width:65px;flex-shrink:0;font-weight:500}
-.step{display:flex;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--brd);align-items:flex-start}
-.step:last-child{border-bottom:none}
-.sn{width:20px;height:20px;border-radius:50%;background:var(--ac-bg);color:var(--ac);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:0.5px solid var(--ac-brd)}
-.st{font-size:13px;font-weight:500}
-.sd{font-size:11px;color:var(--tx2);margin-top:2px;line-height:1.5}
-.prow{display:flex;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--brd);align-items:flex-start}
-.prow:last-child{border-bottom:none}
-.pdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.pdot.r{background:var(--red)}.pdot.o{background:var(--or)}.pdot.y{background:var(--gr)}
-.pl{font-size:13px;font-weight:500}
-.pd{font-size:11px;color:var(--tx3);margin-top:2px;line-height:1.4}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.gc{background:var(--surf2);border:0.5px solid var(--brd);border-radius:var(--r);padding:10px}
-.gc h4{font-size:12px;font-weight:600;margin-bottom:6px}
-.gc ul{list-style:none;display:flex;flex-direction:column;gap:3px}
-.gc li{font-size:11px;color:var(--tx2);display:flex;gap:4px;line-height:1.4}
-.gc li::before{content:'✓';color:var(--ac);flex-shrink:0}
-.mr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--brd);font-size:13px;color:var(--tx2)}
-.mr:last-child{border-bottom:none}
-.mv{color:var(--ac);font-weight:500}
-.eq{font-size:13px;color:var(--tx2);padding:8px 0;border-bottom:0.5px solid var(--brd);line-height:1.5;display:flex;gap:6px}
-.eq:last-child{border-bottom:none}
-.eq-n{color:var(--ac);font-weight:600;flex-shrink:0}
-.sbtn{width:100%;padding:12px;border-radius:var(--r);border:0.5px solid var(--ac-brd);background:var(--ac-bg);color:var(--ac);font-size:13px;font-weight:500;font-family:var(--font);cursor:pointer;margin-top:7px;text-align:center}
-.ph{position:relative;padding-left:18px;margin-bottom:14px}
-.ph::before{content:'';position:absolute;left:6px;top:22px;bottom:-14px;width:1px;background:var(--brd2)}
-.ph:last-child::before{display:none}
-.phd{position:absolute;left:0;top:14px;width:13px;height:13px;border-radius:50%;border:0.5px solid var(--brd2);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:7px;color:var(--tx3)}
-.phd.a{background:var(--ac2-bg);border-color:var(--ac2-brd);color:var(--ac2)}
-.pi{background:var(--surf);border:0.5px solid var(--brd);border-radius:var(--r);padding:10px}
-.ph-h{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap;cursor:pointer}
-.ph-chev{color:var(--tx3);font-size:11px;transition:transform .2s;flex-shrink:0}
-.ph.collapsed .ph-chev{transform:rotate(-90deg)}
-.ph.collapsed .pi-body{display:none}
-.ph-t{font-size:13px;font-weight:600}
-.ph-w{font-size:10px;color:var(--tx3);margin-left:auto}
-.ph-items{display:flex;flex-direction:column;gap:3px}
-.wk-list{display:flex;flex-direction:column;gap:5px;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--brd)}
-.wk-row{display:flex;align-items:baseline;gap:6px;font-size:11px;color:var(--tx3);padding:6px 8px;background:var(--surf);border:0.5px solid var(--brd);border-radius:8px}
-.wk-row b{color:var(--tx2);font-weight:600;min-width:14px}
-.wk-row.current{color:var(--ac2);border-color:var(--ac2-brd);background:var(--ac2-bg)}
-.wk-row.current b{color:var(--ac2)}
-.wk-row.deload{color:var(--yw);border-color:var(--yw-brd);background:var(--yw-bg)}
-.wk-row.deload b{color:var(--yw)}
-.wk-row.event{color:var(--or);border-color:var(--or-brd);background:var(--or-bg)}
-.wk-row.event b{color:var(--or)}
-.wk-row.vacation{color:var(--gr);border-color:var(--gr-brd);background:var(--gr-bg)}
-.wk-row.vacation b{color:var(--gr)}
-.wk-row .wk-now{font-weight:600;color:var(--ac2);margin-left:2px}
-.ph-item{font-size:12px;color:var(--tx2);line-height:1.4;display:flex;gap:5px}
-.ph-item::before{content:'·';color:var(--ac)}
-.wg{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
-.wc{background:var(--surf2);border:0.5px solid var(--brd);border-radius:var(--r);padding:7px}
-.wc.dl{border-color:var(--yw-brd);background:var(--yw-bg)}
-.wc.ev{border-color:var(--ac-brd);background:var(--ac-bg)}
-.wc.va{border-color:var(--gr-brd);background:var(--gr-bg)}
-.wl{font-size:12px;font-weight:600;color:var(--tx);margin-bottom:1px}
-.wc.dl .wl{color:var(--yw)}.wc.ev .wl{color:var(--ac)}.wc.va .wl{color:var(--gr)}
-.wt-label{font-size:10px;color:var(--tx3)}
-.wn{font-size:11px;color:var(--tx2);margin-top:3px;line-height:1.4}
-.stitle{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin:16px 0 8px}
-.stitle:first-child{margin-top:2px}
-.sk-ph{display:flex;gap:6px;padding:8px 0;border-bottom:0.5px solid var(--brd);font-size:12px}
-.sk-ph:last-child{border-bottom:none}
-.sk-f{color:var(--ac2);font-weight:600;min-width:70px;flex-shrink:0}
-.sk-d{color:var(--tx2);line-height:1.4}
-.br-row{display:flex;gap:7px;padding:7px 0;border-bottom:0.5px solid var(--brd)}
-.br-row:last-child{border-bottom:none}
-.br-w{font-size:11px;color:var(--ac2);font-weight:600;min-width:65px;flex-shrink:0}
-.br-d{font-size:12px;color:var(--tx2);line-height:1.4}
-.exp-row{display:flex;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--brd);align-items:flex-start}
-.exp-row:last-child{border-bottom:none}
-.exp-w{font-size:11px;font-weight:600;color:var(--ac2);min-width:65px;flex-shrink:0}
-.exp-d{font-size:12px;color:var(--tx2);line-height:1.5}
-/* CHECKLIST */
-.cl-date{font-size:12px;color:var(--tx2);margin-bottom:12px;text-align:center}
-.cl-section{margin-bottom:14px}
-.cl-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin-bottom:6px;padding-left:2px}
-.cl-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--surf);border:0.5px solid var(--brd);border-radius:var(--r);margin-bottom:5px;cursor:pointer}
-.cl-item.done{background:var(--gr-bg);border-color:var(--gr-brd)}
-.cl-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--brd2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px}
-.cl-item.done .cl-check{background:var(--gr);border-color:var(--gr);color:#000}
-.cl-text{font-size:13px;color:var(--tx);line-height:1.4}
-.cl-item.done .cl-text{color:var(--tx3);text-decoration:line-through}
-.cl-sub{font-size:11px;color:var(--tx3);margin-top:2px}
-.cl-progress{background:var(--surf);border:0.5px solid var(--brd);border-radius:14px;padding:14px;margin-bottom:10px}
-.cl-prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.cl-prog-label{font-size:13px;font-weight:500}
-.cl-prog-count{font-size:13px;color:var(--ac);font-weight:600}
-.cl-prog-bar{height:6px;background:var(--surf2);border-radius:3px;overflow:hidden}
-.cl-prog-fill{height:100%;background:var(--ac);border-radius:3px;transition:width .3s}
-/* EIWIT */
-.prot-card{background:var(--surf);border:0.5px solid var(--brd);border-radius:14px;padding:14px;margin-bottom:10px}
-.prot-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-.prot-total{font-size:36px;font-weight:600;color:var(--ac);line-height:1}
-.prot-goal{font-size:12px;color:var(--tx3);margin-top:4px}
-.prot-bar-wrap{height:8px;background:var(--surf2);border-radius:4px;overflow:hidden;margin-bottom:10px}
-.prot-bar{height:100%;background:var(--ac);border-radius:4px;transition:width .3s}
-.prot-bar.done{background:var(--gr)}
-.prot-reset{font-size:11px;color:var(--tx3);background:none;border:0.5px solid var(--brd2);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:var(--font)}
-.prot-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.prot-item{background:var(--surf2);border:0.5px solid var(--brd);border-radius:var(--r);padding:10px;cursor:pointer;transition:all .12s;position:relative;user-select:none}
-.prot-item:active{transform:scale(0.96)}
-.prot-item.tapped{border-color:var(--ac-brd);background:var(--ac-bg)}
-.prot-name{font-size:12px;font-weight:500;color:var(--tx)}
-.prot-portion{font-size:10px;color:var(--tx3);margin-top:1px}
-.prot-val{font-size:15px;font-weight:600;color:var(--ac);margin-top:4px}
-.prot-count{position:absolute;top:6px;right:8px;font-size:10px;background:var(--ac-bg);color:var(--ac);border-radius:10px;padding:1px 6px;border:0.5px solid var(--ac-brd);font-weight:600}
-/* KALENDER */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#15132A; --surface:#211E3A; --surface2:#2A2648; --ink:#ECEAF8; --muted:#A6A2C4;
+    --line:#35305A; --paars:#A194F2; --paars-soft:#332C63; --blauw:#82B0F2; --blauw-soft:#1F3252;
+    --done:#7CC7A8; --done-soft:#1D3A31; --warm:#E3B863; --warm-soft:#3C3120;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15132A; --surface:#211E3A; --surface2:#2A2648; --ink:#ECEAF8; --muted:#A6A2C4;
+  --line:#35305A; --paars:#A194F2; --paars-soft:#332C63; --blauw:#82B0F2; --blauw-soft:#1F3252;
+  --done:#7CC7A8; --done-soft:#1D3A31; --warm:#E3B863; --warm-soft:#3C3120;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque","Figtree",system-ui,sans-serif;margin:0;letter-spacing:-.01em}
+button{font:inherit;color:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 96px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 14px}
+.top .who{font-weight:600;color:var(--muted);font-size:14px}
+.top .wk{font-size:14px;color:var(--paars);font-weight:600}
 
+/* Hero: dag */
+.day-hero{padding:6px 2px 14px}
+.day-hero .date{color:var(--muted);font-size:15px}
+.day-hero h1{font-size:clamp(30px,8vw,40px);line-height:1.05;margin:6px 0 8px}
+.day-hero .sub{color:var(--muted);font-size:15px}
+.daynav{display:flex;gap:8px;margin:12px 0 4px;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:14px;cursor:pointer}
+.pill:focus-visible,.item:focus-visible,.tab:focus-visible,.food:focus-visible,.sum:focus-visible{outline:2px solid var(--paars);outline-offset:2px}
+.pill.on{background:var(--paars);border-color:var(--paars);color:#fff}
+
+/* weekstrip */
+.strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:14px 0 18px}
+.sd{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:7px 0 8px;text-align:center;cursor:pointer;font-size:12px;color:var(--muted)}
+.sd b{display:block;font-size:15px;color:var(--ink);font-weight:600}
+.sd i{display:block;width:6px;height:6px;border-radius:50%;margin:5px auto 0;background:var(--line)}
+.sd.gym i{background:var(--paars)} .sd.cheer i{background:var(--blauw)} .sd.cond i{background:var(--warm)} .sd.rest i{background:var(--line)}
+.sd.cur{border-color:var(--paars);box-shadow:inset 0 0 0 1px var(--paars)}
+.sd.full i{background:var(--done)}
+
+.progress{height:6px;border-radius:6px;background:var(--surface2);overflow:hidden;margin:4px 0 18px}
+.progress span{display:block;height:100%;background:var(--done);transition:width .3s}
+
+.note{background:var(--warm-soft);border-radius:14px;padding:12px 14px;font-size:14.5px;margin:0 0 14px}
+.note b{font-weight:600}
+
+/* blokken */
+.block{background:var(--surface);border:1px solid var(--line);border-radius:16px;margin:0 0 12px;overflow:hidden}
+.block>h3{font-size:17px;padding:14px 16px 4px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.block>h3 small{font-family:"Figtree",sans-serif;font-weight:500;color:var(--muted);font-size:13px;letter-spacing:0}
+.item{display:grid;grid-template-columns:24px 1fr;gap:12px;padding:11px 16px;border-top:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-bottom:0;width:100%;text-align:left}
+.block>h3+.item{border-top:0}
+.box{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);margin-top:1px;display:grid;place-items:center;transition:background .15s,border-color .15s}
+.item.ok .box{background:var(--done);border-color:var(--done)}
+.item.ok .box::after{content:"";width:10px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.item .nm{font-weight:600;font-size:15.5px}
+.item.ok .nm{color:var(--muted)}
+.item .ds{font-size:14.5px;color:var(--paars);font-weight:600}
+.item .nt{font-size:13.5px;color:var(--muted);margin-top:2px}
+.tag{display:inline-block;font-size:12px;font-weight:600;border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:1px}
+.tag.test{background:var(--warm-soft);color:var(--warm)}
+.tag.opt{background:var(--blauw-soft);color:var(--blauw)}
+
+/* training tab */
+.phase{background:var(--surface);border:1px solid var(--line);border-radius:16px;margin:0 0 10px;overflow:hidden}
+.phase>.sum{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;background:none;border:0;cursor:pointer;text-align:left}
+.phase .pn{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:17px}
+.phase .pw{color:var(--muted);font-size:13.5px}
+.phase .st{font-size:12px;font-weight:600;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.st.klaar{background:var(--done-soft);color:var(--done)} .st.nu{background:var(--paars-soft);color:var(--paars)} .st.straks{background:var(--surface2);color:var(--muted)}
+.phase .body{padding:0 16px 14px;display:none}
+.phase.open .body{display:block}
+.phase .focus{font-size:14.5px;color:var(--muted);margin:0 0 10px}
+.wkrow{border-top:1px solid var(--line);padding:10px 0}
+.wkrow h4{margin:0 0 6px;font-size:14.5px}
+.wkrow h4 span{color:var(--muted);font-weight:500}
+.dayl{display:grid;grid-template-columns:34px 1fr;gap:4px 8px;font-size:14px}
+.dayl button{grid-column:1/-1;display:grid;grid-template-columns:34px 1fr;gap:8px;background:none;border:0;padding:3px 0;text-align:left;cursor:pointer}
+.dayl .dn{color:var(--muted)}
+.kr{margin-top:8px}
+.krh{font-weight:600;font-size:14px;margin-bottom:2px}
+.krr{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:3px 0;color:var(--muted)}
+.krr b{color:var(--paars);font-weight:600;text-align:right}
+.lifts{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+table.goals{width:100%;border-collapse:collapse;font-size:14px}
+.goals th,.goals td{text-align:left;padding:8px 6px;border-top:1px solid var(--line);vertical-align:top}
+.goals th{font-weight:600;color:var(--muted);font-size:13px;border-top:0}
+.goals td:last-child{color:var(--paars);font-weight:600}
+.scroll{overflow-x:auto}
+
+/* eiwit */
+.pro-hero{display:flex;align-items:flex-end;gap:14px;margin:6px 0 4px}
+.pro-hero .big{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:56px;line-height:.9}
+.pro-hero .of{color:var(--muted);font-size:16px;padding-bottom:6px}
+.meta{color:var(--muted);font-size:14px;margin:6px 0 16px}
+.foods{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 12px 14px}
+.food{position:relative;background:var(--surface2);border:1px solid transparent;border-radius:12px;padding:10px 11px;text-align:left;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.food .fn{font-weight:600;font-size:14.5px;line-height:1.2}
+.food .fp{font-size:12.5px;color:var(--muted);margin-top:3px}
+.food .cnt{position:absolute;top:8px;right:9px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--paars);color:#fff;font-size:12.5px;font-weight:700;display:none;align-items:center;justify-content:center}
+.food.has{border-color:var(--paars);background:var(--paars-soft)}
+.food.has .cnt{display:flex}
+.grp{font-size:13.5px;font-weight:600;color:var(--muted);padding:8px 16px 2px}
+.hint{font-size:13px;color:var(--muted);padding:0 16px 12px}
+.water{display:flex;gap:6px;flex-wrap:wrap;padding:6px 16px 14px}
+.glass{width:30px;height:38px;border-radius:5px 5px 9px 9px;border:1.5px solid var(--blauw);background:none;cursor:pointer;position:relative;overflow:hidden;padding:0}
+.glass.on{background:var(--blauw)}
+.supp{display:flex;flex-wrap:wrap;gap:8px;padding:6px 16px 14px}
+
+/* tabs */
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+.tabs .in{display:flex;max-width:560px;width:100%}
+.tab{flex:1;background:none;border:0;padding:12px 0 13px;font-weight:600;font-size:14.5px;color:var(--muted);cursor:pointer;border-top:2px solid transparent}
+.tab.on{color:var(--paars);border-top-color:var(--paars)}
+.sync{font-size:12px;color:var(--muted);text-align:center;margin-top:18px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="hdr">
-  <div class="hdr-eye">Strength & Conditioning · Cheerleading</div>
-  <h1>Jouw 12-weken programma</h1>
-  <p>Nationaal niveau · Base · Zomer 2026</p>
-  <div class="hstats">
-    <div class="hs"><div class="hs-v">12</div><div class="hs-l">weken</div></div>
-    <div class="hs"><div class="hs-v">4</div><div class="hs-l">varianten</div></div>
-    <div class="hs"><div class="hs-v">2</div><div class="hs-l">deload</div></div>
-    <div class="hs"><div class="hs-v">6+</div><div class="hs-l">skills</div></div>
-  </div>
-</div>
-
-<div class="main">
-
-<!-- VANDAAG -->
-<div class="pg active" id="pg-check">
-  <div id="cl-date-display" class="cl-date"></div>
-  <div class="card" style="padding:10px 12px;border-left:2.5px solid var(--ac2)">
-    <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ac2);margin-bottom:4px">🎯 Skill focus deze fase</div>
-    <div class="skill-focus-text" style="font-size:12px;color:var(--tx2);line-height:1.5"></div>
-  </div>
-  <div class="alt y">🤚 Duim — zolang gevoelig: vermijd volle grip op barbells, pull-ups en farmers carry (straps/kabel i.p.v.). Gebruik bij voorkeur machines met pin-selectie in plaats van losse plates, om het laden zelf te vermijden.</div>
-  <div class="cl-progress">
-    <div class="cl-prog-top">
-      <span class="cl-prog-label">Voortgang vandaag</span>
-      <span class="cl-prog-count" id="prog-count">0 / 0</span>
-    </div>
-    <div class="cl-prog-bar"><div class="cl-prog-fill" id="prog-fill" style="width:0%"></div></div>
-  </div>
-  <div class="cl-section">
-    <div class="cl-label">Dagelijkse kern — elke dag (5-6 min)</div>
-    <div class="cl-item" onclick="toggle(this)" data-id="d1">
-      <div class="cl-check"></div>
-      <div><div class="cl-text">Splits routine <span class="skill-tag">Splits</span></div><div class="cl-sub">Rechts + links 2×30 sec · lunge hip flexor 30 sec/kant</div></div>
-    </div>
-    <div class="cl-item" onclick="toggle(this)" data-id="d2">
-      <div class="cl-check"></div>
-      <div><div class="cl-text">Postuur + nek routine</div><div class="cl-sub">Volledig blok — zie Plyo + Mobiliteit tab</div></div>
-    </div>
-    <div class="cl-item" onclick="toggle(this)" data-id="d3">
-      <div class="cl-check"></div>
-      <div><div class="cl-text">Pols oefeningen (specialist)</div><div class="cl-sub">Extensoren kracht + ulnair-radiair deviatie · links elke dag · rechts om de dag</div></div>
-    </div>
-  </div>
-  <div class="cl-section">
-    <div class="cl-label">Voeding & supplementen</div>
-    <div class="cl-item" onclick="toggle(this)" data-id="v1">
-      <div class="cl-check"></div>
-      <div><div class="cl-text">Eiwitdoel op weg</div><div class="cl-sub">Doel: 110-120g · zie eiwit tab voor tracker</div></div>
-    </div>
-    <div class="cl-item" onclick="toggle(this)" data-id="v2">
-      <div class="cl-check"></div>
-      <div><div class="cl-text">Water (2-2.5L)</div></div>
-    </div>
-    <div class="cl-item" onclick="toggle(this)" data-id="v3">
-      <div class="cl-check"></div>
-      <div><div class="cl-text">Supplementen</div><div class="cl-sub">Creatine · magnesium · multivitamine · ashwagandha · gut/darm · collageen</div></div>
-    </div>
-  </div>
-  <div class="cl-section">
-    <div class="cl-label" id="cl-training-label">Training vandaag</div>
-    <div id="cl-training-items"></div>
-  </div>
-  <button class="sbtn" onclick="resetDay()" style="background:var(--red-bg);border-color:var(--red-brd);color:var(--red);margin-top:4px">Dag resetten ↺</button>
-</div>
-
-<!-- EIWIT -->
-<div class="pg" id="pg-eiwit">
-  <div class="prot-card">
-    <div class="prot-top">
-      <div>
-        <div class="prot-total"><span id="prot-total">0</span><span style="font-size:16px;color:var(--tx3);font-weight:400">g</span></div>
-        <div class="prot-goal">doel: 110–120g per dag</div>
-      </div>
-      <button class="prot-reset" onclick="resetProtein()">Reset dag ↺</button>
-    </div>
-    <div class="prot-bar-wrap"><div class="prot-bar" id="prot-bar" style="width:0%"></div></div>
-    <div style="font-size:11px;color:var(--tx3);text-align:center" id="prot-msg">Tik om toe te voegen · lang indrukken = aftrekken</div>
-  </div>
-  <div class="card">
-    <div class="ct">Per 50g portie</div>
-    <div class="prot-grid" id="prot-grid-main"></div>
-  </div>
-  <div class="card">
-    <div class="ct">Per stuk / 10g / scoop</div>
-    <div class="prot-grid" id="prot-grid-extra"></div>
-  </div>
-</div>
-
-<!-- PROGRAMMA (incl. weekindeling per fase + weekcheck) -->
-<div class="pg" id="pg-programma">
-  <div class="alt r">⚠ Polsen: verstevigen, niet strekken (specialist advies). Gebruik de 2 oefeningen dagelijks.</div>
-  <div class="alt y">🤚 Duim — zolang gevoelig: geen volle grip op barbells of pull-ups, gebruik kabels met touw/neutral handle en machines i.p.v. losse plates.</div>
-
-  <div class="stitle">Faseoverzicht</div>
-  <div class="ph collapsed"><div class="phd a">1</div><div class="pi">
-    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg o">Fase 1</span><div class="ph-t">Aanloop & fundament</div><div class="ph-w">Wk 1–3</div><span class="ph-chev">▾</span></div>
-    <div class="pi-body">
-    <div class="ph-items">
-      <div class="ph-item">Front squat leren (begin met stang only)</div>
-      <div class="ph-item">Core activatiepatronen: dead bug, hollow rock</div>
-      <div class="ph-item">Plyometrics: pogos, lateral line jumps, squat jumps</div>
-      <div class="ph-item">Dropback to wall (opgewarmd, voorzichtig)</div>
-    </div>
-    <div class="wk-list" data-phase="f1"></div>
-    </div>
-  </div></div>
-
-  <div class="ph collapsed"><div class="phd">2</div><div class="pi">
-    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg p">Fase 2</span><div class="ph-t">Kracht & mobiliteit</div><div class="ph-w">Wk 4–6</div><span class="ph-chev">▾</span></div>
-    <div class="pi-body">
-    <div class="ph-items">
-      <div class="ph-item">Jefferson curl introduceren (wk 4, geen gewicht)</div>
-      <div class="ph-item">Pull-up: van -40kg naar -30kg assistance</div>
-      <div class="ph-item">Plyometrics: ook skater jumps en plate hops</div>
-      <div class="ph-item">Handstand tegen muur, shape leren</div>
-    </div>
-    <div class="wk-list" data-phase="f2"></div>
-    </div>
-  </div></div>
-
-  <div class="ph collapsed"><div class="phd">D</div><div class="pi">
-    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg y">Deload</span><div class="ph-t">Herstelweek</div><div class="ph-w">Wk 7</div><span class="ph-chev">▾</span></div>
-    <div class="pi-body">
-    <div class="ph-items">
-      <div class="ph-item">Volume 40% omlaag, geen PR pogingen</div>
-      <div class="ph-item">Focus op mobiliteit, handstand, splits</div>
-    </div>
-    <div class="wk-list" data-phase="dl"></div>
-    </div>
-  </div></div>
-
-  <div class="ph"><div class="phd">3</div><div class="pi">
-    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg r">Fase 3</span><div class="ph-t">Intensivering</div><div class="ph-w">Wk 8–10</div><span class="ph-chev">▾</span></div>
-    <div class="pi-body">
-    <div class="ph-items">
-      <div class="ph-item">Alle 7 plyometrics beschikbaar incl. tuck jumps</div>
-      <div class="ph-item">Bulgarian split squat met jump introduceren</div>
-      <div class="ph-item">Pull-ups: eerste bodyweight pogingen</div>
-      <div class="ph-item">Ring push-ups na polsgoedkeuring</div>
-      <div class="ph-item">Handstand vrijstaand proberen</div>
-    </div>
-    <div class="wk-list" data-phase="f3"></div>
-    </div>
-  </div></div>
-
-  <div class="ph"><div class="phd">✦</div><div class="pi">
-    <div class="ph-h" onclick="this.closest('.ph').classList.toggle('collapsed')"><span class="bdg g">Finale</span><div class="ph-t">Piek & showcase</div><div class="ph-w">Wk 11–12</div><span class="ph-chev">▾</span></div>
-    <div class="pi-body">
-    <div class="ph-items">
-      <div class="ph-item">Volume omlaag, kwaliteit omhoog</div>
-      <div class="ph-item">Week 12: splits check, push-up max, pull-up test</div>
-    </div>
-    <div class="wk-list" data-phase="fin"></div>
-    </div>
-  </div></div>
-
-  <div class="stitle">Prioriteiten</div>
-  <div class="card">
-    <div class="bdg r">Kritiek</div>
-    <div class="prow"><div class="pdot r"></div><div><div class="pl">Eiwitinname verhogen</div><div class="pd">Van ~50g naar 110-120g/dag</div></div></div>
-    <div class="prow"><div class="pdot r"></div><div><div class="pl">Core kracht & integratie</div><div class="pd">Juryfeedback: meer uit core & benen</div></div></div>
-    <div class="prow"><div class="pdot r"></div><div><div class="pl">Polsen verstevigen</div><div class="pd">Dagelijks 2 oefeningen specialist — links elke dag, rechts om de dag</div></div></div>
-  </div>
-  <div class="card">
-    <div class="bdg o">Hoog</div>
-    <div class="prow"><div class="pdot o"></div><div><div class="pl">Push-ups → 15 reps</div></div></div>
-    <div class="prow"><div class="pdot o"></div><div><div class="pl">Pull-ups → 2-3 bodyweight</div></div></div>
-    <div class="prow"><div class="pdot o"></div><div><div class="pl">Nekversterking</div><div class="pd">Stabiliteit als base, vertrouwen bij nieuwe stunts</div></div></div>
-    <div class="prow"><div class="pdot o"></div><div><div class="pl">Armen strekken in extended stunts</div><div class="pd">Kabel overhead press traint dit direct</div></div></div>
-  </div>
-
-  <div class="stitle">Wekelijkse check-in</div>
-  <div class="card">
-    <div class="ct">Check-in vragen</div>
-    <div class="eq"><span class="eq-n">1</span>Hoe voelde elke sessie deze week?</div>
-    <div class="eq"><span class="eq-n">2</span>Heb ik mijn eiwitdoel (110-120g) gehaald?</div>
-    <div class="eq"><span class="eq-n">3</span>Energieniveau tijdens cheer training?</div>
-    <div class="eq"><span class="eq-n">4</span>Heb ik dagelijks mijn kern mobiliteitsroutine gedaan?</div>
-    <div class="eq"><span class="eq-n">5</span>Hoe voelen mijn polsen en duim? Pijn of verbetering?</div>
-    <div class="eq"><span class="eq-n">6</span>Meer stabiliteit en vertrouwen als base?</div>
-    <div class="eq"><span class="eq-n">7</span>Wat ging goed? Wat wil ik volgende week anders?</div>
-    <div class="eq"><span class="eq-n">8</span>Slaap (uur gemiddeld)? Stress (1-10)?</div>
-  </div>
-  <button class="sbtn" onclick="if(typeof sendPrompt==='function')sendPrompt('Week check-in: ik wil mijn wekelijkse evaluatie doen voor het cheerleading programma')">Weekcheck bespreken met Claude ↗</button>
-  <button class="sbtn" onclick="if(typeof sendPrompt==='function')sendPrompt('Ik heb de uitslag van de polsspecialist, welke oefeningen kan ik nu toevoegen?')" style="margin-top:7px">Pols update verwerken ↗</button>
-</div>
-
-<!-- TRAININGEN -->
-<div class="pg" id="pg-train">
-  <div class="tabbar">
-    <button class="tb active" onclick="switchTab('train','A',this)">Upper — combi</button>
-    <button class="tb" onclick="switchTab('train','B',this)">Legs</button>
-    <button class="tb" onclick="switchTab('train','Push',this)">Push</button>
-    <button class="tb" onclick="switchTab('train','Pull',this)">Pull</button>
-    <button class="tb" onclick="switchTab('train','PM',this)">Plyo + Mobiliteit</button>
-    <button class="tb" onclick="switchTab('train','Billen',this)">Billen</button>
-    <button class="tb" onclick="switchTab('train','S',this)">Schema</button>
-  </div>
-
-  <!-- KRACHT A: UPPER -->
-  <div class="tc active" id="train-A">
-    <div class="card">
-      <div class="ct">Upper body</div>
-      <div class="bdg p">Warming-up — 8 min</div>
-      <div class="rw"><div><div class="rn">Band pull-aparts</div></div><div class="rv">3×15</div></div>
-      <div class="rw"><div><div class="rn">Schouder circles + arm swings</div></div><div class="rv">2×10</div></div>
-      <div class="rw"><div><div class="rn">Cat-cow + thoracale rotaties</div></div><div class="rv">10 reps</div></div>
-      <div class="rw"><div><div class="rn">Dead hang (passief)</div><div class="rs">Grip + schouder decompressie</div></div><div class="rv">2×max</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg o">Werkblok — 30-35 min</div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">1. Push-up progressie <span class="work-tag">2-3 sets × max</span><span class="skill-tag">Doel: 15 reps</span></div><div class="ex-s">Vooraan terwijl je fris bent</div></div></div>
-      </div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">2. Lat Pulldown <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Jouw voorkeur boven pull-up — primaire trekoefening</div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Start:</span>Bepaal werkgewicht op gevoel, 3×8-10, log in Hevy</div></div>
-      </div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">3. Seated Cable Row - V Grip <span class="work-tag">2-3 sets</span></div><div class="ex-s">Polsvriendelijk</div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>42,5-50kg × 5-8 reps</div></div>
-      </div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">4. Standing Military Press (Barbell) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Warm-up 20kg × 8 · werk 25kg × 5-6</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">5. Single Arm Lateral Raise (Cable) <span class="work-tag">2 sets</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>3,75-6,25kg × 7-8/kant</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">6. Triceps Pushdown <span class="work-tag">2 sets</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>15-17,5kg × 7-8</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">7. Bicep Curl (Dumbbell) <span class="work-tag">2 sets</span></div><div class="ex-s">Bij duimpijn: dikkere grip/straps</div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>9-10kg × 5-10</div></div>
-      </div>
-    </div>
-    <div class="alt p">Elke paar weken 1x Pull Up (Assisted) proberen om het doel (2-3 unassisted) bij te houden — zie Skills-tab. Hoeft niet elke sessie.</div>
-    <div class="alt p">Na deze sessie: kort abs-blok (zie Plyo + Mobiliteit), 2x/week is genoeg.</div>
-  </div>
-
-  <!-- KRACHT B: LEGS -->
-  <div class="tc" id="train-B">
-    <div class="alt p">Plyometrics, core en cooldown-mobiliteit staan niet meer hier — die zitten in <b>Plyo + Mobiliteit</b>, inclusief de nieuwe drills. Doe die vóór of na deze sessie.</div>
-    <div class="card">
-      <div class="ct">Legs · dinsdag</div>
-      <div class="bdg p">Warming-up — 5 min</div>
-      <div class="rw"><div><div class="rn">Overhead squat met bal</div><div class="rs">Schoudermobiliteit + squat patroon in één</div></div><div class="rv">2×8</div></div>
-      <div class="rw"><div><div class="rn">Glute bridges op grond</div></div><div class="rv">2×15</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg o">Kracht — 30 min</div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">1. Jump Squat <span class="work-tag">2-3 sets × 8-10</span></div><div class="ex-s">Opener — bodyweight, explosief</div></div></div>
-      </div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">2. Leg Press (Machine) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Je hoofdlift — vervangt front squat, hier zit je progressie</div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Warm-up 50kg × 8 · werk 150-180kg × 8-10 — flink gestegen, ga door op gevoel</div></div>
-      </div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">3. Romanian Deadlift (Barbell) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div><div class="ex-s">Straps of overhand grip toegestaan bij duimpijn</div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Werk 40-50kg × 6-10</div></div>
-      </div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">4. Hip Thrust (Machine) <span class="warm-tag">1 warm-up</span><span class="work-tag">2-3 werksets</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Warm-up 40-50kg · werk tot 130kg × 3-8</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">5. Bulgarian Split Squat <span class="work-tag">2-3 sets × 5-8/kant</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>14-16kg (barbell of dumbbell)</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">6. Standing Cable Glute Kickbacks <span class="work-tag">2 sets × 8/kant</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>11-16kg</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">7. Standing Calf Raise (Machine) <span class="work-tag">2-3 sets × 8-10</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>67-97kg</div></div>
-      </div>
-    </div>
-    <div class="alt p">Na deze sessie: plyo hoort hierbij (zie Plyo + Mobiliteit) + kort abs-blok (2x/week).</div>
-  </div>
-
-  <!-- PUSH -->
-  <div class="tc" id="train-Push">
-    <div class="alt o">⚠️ Push loopt achter op pull in je Hevy-data — pak deze sessie liever een keer extra.</div>
-
-    <div class="card">
-      <div class="ct">Push · warming-up — 8 min</div>
-      <div class="rw"><div><div class="rn">Band pull-aparts</div></div><div class="rv">3×15</div></div>
-      <div class="rw"><div><div class="rn">Schouder circles + arm swings</div></div><div class="rv">2×10</div></div>
-      <div class="rw"><div><div class="rn">Cat-cow + thoracale rotaties</div></div><div class="rv">10 reps</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg o">Duw — 30 min</div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">1. Standing Military Press (Barbell) <span class="warm-tag">1 warm-up</span><span class="work-tag">3-4 werksets</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Warm-up 20kg × 8 · werk 25kg × 5-6</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">2. Kabel single-arm overhead press <span class="work-tag">3×10/kant</span></div><div class="ex-s">Armen strekken in extended — directe cheer carryover</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">3. Single Arm Lateral Raise (Cable) <span class="work-tag">3×8</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>3,75-6,25kg/kant</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">4. Triceps Pushdown <span class="work-tag">3×8</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>15-17,5kg</div></div>
-      </div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Push-up progressie <span class="work-tag">4-5 sets × max</span><span class="skill-tag">Doel: 15 reps</span></div><div class="ex-s">Extra volume, aan het einde als je nog energie hebt — dit is waar je 'm in de praktijk vaak liet liggen</div></div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="bdg r">Core — 6 min</div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Plank variaties <span class="work-tag">3×30-45 sec</span></div></div></div></div>
-    </div>
-    <div class="card">
-      <div class="ct">Cooldown</div>
-      <div class="rw"><div><div class="rn">Doorway chest stretch</div></div><div class="rv">2×30 sec</div></div>
-      <div class="rw"><div><div class="rn">Schouderopening (child's pose reach)</div></div><div class="rv">2×30 sec</div></div>
-    </div>
-  </div>
-
-  <!-- PULL -->
-  <div class="tc" id="train-Pull">
-    <div class="card">
-      <div class="ct">Pull · warming-up — 8 min</div>
-      <div class="rw"><div><div class="rn">Band pull-aparts</div></div><div class="rv">3×15</div></div>
-      <div class="rw"><div><div class="rn">Dead hang (passief)</div><div class="rs">Grip + schouder decompressie</div></div><div class="rv">2×max</div></div>
-      <div class="rw"><div><div class="rn">Chin tucks (staand)</div></div><div class="rv">3×12</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg o">Trek — 30 min</div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">1. Lat Pulldown <span class="warm-tag">1 warm-up</span><span class="work-tag">3-4 werksets</span></div><div class="ex-s">Jouw voorkeur — primaire trekoefening</div></div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">2. Seated Cable Row - V Grip <span class="work-tag">3-4×8</span></div><div class="ex-s">Polsvriendelijk</div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>42,5-50kg × 5-8</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">3. Straight arm lat pulldown <span class="work-tag">3×10</span></div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">4. Bicep curl (dumbbell) <span class="work-tag">3×8-10</span></div><div class="ex-s">Bij duimpijn: dikkere grip/straps of overhand pak lichter</div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>9-10kg</div></div>
-      </div>
-    </div>
-    <div class="alt p">Elke paar weken 1x Pull Up (Assisted) proberen om het doel (2-3 unassisted) bij te houden — zie Skills-tab. Huidig: ~40-47kg assistentie.</div>
-    <div class="card">
-      <div class="bdg r">Core — 6 min</div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Dead bug <span class="work-tag">3×10/kant</span></div><div class="ex-s">Polsvriendelijk</div></div></div></div>
-    </div>
-    <div class="card">
-      <div class="ct">Cooldown</div>
-      <div class="rw"><div><div class="rn">Latstretch</div></div><div class="rv">2×30 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Bicepsstretch</div></div><div class="rv">2×20 sec/kant</div></div>
-    </div>
-  </div>
-
-  <!-- PLYO + MOBILITEIT -->
-  <div class="tc" id="train-PM">
-    <div class="alt p"><b>Wanneer?</b> Niet na elke training. Plyo hoort bij Legday (doe je al — jump squats zitten er al in). Abs: 2x/week, een kort blokje na Legday én na Upper. Handstand/postuur/spagaat: dagelijks kort, los van trainingsdagen.</div>
-    <div class="card">
-      <div class="bdg o">Plyometrics — 10-15 min <span class="skill-tag">Explosiviteit (coach)</span></div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Vast — elke keer</div><div class="ex-s">3-4 sets × 8-10 reps · 30 sec rust</div></div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Kniezit → opspringen naar staand</div><div class="ex-s">Vanuit zit op je knieën, zonder handen, explosief opspringen naar een staande positie. Directe rate-of-force-development drill — sluit aan bij coach-feedback over explosiviteit uit de benen.</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Box jumps</div><div class="ex-s">Begin met een lage box, stap er altijd rustig af (nooit terugspringen) om de knieën te sparen.</div></div></div></div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Kies er 1 bij, fase-afhankelijk</div><div class="ex-s">Optioneel — mag ook overgeslagen als de twee vaste genoeg zijn</div></div></div>
-        <div class="pr">
-          <div class="pr-row"><span class="pr-w">Fase 1:</span>Pogos · lateral line jumps · squat jumps</div>
-          <div class="pr-row"><span class="pr-w">Fase 2:</span>Ook: skater jumps · plate hops</div>
-          <div class="pr-row"><span class="pr-w">Fase 3:</span>Ook: tuck jumps · alternating hops · Bulgarian met jump</div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="bdg r">Abs — dedicated blok</div>
-      <div class="ex">
-        <div class="ex-top"><div><div class="ex-n">Hollow body hold <span class="work-tag">3×20-40 sec</span></div><div class="ex-s">Wk 1-3: tuck hold · wk 4-6: hollow rock · wk 8+: volledig gestrekte hold</div></div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Straddle leg lifts <span class="work-tag">3×8-10</span></div><div class="ex-s">Functioneel voor spagaat-kracht</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Decline crunch <span class="work-tag">3×15-20</span></div><div class="ex-s">Wk 4+: gewicht toevoegen op de borst</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Hanging leg raises <span class="work-tag">3×10</span></div><div class="ex-s">Straps bij duimpijn · wk 1-3 evt. vervangen door extra dead bug</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Side plank op onderarm <span class="work-tag">3×25-45 sec</span></div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">Dead bug <span class="work-tag">3×10/kant</span></div></div></div></div>
-    </div>
-    <div class="card">
-      <div class="bdg y">Postuur + nek — 6 min</div>
-      <div class="rw"><div><div class="rn">Chin tucks (staand)</div></div><div class="rv">3×12</div></div>
-      <div class="rw"><div><div class="rn">Nek laterale stretch</div></div><div class="rv">30 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Nek rotatie</div></div><div class="rv">5×/kant</div></div>
-      <div class="rw"><div><div class="rn">Levator scapulae stretch</div></div><div class="rv">30 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Wall angels (postuur/schouderblad)</div><div class="rs">Rug tegen muur, armen langzaam op en neer</div></div><div class="rv">2×12</div></div>
-      <div class="rw"><div><div class="rn">Scapula squeeze (staand of zittend)</div></div><div class="rv">3×15</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg g">Handstand + algemene mobiliteit — 8 min <span class="skill-tag">Handstand</span></div>
-      <div class="rw"><div><div class="rn">Dropback to wall</div><div class="rs">Foam roller thoracaal eerst</div></div><div class="rv">5-8 herh.</div></div>
-      <div class="rw"><div><div class="rn">Handstand shrugs op vuisten</div><div class="rs">Polsvriendelijk — schouder elevatie</div></div><div class="rv">3×10</div></div>
-      <div class="rw"><div><div class="rn">Doorway chest stretch</div></div><div class="rv">2×30 sec</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg g">Cooldown mobiliteit (na legday) — 6 min</div>
-      <div class="rw"><div><div class="rn">Couch stretch muur + 8kg KB</div><div class="rs">Wk 1-2: zonder KB · wk 3+: met KB</div></div><div class="rv">60 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Hamstring stretch elevated (hiel op bank)</div><div class="rs">Wk 3+: 8kg KB als gewicht</div></div><div class="rv">60 sec/kant</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg p">Spagaat — extra dieptewerk <span class="skill-tag">Splits</span></div>
-      <div class="rw"><div><div class="rn">Muur-geassisteerde squared split</div><div class="rs">Achterste voet plat tegen de muur — check of je bekken vierkant blijft i.p.v. wegdraaien</div></div><div class="rv">2×30 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Pancake met arch in de rug</div><div class="rs">Benen wijd, rug bol/arch trekken i.p.v. plat naar voren</div></div><div class="rv">2×30-45 sec</div></div>
-      <div class="rw"><div><div class="rn">Lunge elevated</div></div><div class="rv">60 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Elevated pigeon</div></div><div class="rv">90 sec/kant</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg o">Extra stretch — na upper body dag</div>
-      <div class="rw"><div><div class="rn">Stretchband achterwaartse rotatie-pulse</div><div class="rs">Band achter je rug draaien tot je maximale punt, daar de band in kleine pulsjes uit elkaar trekken — schouder-mobiliteit/rotator cuff</div></div><div class="rv">2×10-15 pulses</div></div>
-    </div>
-  </div>
-
-  <!-- BILLEN -->
-  <div class="tc" id="train-Billen">
-    <div class="alt p">Geen vaste dag — pak 'm als het uitkomt, bijvoorbeeld extra op een Legday of los op een rustmoment.</div>
-    <div class="card">
-      <div class="ct">Activatie — 5 min</div>
-      <div class="rw"><div><div class="rn">Band walks (zij, mini-band)</div></div><div class="rv">2×12/kant</div></div>
-      <div class="rw"><div><div class="rn">Glute bridge (bodyweight)</div></div><div class="rv">2×15</div></div>
-    </div>
-    <div class="card">
-      <div class="bdg o">Hoofdblok — 25-30 min</div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">1. Hip Thrust (Machine) <span class="warm-tag">1 warm-up</span><span class="work-tag">3 werksets</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>Tot 130kg × 4-8 — je sterkste lift, hier zit ruimte</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">2. Standing Cable Glute Kickbacks <span class="work-tag">3×8/kant</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>11-16kg</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">3. Hip Abduction (Machine) <span class="work-tag">3×8-12</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>tot 102,5kg</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">4. Hip Adduction (Machine) <span class="work-tag">2-3×8-9</span></div></div></div>
-        <div class="pr"><div class="pr-row"><span class="pr-w">Huidig:</span>~42,5kg</div></div>
-      </div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">5. Curtsy lunge (dumbbell) <span class="work-tag">3×10/kant</span></div><div class="ex-s">Nieuw — richt zich op bilspier medius, mist nog in je routine</div></div></div></div>
-      <div class="ex"><div class="ex-top"><div><div class="ex-n">6. Eenbenige glute bridge <span class="work-tag">3×12/kant</span></div></div></div></div>
-    </div>
-    <div class="card">
-      <div class="ct">Cooldown</div>
-      <div class="rw"><div><div class="rn">Pigeon stretch</div></div><div class="rv">45 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Couch stretch</div></div><div class="rv">45 sec/kant</div></div>
-    </div>
-  </div>
-
-  <!-- SCHEMA -->
-  <div class="tc" id="train-S">
-    <div class="card">
-      <div class="ct">Zwembad zomerrooster (tijdelijk)</div>
-      <div class="alt o">20 jul – 6 aug: geen maandagzwemmen · donderdag 19:45-21:00 optioneel als alternatief.<br>7 aug – 30 aug: zwembad volledig dicht.<br>Vanaf 31 aug: aanname dat het normale rooster terugkeert.</div>
-      <div class="rw"><div><div class="rn">Maandag</div><div class="rs">Vrij in deze periode — geen zwemles</div></div><div class="rv">Tijdelijk</div></div>
-      <div class="rw"><div><div class="rn">Donderdag</div><div class="rs">Reformer, of zwemmen als alternatief (t/m 6 aug)</div></div><div class="rv">Tijdelijk</div></div>
-    </div>
-    <div class="card">
-      <div class="ct">Sessies per dag (normaal rooster)</div>
-      <div class="rw"><div><div class="rn">Maandag</div><div class="rs">Zwemmen (schoolslag)</div></div><div class="rv">Vast</div></div>
-      <div class="rw"><div><div class="rn">Dinsdag</div><div class="rs">Legs</div></div><div class="rv">Vast</div></div>
-      <div class="rw"><div><div class="rn">Woensdag</div><div class="rs">Cheer training</div></div><div class="rv">Vast</div></div>
-      <div class="rw"><div><div class="rn">Donderdag</div><div class="rs">Reformer pilates</div></div><div class="rv">Vast</div></div>
-      <div class="rw"><div><div class="rn">Vrijdag</div><div class="rs">Rust · optioneel korte Plyo+Mobiliteit (10-15 min)</div></div><div class="rv">Rust</div></div>
-      <div class="rw"><div><div class="rn">Zaterdag</div><div class="rs">Cheer training</div></div><div class="rv">Vast</div></div>
-      <div class="rw"><div><div class="rn">Zondag</div><div class="rs">Upper (of los Push/Pull)</div></div><div class="rv">Vast</div></div>
-    </div>
-    <div class="card">
-      <div class="ct">Als je een training niet afmaakt</div>
-      <div class="step"><div class="sn">⏱</div><div><div class="st">Maar 20-30 minuten</div><div class="sd">Warming-up + plyometrics + 2 hoofdoefeningen. Sla de rest over.</div></div></div>
-      <div class="step"><div class="sn">½</div><div><div class="st">Training half afgemaakt</div><div class="sd">Warming-up en plyometrics gedaan maar kracht niet af? Prima — dat is het meest tijdkritisch.</div></div></div>
-      <div class="step"><div class="sn">😴</div><div><div class="st">Moe of niet lekker</div><div class="sd">Alleen dagelijkse kern (5 min) en noem het een actieve hersteldag.</div></div></div>
-    </div>
-    <div class="card">
-      <div class="ct">Pols opwarmen voor cheer</div>
-      <div class="alt p">Geen stretching meer — verstevigen is het doel. Dit zijn de alternatieven voor je warming-up routine.</div>
-      <div class="rw"><div><div class="rn">Extensoren oefening (specialist)</div><div class="rs">Licht gewicht of zonder gewicht als activatie</div></div><div class="rv">2×10</div></div>
-      <div class="rw"><div><div class="rn">Ulnair-radiair deviatie</div><div class="rs">Langzaam en gecontroleerd</div></div><div class="rv">2×10</div></div>
-      <div class="rw"><div><div class="rn">Pols cirkels (mobiliseren, niet strekken)</div><div class="rs">Langzaam en gecontroleerd</div></div><div class="rv">10×/richting</div></div>
-      <div class="rw"><div><div class="rn">Knijpen in bal of handdoek</div><div class="rs">10 sec vasthouden · loslaten</div></div><div class="rv">5×</div></div>
-      <div class="rw"><div><div class="rn">Onderarm uitschudden</div><div class="rs">Loslaten en ontspannen</div></div><div class="rv">30 sec</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- SKILLS -->
-<div class="pg" id="pg-skills">
-  <div class="tabbar">
-    <button class="tb active" onclick="switchTab('skills','handstand',this)">Handstand</button>
-    <button class="tb" onclick="switchTab('skills','splits',this)">Splits</button>
-    <button class="tb" onclick="switchTab('skills','brug',this)">Brug</button>
-    <button class="tb" onclick="switchTab('skills','exposure',this)">Exposure</button>
-  </div>
-  <div class="tc active" id="skills-handstand">
-    <div class="alt o">Polsen: start op vuisten of parallettes. Na goedkeuring overstappen naar vlakke hand.</div>
-    <div class="card"><div class="ct">Handstand — progressie per fase</div>
-      <div class="sk-ph"><span class="sk-f">Fase 1 (wk 1-3)</span><div class="sk-d">Schouder protractie/retractie · wrist conditioning · headstand muur · shrugs op vuisten</div></div>
-      <div class="sk-ph"><span class="sk-f">Fase 2 (wk 4-6)</span><div class="sk-d">Handstand op vuisten tegen muur · shape leren · 10 sec vasthouden</div></div>
-      <div class="sk-ph"><span class="sk-f">Deload (wk 7)</span><div class="sk-d">Onderhoud — gewoon dagelijks doen, geen nieuwe progressie of langer vasthouden</div></div>
-      <div class="sk-ph"><span class="sk-f">Fase 3 (wk 8-10)</span><div class="sk-d"><b>Focus omgeslagen naar kick-up techniek</b> — niet meer op langere holds jagen, dat plateaut. Elke sessie: 8-10 kick-up pogingen (met muur dichtbij) + korte balance taps. Holds op 15-20 sec is genoeg, kwaliteit van de kick-up is nu belangrijker.</div></div>
-      <div class="sk-ph"><span class="sk-f">Finale (wk 11-12)</span><div class="sk-d">Eerste vrije handstand pogingen</div></div>
-    </div>
-  </div>
-  <div class="tc" id="skills-splits">
-    <div class="alt p">Elke dag — ook op rustdagen.</div>
-    <div class="alt o">⚠️ Diagnose: je zit schuin (heupen niet vierkant naar voren) i.p.v. recht — dat betekent dat een deel van je "diepte" rechts uit bekkenrotatie komt, niet uit echte heupflexor-lengte. Dat is deels waarom links achterblijft.</div>
-    <div class="card"><div class="ct">Squared-hip correctie — nieuw, prioriteit</div>
-      <div class="rw"><div><div class="rn">Muur-geassisteerde squared split</div><div class="rs">Achterste voet plat tegen de muur — voorkomt fysiek dat je bekken wegdraait</div></div><div class="rv">2×30 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Halve-kniezit heupflexorstretch, staartbeen onder</div><div class="rs">Bekken achterover kantelen tijdens de stretch — isoleert de heupflexor i.p.v. dat je 'm omzeilt door te draaien</div></div><div class="rv">45 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Spiegel-check</div><div class="rs">Heupbotjes (ASIS) recht naar voren, niet één kant hoger — check dit bij elke spagaat-oefening</div></div><div class="rv">Elke set</div></div>
-    </div>
-    <div class="card"><div class="ct">Splits — dagelijkse kern</div>
-      <div class="rw"><div><div class="rn">Lunge hip flexor stretch</div></div><div class="rv">30 sec/kant</div></div>
-      <div class="rw"><div><div class="rn">Rechter splits progressie</div><div class="rs">Vierkante heupen — liever iets minder diep en recht dan dieper en schuin</div></div><div class="rv">2×30 sec</div></div>
-      <div class="rw"><div><div class="rn">Linker splits progressie</div></div><div class="rv">2×30 sec</div></div>
-      <div class="rw"><div><div class="rn">Pancake drill</div><div class="rs">Na training: langer + gewicht</div></div><div class="rv">2×30 sec</div></div>
-      <div class="rw"><div><div class="rn">Straddle leg lifts</div></div><div class="rv">3×10/kant</div></div>
-    </div>
-    <div class="card"><div class="ct">Doelstelling</div>
-      <div class="sk-ph"><span class="sk-f">Wk 6-8</span><div class="sk-d">Rechter splits plat</div></div>
-      <div class="sk-ph"><span class="sk-f">Wk 10-12</span><div class="sk-d">Linker splits plat</div></div>
-      <div class="sk-ph"><span class="sk-f">Wk 12</span><div class="sk-d">Midden splits 80%+</div></div>
-    </div>
-  </div>
-  <div class="tc" id="skills-brug">
-    <div class="alt o">Altijd na volledige warming-up. Foam roller thoracaal eerst.</div>
-    <div class="card"><div class="ct">Dropback to wall</div>
-      <div class="br-row"><span class="br-w">Wk 1-3</span><div class="br-d">Dichtbij muur — handen hoog, lopen omlaag</div></div>
-      <div class="br-row"><span class="br-w">Wk 4-6</span><div class="br-d">Verder van muur — handen lager</div></div>
-      <div class="br-row"><span class="br-w">Wk 7-9</span><div class="br-d">Handen bijna de grond</div></div>
-      <div class="br-row"><span class="br-w">Wk 10+</span><div class="br-d">Eerste pogingen zonder muur</div></div>
-    </div>
-    <div class="card"><div class="ct">Front walkover <span class="bdg" style="background:var(--surf2);color:var(--tx3);border:0.5px solid var(--brd2)">Gepauzeerd</span></div>
-      <div class="alt" style="background:var(--surf2);border:0.5px solid var(--brd2);color:var(--tx3)">Bewust geen actieve tijd op dit moment — die gaat nu naar splits, handstand en push. Referentie blijft hier staan voor als je 'm later weer oppakt.</div>
-      <div class="step"><div class="sn">1</div><div><div class="st">Brug volledig gestrekt</div><div class="sd">Doel wk 6-7</div></div></div>
-      <div class="step"><div class="sn">2</div><div><div class="st">Brug kickover met hulp</div><div class="sd">Spotter aan heupen — wk 8-9</div></div></div>
-      <div class="step"><div class="sn">4</div><div><div class="st">Front walkover met spotter</div><div class="sd">Wk 10-12 — altijd met spotter of op mat</div></div></div>
-    </div>
-  </div>
-  <div class="tc" id="skills-exposure">
-    <div class="card"><div class="ct">Exposure plan</div>
-      <div class="exp-row"><span class="exp-w">Wk 1-3</span><div class="exp-d">Stunts die je al kent en vertrouwt. Positieve ervaringen stapelen</div></div>
-      <div class="exp-row"><span class="exp-w">Wk 4-6</span><div class="exp-d">Één nieuwe stunt per open gym. Vertel je partner van tevoren</div></div>
-      <div class="exp-row"><span class="exp-w">Stuntfest</span><div class="exp-d">Spinning stunts bewust oefenen. Saves en catch technique. Vraag actief om hogere stunts</div></div>
-      <div class="exp-row"><span class="exp-w">Wk 8-10</span><div class="exp-d">Hogere stunts als base. Nek is sterker — je bent letterlijk beter beschermd</div></div>
-      <div class="exp-row"><span class="exp-w">Wk 12</span><div class="exp-d">Evalueer: welke stunts zijn nu gewoon die voorheen spannend waren?</div></div>
-    </div>
-    <div class="card"><div class="ct">Mindset tools</div>
-      <div class="step"><div class="sn">1</div><div><div class="st">Vertel het van tevoren</div><div class="sd">"Dit is nieuw voor mij, ik wil het rustig opbouwen."</div></div></div>
-      <div class="step"><div class="sn">2</div><div><div class="st">Het 3-keer principe</div><div class="sd">Doe elke nieuwe stunt minstens 3× achter elkaar. Stop nooit na één poging</div></div></div>
-      <div class="step"><div class="sn">3</div><div><div class="st">Angst vs gevaar</div><div class="sd">Als de opstelling goed is — is het angst, niet gevaar</div></div></div>
-      <div class="step"><div class="sn">4</div><div><div class="st">Noteer elke overwinning</div><div class="sd">Na elke open gym: één ding dat vorige maand spannender was</div></div></div>
-    </div>
-  </div>
-</div>
-
-</div>
-
-<!-- BOTTOM NAV -->
-<div class="bnav">
-  <button class="nb active" onclick="showPage('check',0)"><div class="nb-ic">✓</div>Vandaag</button>
-  <button class="nb" onclick="showPage('eiwit',1)"><div class="nb-ic">🥩</div>Eiwit</button>
-  <button class="nb" onclick="showPage('programma',2)"><div class="nb-ic">🗂</div>Programma</button>
-  <button class="nb" onclick="showPage('train',3)"><div class="nb-ic">🏋</div>Training</button>
-  <button class="nb" onclick="showPage('skills',4)"><div class="nb-ic">🤸</div>Skills</button>
-</div>
+<div class="wrap" id="app"></div>
+<nav class="tabs" aria-label="Onderdelen"><div class="in">
+  <button class="tab on" data-t="vandaag">Vandaag</button>
+  <button class="tab" data-t="training">Training</button>
+  <button class="tab" data-t="eiwit">Eiwit</button>
+</div></nav>
 
 <script>
-var state=JSON.parse(localStorage.getItem('cheer_v5')||'{}');
-if(!state.checks)state.checks={};
-if(!state.protein)state.protein={};
-function save(){localStorage.setItem('cheer_v5',JSON.stringify(state));}
+/* ============ PROGRAMMA ============ */
+const START = new Date(2026, 9, 5); // ma 5 okt 2026
+const DAGEN = ["ma","di","wo","do","vr","za","zo"];
+const DAGEN_LANG = ["maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag","zondag"];
+const MAANDEN = ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
 
-var dayN=['zo','ma','di','wo','do','vr','za'];
-var monthN=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-function todayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+const FASES = [
+  {n:"Nulmeting & instap", w:[1], focus:"Tests doen, techniek leren, rustig instappen. Eiwit stap 1."},
+  {n:"Basis", w:[2,3], focus:"Volume opbouwen, eiwit naar doel, slaap een kwartier eerder."},
+  {n:"Vakantie & herstart", w:[4], focus:"Vakantie van 22 t/m 29 oktober. Vrijdag 30 oktober weer instappen met de gewichten van week 2."},
+  {n:"Opbouw", w:[5,6,7], focus:"Kracht omhoog, mild calorietekort start, handstand los van de muur oefenen."},
+  {n:"Lichte week", w:[8], focus:"Minder sets, zelfde techniek. Herstellen voor de laatste push."},
+  {n:"Intensivering", w:[9,10], focus:"Zwaarder en explosiever. Skills met spot van je coach."},
+  {n:"Testweek", w:[11], focus:"Alle doelen meten. Laat je coaches zien wat je kunt."},
+  {n:"Kerst & afbouw", w:[12], focus:"Onderhoud, terug naar onderhoudscalorieën, genieten."}
+];
+const faseVan = w => FASES.find(f => f.w.includes(w));
 
-function showPage(id,idx){
-  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('active');});
-  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('active');});
-  document.getElementById('pg-'+id).classList.add('active');
-  document.querySelectorAll('.nb')[idx].classList.add('active');
-  window.scrollTo(0,0);
-}
-
-function switchTab(group,id,btn){
-  var pfx=group+'-';
-  document.querySelectorAll('[id^="'+pfx+'"]').forEach(function(t){t.classList.remove('active');});
-  if(btn){var bar=btn.closest('.tabbar');if(bar)bar.querySelectorAll('.tb').forEach(function(b){b.classList.remove('active');});}
-  var el=document.getElementById(pfx+id);
-  if(el)el.classList.add('active');
-  if(btn)btn.classList.add('active');
-}
-
-// CHECKLIST — correcte dagmapping
-// getDay(): 0=zo, 1=ma, 2=di, 3=wo, 4=do, 5=vr, 6=za
-var trainingByDay={
-  0:[
-    {id:'t1',text:'Upper body (zondag)',sub:'Combi push+pull — of los Push/Pull als je 2 momenten hebt deze week'},
-    {id:'t2',text:'Plyo + Mobiliteit',sub:'Abs, postuur/nek, handstand — plan los indien nog niet gedaan deze week'}
-  ],
-  1:[{id:'t1',text:'Zwemmen (maandag)',sub:'Schoolslag — polsvriendelijk · actief herstel'}],
-  2:[
-    {id:'t1',text:'Legs (dinsdag)',sub:'Front squat · hip thrust · Bulgarian · RDL'},
-    {id:'t2',text:'Plyo + Mobiliteit',sub:'Plyo vóór de kracht · cooldown mobiliteit erna — zie Training tab'}
-  ],
-  3:[{id:'t1',text:'Cheer training (woensdag)',sub:'Na cheer: splits + dropback to wall 10 min'},{id:'t2',text:'Na cheer mobiliteit gedaan',sub:'Splits · pigeon · brug'}],
-  4:[{id:'t1',text:'Reformer pilates (donderdag)'}],
-  5:[{id:'t1',text:'Rust (vrijdag)',sub:'Optioneel: korte Plyo + Mobiliteit sessie, 10-15 min'}],
-  6:[{id:'t1',text:'Cheer training (zaterdag)',sub:'Na cheer: splits + dropback to wall 10 min'},{id:'t2',text:'Na cheer mobiliteit gedaan',sub:'Splits · pigeon · brug'}]
+// index = week (1..12); 4 = vakantie
+const L = {
+  squat:  [null,"3×6 · 70 kg","3×6 · 72,5 kg","3×6 · 75 kg",null,"4×5 · 77,5 kg","4×5 · 80 kg","4×5 · 82,5 kg","2×5 · 70 kg","4×4 · 85 kg","3×4 · 87,5 kg","Test: 87,5 kg × 5","2×5 · 70 kg"],
+  rdl:    [null,"3×8 · 60 kg","3×8 · 62,5 kg","3×8 · 65 kg",null,"3×8 · 67,5 kg","3×8 · 70 kg","3×8 · 72,5 kg","2×8 · 60 kg","3×6 · 75 kg","3×6 · 77,5 kg","3×6 · 75 kg","2×8 · 60 kg"],
+  lunge:  [null,"3×8/been · 20 kg","3×8/been · 20 kg","3×8/been · 25 kg",null,"3×8/been · 25 kg","3×8/been · 27,5 kg","3×8/been · 30 kg","2×8/been · 20 kg","3×8/been · 30 kg","3×8/been · 32,5 kg","3×8/been · 30 kg","2×8/been · 20 kg"],
+  hip:    [null,"3×8 · 85 kg","3×8 · 90 kg","3×8 · 90 kg",null,"3×8 · 95 kg","3×8 · 100 kg","3×8 · 100 kg","2×8 · 80 kg","3×6 · 105 kg","3×6 · 110 kg","3×6 · 105 kg","2×8 · 80 kg"],
+  press:  [null,"3×6 · 22,5 kg","3×7 · 22,5 kg","3×8 · 22,5 kg",null,"3×6 · 25 kg","3×7 · 25 kg","3×8 · 25 kg","2×6 · 20 kg","4×5 · 27,5 kg","4×4 · 30 kg","Test: 30 kg × 5","2×6 · 20 kg"],
+  pull:   [null,"3×8 · 40 kg","3×9 · 40 kg","3×10 · 40 kg",null,"3×8 · 45 kg","3×9 · 45 kg","3×10 · 45 kg","2×8 · 37,5 kg","3×8 · 50 kg","3×8 · 52,5 kg","Test: 52,5 kg × 8","2×8 · 40 kg"],
+  push:   [null,"Test: max reps","3×7","3×8",null,"4×8","4×9","4×10","2×8","3×11","3×12","Test: max (doel 15)","2×8"],
+  ohold:  [null,"3×20 s · 30 kg","3×20 s · 30 kg","3×25 s · 30 kg",null,"3×20 s · 35 kg","3×25 s · 35 kg","3×25 s · 35 kg","2×20 s · 30 kg","3×20 s · 40 kg","3×25 s · 40 kg","3×25 s · 40 kg","2×20 s · 30 kg"],
+  row:    [null,"3×10 · 40 kg","3×10 · 40 kg","3×12 · 40 kg",null,"3×10 · 45 kg","3×10 · 45 kg","3×12 · 45 kg","2×10 · 40 kg","3×8 · 50 kg","3×8 · 50 kg","3×8 · 50 kg","2×10 · 40 kg"],
+  bss:    [null,"3×8/been · 15 kg","3×8/been · 15 kg","3×8/been · 17,5 kg",null,"3×8/been · 17,5 kg","3×8/been · 20 kg","3×8/been · 20 kg","2×8/been · 15 kg","3×8/been · 22,5 kg","3×8/been · 25 kg","3×8/been · 22,5 kg","2×8/been · 15 kg"],
+  ham:    [null,"3×8 · 45 kg","3×8 · 45 kg","3×8 · 47 kg",null,"3×8 · 50 kg","3×8 · 50 kg","3×8 · 52 kg","2×8 · 45 kg","3×6 · 55 kg","3×6 · 57 kg","3×6 · 55 kg","2×8 · 45 kg"],
+  abd:    [null,"3×15 · 60 kg","3×15 · 60 kg","3×15 · 65 kg",null,"3×15 · 65 kg","3×15 · 70 kg","3×15 · 70 kg","2×15 · 60 kg","3×12 · 75 kg","3×12 · 80 kg","3×12 · 75 kg","2×15 · 60 kg"],
+  calf:   [null,"3×12 per been + 3×12","3×12 per been + 3×12","3×15 per been + 3×15",null,"3×15 per been + 3×15","3×15 per been + 3×15","3×15 per been + 3×15","2×12 per been + 2×12","3×12 per been, langzaam + 3×15","3×12 per been, langzaam + 3×15","3×12 per been + 3×15","2×12 per been + 2×12"],
+  cop:    [null,"3×15 s per kant","3×15 s per kant","3×20 s per kant",null,"3×20 s per kant","3×25 s per kant","3×25 s per kant","2×15 s per kant","3×30 s per kant","3×30 s per kant","3×30 s per kant","2×15 s per kant"],
+  curl:   [null,"3×8 · 15 kg","3×9 · 15 kg","3×10 · 15 kg",null,"3×8 · 17,5 kg","3×9 · 17,5 kg","3×10 · 17,5 kg","2×8 · 15 kg","3×8 · 20 kg","3×9 · 20 kg","3×8 · 20 kg","2×8 · 15 kg"],
+  situp:  [null,"3×12","3×12","3×15",null,"3×15","3×15","3×18","2×12","3×20","3×20","3×20","2×12"],
+  kneel:  [null,"3×3","3×3","3×4",null,"4×3","4×3","4×4","2×3","4×3","4×3","3×3","2×3"],
+  box:    [null,"3×4 · lage box","3×4 · lage box","3×5 · lage box",null,"4×4 · middelhoge box","4×4 · middelhoge box","4×5 · middelhoge box","2×4 · lage box","4×3 · hoge box","4×3 · hoge box","3×3 · hoge box","2×4 · lage box"],
+  plank:  [null,"Test: max tijd","3×35 s","3×40 s",null,"3×45 s","3×50 s","3×50 s","2×30 s","3×55 s","3×60 s","Test: max tijd","2×30 s"],
+  hollow: [null,"3×15 s","3×20 s","3×20 s",null,"3×25 s","3×25 s","3×30 s","2×15 s","3×30 s","3×35 s","Test: max tijd","2×15 s"],
+  side:   [null,"3×20 s/zijde","3×20 s/zijde","3×25 s/zijde",null,"3×30 s/zijde","3×30 s/zijde","3×35 s/zijde","2×20 s/zijde","3×40 s/zijde","3×40 s/zijde","3×40 s/zijde","2×20 s/zijde"],
+  run:    [null,"6× (1 min lopen / 2 min wandelen)","6× (1,5 min / 1,5 min)","5× (2 min / 1,5 min)",null,"4× (3 min / 1,5 min)","4× (4 min / 1 min)","3× (6 min / 1,5 min)","3× (4 min / 1 min)","2× (9 min / 1,5 min)","2× (12 min / 1 min)","Test: 20 min aaneengesloten","15 min rustig, als je zin hebt"],
+  crawl:  [null,"4×25 m crawl","4×25 m crawl","5×25 m crawl",null,"6×25 m crawl","6×25 m crawl","4×25 m + 2×50 m crawl","4×25 m crawl","4×50 m crawl","4×50 m crawl","Test: 50 m aaneengesloten","Rustig zwemmen, vrije slag"]
 };
+// week 4: na terugkomst instappen met week-2-gewichten
+Object.keys(L).forEach(k=>{ L[k][4] = L[k][2]; });
+const VAK_VAN = new Date(2026,9,22), VAK_TOT = new Date(2026,9,29);
+const isVak = d => d>=VAK_VAN && d<=VAK_TOT;
+const lichtWeek = w => w===8 || w===12;
 
-// ZWEMBAD ZOMERROOSTER — tijdelijke aanpassing
-// 20 jul t/m 6 aug: geen maandagzwemmen, wél optioneel donderdagavond 19:45-21:00
-// 7 aug t/m 30 aug: zwembad volledig dicht (maandag + donderdag geen zwemmen)
-// vanaf 31 aug: aanname dat normale rooster terugkeert
-var poolMondayClosedStart=new Date('2026-07-20');
-var poolMondayClosedEnd=new Date('2026-08-30T23:59:59');
-var poolThuOptionStart=new Date('2026-07-20');
-var poolThuOptionEnd=new Date('2026-08-06T23:59:59');
+function I(id,nm,ds,nt,tag){return {id,nm,ds:ds||"",nt:nt||"",tag:tag||""}}
+const isTest = s => typeof s==="string" && s.startsWith("Test");
 
-function inRange(d,s,e){return d>=s&&d<=e;}
+const lang = w => w>=5 ? 60 : 45;
+function stretch(w){ const t=lang(w)+" s"; return {h:"Stretch", s:"± 12 min", items:[
+  I("st1","Pancake met yogablok + cat & cow", t+" + 8×",""),
+  I("st2","Couch stretch met muur", `2×${t} links, 1×${t} rechts`,"Heup naar voren, bil aanspannen."),
+  I("st3","Hamstring stretch, enkel vasthouden", t+" per been",""),
+  I("st4","Pigeon + mermaid", t+" per kant",""),
+  I("st5","Pancake naar de zijkant", t+" per kant",""),
+  I("st6","Spagaat links, rechts, midden", `links 2×${t}, rechts en midden 1×${t}`,"Blokken onder je handen, heup recht."),
+  I("st7","Straddle leg lifts", w>=5?"12×":"10×","Actieve flexibiliteit: benen optillen zonder te zwaaien."),
+  I("st8","Forward leg lifts", (w>=5?"12×":"10×")+" per been","")
+]};}
+function upperStretch(){ return {h:"Upper stretches", s:"± 5 min", items:[
+  I("us1","Shoulder stretch","45 s per kant",""),
+  I("us2","Doorway stretch","45 s",""),
+  I("us3","Camel stretch","3×20 s","Heupen naar voren, borst omhoog.")
+]};}
+function handstand(w){
+  const items=[
+    I("hs1","Plank to pike","8×",""),
+    I("hs2","Pike shoulder taps","8× per kant",""),
+    I("hs3","Pike weight shift","8×","Gewicht naar je handen verplaatsen."),
+    I("hs4","Pike leg lifts","5× per been",""),
+    I("hs5","Pike fall out","3× per kant","Veilig uitvallen: dit geeft durf.")];
+  if (w>=5 && w<=8) items.push(I("hs6","Chest-to-wall hold", w===8?"2×20 s":"3×30 s","Opbouw naar vrij staan."));
+  if (w>=9) items.push(I("hs6","Vrije handstand","8 pogingen","Tel je seconden en noteer je beste.", w===11?"test":""));
+  return {h:"Handstand", s:"± 10 min", items};
+}
+function brug(w){
+  const items=[
+    I("br1","Brug stretch", w>=5?"3×30 s":"3×20 s","Schouders naar voren boven je handen."),
+    I("br2","Bridge rocks","8×",""),
+    I("br3","Wall walk down","3×",""),
+    I("br4","Bridge leg lifts","5× per been",""),
+    I("br5","Bridge kick from wall","5×","")];
+  if (w>=9) items.push(I("br6","Uit brug opstaan / walkover met spot","3×","Vraag je coach om te spotten.", w===11?"test":""));
+  return {h:"Brug drills", s:"± 10 min", items};
+}
+function coreCircuit(w){
+  const r = (w===8||w===12) ? 1 : (w<=3 ? 2 : 3);
+  return {h:"Core circuit", s:`${r} ${r===1?"ronde":"rondes"}`, items:[
+    I("cc1","Knee raises","8×",""),
+    I("cc2","Leg raises","8×",""),
+    I("cc3","Side raises","2×4",""),
+    I("cc4","Around the world","4×",""),
+    I("cc5","Marches","8×",""),
+    I("cc6","Hold","tot falen","")
+  ]};
+}
+function warmLegs(){return {h:"Warming-up", s:"8 min", items:[
+  I("wu1","Puffer bij de hand","","Gebruik hem zoals afgesproken met je arts."),
+  I("wu2","Fietsen of roeien, rustig","5 min","Rustig opbouwen, vooral voor je adem."),
+  I("wu3","90/90 heupwissel + world's greatest stretch","5× + 3× per kant","")]}}
+function warmUpper(){return {h:"Warming-up", s:"8 min", items:[
+  I("wu1","Puffer bij de hand","","Gebruik hem zoals afgesproken met je arts."),
+  I("wu2","Roeien, rustig","4 min",""),
+  I("wu3","Band pull-aparts + wall slides","2×15 + 2×10","Ribben omlaag, onderrug niet hol.")]}}
 
-function getTrainingItemsForDate(dow,today){
-  if(dow===1){
-    if(inRange(today,poolMondayClosedStart,poolMondayClosedEnd)){
-      return [{id:'t1',text:'Maandag vrij (zwembad dicht)',sub:'Geen maandagzwemmen deze periode — prima rustdag, of inhaalmoment voor een gemiste training'}];
-    }
-    return trainingByDay[1];
+function legs(w){
+  return [
+    warmLegs(),
+    {h:"Plyometrics", s:"warming-up blok", items:[
+      I("pl1","Kneeling jump", L.kneel[w], "Vanuit kniezit explosief naar squat springen."),
+      I("pl2","Box jump", L.box[w], "Zacht landen, stap altijd naar beneden.")]},
+    {h:"Kracht", s:"± 50 min", items:[
+      I("k1","Back squat", L.squat[w], "Of front squat. Rust 2–3 min. Denk: snel omhoog, zoals in een stunt.", isTest(L.squat[w])?"test":""),
+      I("k2","Hip thrust (machine)", L.hip[w], "1 s vasthouden bovenin."),
+      I("k3","Romanian deadlift", L.rdl[w], "Met straps (duim). Rust 2 min."),
+      I("k4","Bulgarian split squat (barbell)", L.bss[w], "Of reverse lunge in de Smith als je wilt."),
+      I("k5","Seated leg curl", L.ham[w], ""),
+      I("k6","Hip abduction (machine)", L.abd[w], "Kan eruit als je weinig tijd hebt.","opt"),
+      I("k7","Eenbenige calf raise + tibialis raise", L.calf[w], "Op een trede, lichaamsgewicht. Kan eruit als je weinig tijd hebt.","opt"),
+      I("k8","Copenhagen plank", L.cop[w], "Begin met de knie op de bank, later de voet.")]},
+    coreCircuit(w),
+    {h:"Herstel", s:"", items:[
+      I("h1","Clear whey na de training","","Telt mee in je eiwit."),
+      I("h2","Rood licht: benen & billen","","")]}
+  ];
+}
+function upper(w){
+  return [
+    warmUpper(),
+    {h:"Kracht", s:"± 40 min", items:[
+      I("k1","Military press (staand)", L.press[w], "Rust 2–3 min. Billen en buik aan, geen holle rug.", isTest(L.press[w])?"test":""),
+      I("k2","Overhead hold (barbell)", L.ohold[w], "Vanuit het rek alleen uitdrukken en vasthouden. Dit is je extension-kracht."),
+      I("k3","Lat pulldown", L.pull[w], "Borst naar de stang, schouders omlaag.", isTest(L.pull[w])?"test":""),
+      I("k4","Cable row", L.row[w], "Brede stang als je duim gevoelig is."),
+      I("k5","Push-ups", L.push[w], "Strikt: borst tot vuist-hoogte van de grond.", isTest(L.push[w])?"test":""),
+      I("k6","EZ bar biceps curl", L.curl[w], "Geen hammer curls vanwege je duim.")]},
+    coreCircuit(w),
+    upperStretch(),
+    {h:"Herstel", s:"", items:[
+      I("h1","Clear whey na de training","",""),
+      I("h2","Rood licht: schouders","","")]}
+  ];
+}
+function maCore(w){ return {h:"Core", s:"± 6 min", items:[
+  I("mc1","Plank", L.plank[w], isTest(L.plank[w])?"Eén poging, noteer je tijd.":"", isTest(L.plank[w])?"test":""),
+  I("mc2","Sit-ups", L.situp[w], "")
+]};}
+function zwemmen(w){return [
+  {h:"Zwemmen", s:"± 45 min · borstcrawl leren", items:[
+    I("z1","Inzwemmen schoolslag","100 m","Rustig, adem laten zakken."),
+    I("z2","Crawl-benen aan de rand", lichtWeek(w)?"2×20 s":"4×20 s","Handen op de rand, lichaam gestrekt. Vanuit de heup, enkels los."),
+    I("z3","Zijademhaling drill", lichtWeek(w)?"2×25 m":"4×25 m","6 trappen op je zij, dan 1 slag."),
+    I("z4","Borstcrawl", L.crawl[w], "Rust aan de kant tot je adem rustig is.", isTest(L.crawl[w])?"test":""),
+    I("z5","Uitzwemmen","100 m","")]},
+  maCore(w)
+]}
+function reformer(w){return [
+  {h:"Ochtend", s:"", items:[I("r1","Reformer pilates","vast","")]},
+  stretch(w),
+  {h:"Avond: hardlopen", s:"± 25 min · licht", items:[
+    I("run0","Puffer bij de hand","","Rustig starten, ook als het koud is."),
+    I("run1","5 min wandelen","",""),
+    I("run2","Intervallen", L.run[w], "Tempo waarop je nog kunt praten.", isTest(L.run[w])?"test":""),
+    I("run3","5 min uitwandelen","","")]}
+]}
+function cheer(w){return [
+  {h:"Teamtraining", s:"", items:[
+    I("ch1","Eten 1,5–2 uur vooraf","",""),
+    I("ch2","Puffer bij de hand + extra lange warming-up","5 min eigen opwarming",""),
+    I("ch3","Teamtraining","","Focus: benen eerst bij de push naar extension."),
+    I("ch4","Clear whey erna","",""),
+    I("ch5","Rood licht: schouders & onderrug","","")]}
+]}
+function rust(){return [
+  {h:"Rustdag", s:"", items:[
+    I("rs1","Wandelen met de hond","",""),
+    I("rs2","Foamrollen","10 min","Benen en bovenrug.","opt"),
+    I("rs3","Rood licht: wat het meest moe voelt","",""),
+    I("rs4","Eiwit en water gewoon halen","","")]}
+]}
+function vakantie(){return [
+  {h:"Vakantieweek", s:"alles is optioneel", items:[
+    I("v1","Wandelen","","Lekker veel lopen telt al."),
+    I("v2","Stretchen","5–10 min","Alleen als je zin hebt.","opt"),
+    I("v3","Eiwit zo goed als het lukt","","Geen stress.")]}
+]}
+function metingen(w){
+  const foto = [1,5,9,11].includes(w);
+  return {h:"Ochtend: metingen", s:"na plassen, voor drinken", items:[
+    I("me1","Gewicht, taille, heupen, nek, biceps","","Zelfde plek meten als op 4 oktober."),
+    ...(foto?[I("me2","Foto's","voor, zij, achter","Zelfde licht, zelfde houding.")]:[])
+  ]};
+}
+
+function sessie(date){
+  const w = weekVan(date), d = dagIdx(date);
+  if (w<1) return {titel:"Nog even rust", sub:"Het programma start maandag 5 oktober.", type:"rest", blocks:[
+    {h:"Klaarzetten", s:"", items:[I("pre1","Nieuwe eiwitdoelen bekijken","",""),I("pre2","Straps in je gymtas","",""),I("pre3","Hevy-routines klaarzetten","","")]}]};
+  if (w>12) return {titel:"Blok afgerond", sub:"Tijd voor een terugblik en het volgende blok.", type:"rest", blocks:[]};
+  if (isVak(date)) return {titel:"Vakantie", sub:"Rustweek: je lichaam bouwt nu op.", type:"rest", blocks:vakantie()};
+  let t, sub, type, blocks=[];
+  switch(d){
+    case 0: t="Zwemmen"; sub="Borstcrawl, core en handstand"; type="cond"; blocks=[...zwemmen(w), handstand(w)];
+      if (w%2===1) blocks.unshift(metingen(w)); break;
+    case 1: t="Leg day"; sub="Plyo, kracht, core en stretch"; type="gym"; blocks=[...legs(w), stretch(w)]; break;
+    case 2: t="Cheer"; sub="Teamtraining + core, brug en stretch"; type="cheer"; blocks=[...cheer(w), coreCircuit(w), brug(w), stretch(w)]; break;
+    case 3: t="Pilates & hardlopen"; sub="Ochtend reformer en stretchen, avond intervallen"; type="cond"; blocks=reformer(w); break;
+    case 4: t="Upper body"; sub="Kracht, core, handstand en brug"; type="gym"; blocks=[...upper(w), handstand(w), brug(w)]; break;
+    case 5: t="Cheer"; sub="Teamtraining + handstand, brug en stretch"; type="cheer"; blocks=[...cheer(w), handstand(w), brug(w), stretch(w)]; break;
+    case 6: t="Rustdag"; sub="Herstellen hoort bij het programma"; type="rest"; blocks=rust(); break;
   }
-  if(dow===4){
-    if(inRange(today,poolThuOptionStart,poolThuOptionEnd)){
-      return [{id:'t1',text:'Reformer pilates óf zwemmen (kies één)',sub:'Zwemmen kan als alternatief 19:45-21:00 zolang het maandagzwemmen uitvalt'}];
-    }
-    return trainingByDay[4];
-  }
-  return trainingByDay[dow];
+  blocks = [...blocks.filter(b=>b.h!=="Herstel"), ...blocks.filter(b=>b.h==="Herstel")];
+  if (lichtWeek(w) && (d===1||d===4)) sub += " · lichte week";
+  if (w===4 && d===4) sub += " · herstart na vakantie";
+  if (w===11 && (d===1||d===4||d===0||d===3)) sub += " · testweek";
+  return {titel:t, sub, type, blocks};
 }
 
-function initChecklist(){
-  var d=new Date();
-  var dow=d.getDay();
-  var el=document.getElementById('cl-date-display');
-  if(el)el.textContent=dayN[dow]+' '+d.getDate()+' '+monthN[d.getMonth()];
-  var key=todayKey();
-  if(!state.checks[key])state.checks[key]={};
-  document.querySelectorAll('.cl-item[data-id]').forEach(function(item){
-    var id=item.getAttribute('data-id');
-    if(state.checks[key][id]){item.classList.add('done');item.querySelector('.cl-check').textContent='✓';}
-  });
-  buildTrainingItems(dow,d);
-  updateProgress();
-}
+/* ============ DATUMS ============ */
+const dstr = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const addDays = (d,n) => {const x=new Date(d); x.setDate(x.getDate()+n); return x};
+const dagIdx = d => (d.getDay()+6)%7;
+const diffDagen = (a,b) => Math.round((new Date(a.getFullYear(),a.getMonth(),a.getDate()) - new Date(b.getFullYear(),b.getMonth(),b.getDate()))/864e5);
+const weekVan = d => { const n = diffDagen(d, START); return n<0 ? 0 : Math.floor(n/7)+1; };
+const maandag = d => addDays(d, -dagIdx(d));
+const today0 = () => { const n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate()); };
 
-function buildTrainingItems(dow,today){
-  var container=document.getElementById('cl-training-items');
-  var label=document.getElementById('cl-training-label');
-  var items=getTrainingItemsForDate(dow,today)||[];
-  var key=todayKey();
-  container.innerHTML='';
-  if(!items.length){
-    container.innerHTML='<div style="font-size:13px;color:var(--tx3);padding:4px 0">Rustdag — alleen dagelijkse kern</div>';
-    return;
-  }
-  label.textContent='Training vandaag ('+dayN[dow]+')';
-  items.forEach(function(item){
-    var done=state.checks[key]&&state.checks[key]['tr_'+item.id];
-    var div=document.createElement('div');
-    div.className='cl-item'+(done?' done':'');
-    div.setAttribute('data-id','tr_'+item.id);
-    div.onclick=function(){toggle(this);};
-    div.innerHTML='<div class="cl-check">'+(done?'✓':'')+'</div><div><div class="cl-text">'+item.text+'</div>'+(item.sub?'<div class="cl-sub">'+item.sub+'</div>':'')+'</div>';
-    container.appendChild(div);
-  });
-}
-
-function toggle(el){
-  var key=todayKey();var id=el.getAttribute('data-id');
-  if(!state.checks[key])state.checks[key]={};
-  if(el.classList.contains('done')){el.classList.remove('done');el.querySelector('.cl-check').textContent='';delete state.checks[key][id];}
-  else{el.classList.add('done');el.querySelector('.cl-check').textContent='✓';state.checks[key][id]=true;}
-  save();updateProgress();
-}
-
-function updateProgress(){
-  var total=document.querySelectorAll('#pg-check .cl-item').length;
-  var done=document.querySelectorAll('#pg-check .cl-item.done').length;
-  var pct=total>0?Math.round((done/total)*100):0;
-  var c=document.getElementById('prog-count');var f=document.getElementById('prog-fill');
-  if(c)c.textContent=done+' / '+total;
-  if(f)f.style.width=pct+'%';
-}
-
-function resetDay(){
-  var key=todayKey();state.checks[key]={};save();
-  document.querySelectorAll('#pg-check .cl-item').forEach(function(item){item.classList.remove('done');item.querySelector('.cl-check').textContent='';});
-  updateProgress();
-}
-
-// EIWIT
-var proteinMain=[
-  {id:'kip',name:'Kipfilet',portion:'per 50g',val:15},
-  {id:'steak',name:'Steak',portion:'per 50g',val:12},
-  {id:'zalm',name:'Zalm',portion:'per 50g',val:10},
-  {id:'tonijn',name:'Tonijn',portion:'per 50g',val:12},
-  {id:'garnalen',name:'Garnalen',portion:'per 50g',val:9},
-  {id:'burger',name:'Dunne burger',portion:'per burger (~45g)',val:9},
-  {id:'eieren',name:'Ei',portion:'per ei',val:6},
-  {id:'yoghurt',name:'Griekse yoghurt',portion:'per 50g',val:5},
-  {id:'skyr',name:'Skyr',portion:'per 50g',val:6},
-  {id:'kwark',name:'Kwark',portion:'per 50g',val:6},
-  {id:'cottage',name:'Cottage cheese',portion:'per 50g',val:6}
+/* ============ VOEDING ============ */
+const FOODS = [
+  {id:"kip50",n:"Kipfilet",p:"50 g bereid",g:15,grp:0},
+  {id:"gehakt50",n:"Rundergehakt",p:"50 g",g:10,grp:0},
+  {id:"zalm50",n:"Zalm",p:"50 g",g:11,grp:0},
+  {id:"tonijn50",n:"Tonijn",p:"50 g",g:12.5,grp:0},
+  {id:"rosbief",n:"Rosbief",p:"50 g",g:12,grp:0},
+  {id:"rookvlees",n:"Rookvlees",p:"50 g",g:13,grp:0},
+  {id:"chorizo",n:"Chorizo",p:"50 g",g:12,grp:0},
+  {id:"eiwitpak50",n:"AH vloeibaar kippeneiwit",p:"50 ml",g:5.5,grp:0},
+  {id:"kwark50",n:"Magere kwark",p:"50 g",g:4.5,grp:0},
+  {id:"grieks50",n:"Griekse yoghurt",p:"50 g",g:3,grp:0},
+  {id:"cottage50",n:"Cottage cheese",p:"50 g",g:5.5,grp:0},
+  {id:"sojacrisp50",n:"Soja crispies",p:"50 g",g:30,grp:0},
+  {id:"spelt50",n:"Gepofte spelt",p:"50 g",g:8,grp:0},
+  {id:"kwarkel",n:"Magere kwark",p:"1 eetlepel",g:1.8,grp:1},
+  {id:"grieksel",n:"Griekse yoghurt",p:"1 eetlepel",g:1.2,grp:1},
+  {id:"cottageel",n:"Cottage cheese",p:"1 eetlepel",g:2.2,grp:1},
+  {id:"parmezaan10",n:"Parmezaanse kaas",p:"10 g",g:3.5,grp:1},
+  {id:"mager10",n:"Magere kaas",p:"10 g",g:3,grp:1},
+  {id:"mozza10",n:"Mozzarella",p:"10 g",g:1.8,grp:1},
+  {id:"geit",n:"Geitenkaas",p:"30 g",g:6,grp:1},
+  {id:"spirulina5",n:"Spirulina poeder",p:"5 g",g:3.2,grp:1},
+  {id:"ei",n:"Ei",p:"1 stuk",g:6.5,grp:2},
+  {id:"whey",n:"Clear whey",p:"1 schep",g:20,grp:2},
+  {id:"ijskoffie",n:"Protein ijskoffie",p:"1 stuk",g:18,grp:2},
+  {id:"melk",n:"Melk",p:"250 ml",g:8.5,grp:2}
 ];
-var proteinExtra=[
-  {id:'parma',name:'Parmezaanse kaas',portion:'per 10g',val:4},
-  {id:'kaas',name:'Magere kaas',portion:'per 10g',val:3},
-  {id:'oldams',name:'Old Amsterdam bitterbal',portion:'per bal',val:2},
-  {id:'feta',name:'Feta',portion:'per 10g',val:2},
-  {id:'mozza',name:'Mozzarella',portion:'per 10g',val:2},
-  {id:'clearwhey',name:'Clear whey',portion:'per scoop',val:22},
-  {id:'whey',name:'Regular whey',portion:'per scoop',val:22},
-  {id:'bar',name:'Protein bar',portion:'per stuk',val:20},
-  {id:'ijskoffie',name:'Protein ijskoffie',portion:'per portie',val:18}
-];
+const GROEPEN = ["Per 50 g","Kleine porties","Per stuk"];
+const SUPPS = [{id:"creatine",n:"Creatine"},{id:"magnesium",n:"Magnesium"},{id:"multi",n:"Multivitamine"},{id:"omega3",n:"Omega 3"},{id:"collageen",n:"Collageen (optioneel)"}];
+const eiwitDoel = w => w<=1 ? 90 : w===2 ? 100 : 115;
+const kcal = w => (w>=5 && w<=11) ? "± 1900–1950 kcal (mild tekort)" : "± 2222 kcal (onderhoud)";
+const WATER_DOEL = 9;
 
-function buildProteinGrid(sources,containerId){
-  var key=todayKey();
-  if(!state.protein[key])state.protein[key]={};
-  var grid=document.getElementById(containerId);
-  if(!grid)return;
-  grid.innerHTML='';
-  sources.forEach(function(src){
-    var count=state.protein[key][src.id]||0;
-    var div=document.createElement('div');
-    div.className='prot-item'+(count>0?' tapped':'');
-    div.id='pi-'+src.id;
-    var pressTimer;
-    div.addEventListener('touchstart',function(){pressTimer=setTimeout(function(){subtractProtein(src.id);},600);},{passive:true});
-    div.addEventListener('touchend',function(){clearTimeout(pressTimer);});
-    div.addEventListener('touchmove',function(){clearTimeout(pressTimer);},{passive:true});
-    div.onclick=function(){addProtein(src.id,src.val);};
-    div.innerHTML=(count>0?'<div class="prot-count">×'+count+'</div>':'')+
-      '<div class="prot-name">'+src.name+'</div>'+
-      '<div class="prot-portion">'+src.portion+'</div>'+
-      '<div class="prot-val">+'+src.val+'g eiwit</div>';
-    grid.appendChild(div);
-  });
+/* ============ OPSLAG ============ */
+let S = {checks:{}, food:{}, water:{}, supps:{}};
+let dbRef = null, saveT = null, syncTxt = "Opgeslagen op dit apparaat";
+function lsGet(){ try{ const r = localStorage.getItem("cheer-blok2"); if(r) S = Object.assign(S, JSON.parse(r)); }catch(e){} }
+function lsSet(){ try{ localStorage.setItem("cheer-blok2", JSON.stringify(S)); }catch(e){} }
+function save(){
+  lsSet();
+  clearTimeout(saveT);
+  saveT = setTimeout(async ()=>{ if(dbRef){ try{ await dbRef.set(S); }catch(e){ } } }, 900);
+}
+async function initDb(){
+  try{
+    if(!window.claude || !window.claude.use) return;
+    const db = await window.claude.use("db"); const user = await window.claude.use("user");
+    if(!db || !user) return;
+    const id = await user.id(); if(!id) return;
+    dbRef = db.doc("data/users/"+id+"/state/main");
+    const snap = await dbRef.get();
+    if(snap.exists){ const d = snap.data()||{}; S = Object.assign({checks:{},food:{},water:{},supps:{}}, d); lsSet(); }
+    else { await dbRef.set(S); }
+    syncTxt = "Opgeslagen in je account";
+    render();
+  }catch(e){}
 }
 
-function addProtein(id,val){
-  var key=todayKey();
-  if(!state.protein[key])state.protein[key]={};
-  state.protein[key][id]=(state.protein[key][id]||0)+1;
-  save();refreshProtein();
+/* ============ UI ============ */
+let tab = "vandaag";
+let view = today0();
+let openWeek = null;
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtDatum = d => `${DAGEN_LANG[dagIdx(d)]} ${d.getDate()} ${MAANDEN[d.getMonth()]}`;
+
+function itemsVan(date){ return sessie(date).blocks.flatMap(b=>b.items.map(i=>b.h+"|"+i.id)); }
+function pctVan(date){
+  const ids = itemsVan(date); if(!ids.length) return 0;
+  const c = S.checks[dstr(date)]||{}; return ids.filter(k=>c[k]).length/ids.length;
 }
 
-function subtractProtein(id){
-  var key=todayKey();
-  if(!state.protein[key]||!state.protein[key][id])return;
-  state.protein[key][id]--;
-  if(state.protein[key][id]<=0)delete state.protein[key][id];
-  save();refreshProtein();
-}
-
-function refreshProtein(){
-  buildProteinGrid(proteinMain,'prot-grid-main');
-  buildProteinGrid(proteinExtra,'prot-grid-extra');
-  updateProteinUI();
-}
-
-function updateProteinUI(){
-  var key=todayKey();var total=0;
-  var counts=state.protein[key]||{};
-  proteinMain.concat(proteinExtra).forEach(function(src){total+=(counts[src.id]||0)*src.val;});
-  var el=document.getElementById('prot-total');
-  var bar=document.getElementById('prot-bar');
-  var msg=document.getElementById('prot-msg');
-  if(el)el.textContent=total;
-  var pct=Math.min(100,Math.round((total/115)*100));
-  if(bar){bar.style.width=pct+'%';if(total>=110)bar.classList.add('done');else bar.classList.remove('done');}
-  if(msg){
-    if(total===0)msg.textContent='Tik om toe te voegen · lang indrukken = aftrekken';
-    else if(total<110)msg.textContent='Nog '+(115-total)+'g te gaan';
-    else msg.textContent='🎉 Eiwitdoel gehaald!';
+function renderVandaag(){
+  const w = weekVan(view), s = sessie(view), key = dstr(view), c = S.checks[key]||{};
+  const f = w>=1&&w<=12 ? faseVan(w) : null;
+  const isToday = diffDagen(view,today0())===0;
+  const ma = maandag(view);
+  let strip = "";
+  for(let i=0;i<7;i++){
+    const d = addDays(ma,i), ss = sessie(d);
+    const cls = ["sd", ss.type, dstr(d)===key?"cur":"", pctVan(d)===1?"full":""].join(" ");
+    strip += `<button class="${cls}" data-go="${dstr(d)}" aria-label="${fmtDatum(d)}: ${esc(ss.titel)}">${DAGEN[i]}<b>${d.getDate()}</b><i></i></button>`;
   }
+  let notes = "";
+  if (w===1 && dagIdx(view)<=1) notes = `<div class="note"><b>Week 1 is nulmeting.</b> Doe de tests rustig en noteer alles. Dit zijn de cijfers waarmee je straks je vooruitgang laat zien.</div>`;
+  if (w===5 && dagIdx(view)===0) notes = `<div class="note"><b>Vanaf deze week:</b> mild calorietekort, ± 1900–1950 kcal. Eiwit blijft 110–120 g.</div>`;
+  if (w===11 && dagIdx(view)===0) notes = `<div class="note"><b>Testweek.</b> Goed slapen, goed eten, en laat zien wat je kunt.</div>`;
+  const blocks = s.blocks.map(b=>`
+    <section class="block"><h3>${esc(b.h)}<small>${esc(b.s)}</small></h3>
+    ${b.items.map(i=>{const k=b.h+"|"+i.id; const ok=!!c[k]; return `
+      <button class="item ${ok?"ok":""}" data-k="${esc(k)}" aria-pressed="${ok}">
+        <span class="box" aria-hidden="true"></span>
+        <span><span class="nm">${esc(i.nm)}</span>${i.tag==="test"?'<span class="tag test">test</span>':""}${i.tag==="opt"?'<span class="tag opt">keuze</span>':""}
+        ${i.ds?`<div class="ds">${esc(i.ds)}</div>`:""}${i.nt?`<div class="nt">${esc(i.nt)}</div>`:""}</span>
+      </button>`}).join("")}
+    </section>`).join("");
+  const p = Math.round(pctVan(view)*100);
+  app.innerHTML = `
+    <div class="top"><span class="who">Hanne · blok 2</span><span class="wk">${w>=1&&w<=12?`Week ${w} · ${esc(f.n)}`:(w<1?"Start 5 oktober":"Afgerond")}</span></div>
+    <div class="day-hero">
+      <div class="date">${isToday?"Vandaag, ":""}${fmtDatum(view)}</div>
+      <h1>${esc(s.titel)}</h1>
+      <div class="sub">${esc(s.sub)}</div>
+      <div class="daynav">
+        <button class="pill" data-nav="-1" aria-label="Vorige dag">Vorige</button>
+        <button class="pill ${isToday?"on":""}" data-nav="0">Vandaag</button>
+        <button class="pill" data-nav="1" aria-label="Volgende dag">Volgende</button>
+        ${w<1?`<button class="pill" data-go="${dstr(START)}">Bekijk week 1</button>`:""}
+      </div>
+    </div>
+    <div class="strip">${strip}</div>
+    ${s.blocks.length?`<div class="progress" aria-label="${p}% afgevinkt"><span style="width:${p}%"></span></div>`:""}
+    ${notes}${blocks}
+    <div class="sync">${esc(syncTxt)}</div>`;
 }
 
-function resetProtein(){
-  var key=todayKey();state.protein[key]={};save();refreshProtein();
+function renderTraining(){
+  const tw = weekVan(today0());
+  const actief = tw<1 ? 1 : Math.min(tw,12);
+  const phases = FASES.map((f,fi)=>{
+    const klaar = f.w[f.w.length-1] < tw, nu = f.w.includes(actief);
+    const open = openWeek===null ? nu : openWeek===fi;
+    const st = klaar ? '<span class="st klaar">klaar</span>' : nu ? '<span class="st nu">nu</span>' : '<span class="st straks">straks</span>';
+    const weken = f.w.map(w=>{
+      const ma = addDays(START,(w-1)*7);
+      const lst = (nm,rows) => `<div class="kr"><div class="krh">${nm}</div>${rows.map(([a,b])=>`<div class="krr"><span>${a}</span><b>${esc(b)}</b></div>`).join("")}</div>`;
+      const legsR = [["Box jump",L.box[w]],["Back squat",L.squat[w]],["Hip thrust",L.hip[w]],["Romanian deadlift",L.rdl[w]],["Bulgarian split squat",L.bss[w]],["Seated leg curl",L.ham[w]],["Hip abduction",L.abd[w]],["Calf + tibialis raise",L.calf[w]],["Copenhagen plank",L.cop[w]]];
+      const condR = [["Borstcrawl · ma",L.crawl[w]],["Hardlopen · do",L.run[w]]];
+      const upR = [["Military press",L.press[w]],["Overhead hold",L.ohold[w]],["Lat pulldown",L.pull[w]],["Cable row",L.row[w]],["Push-ups",L.push[w]],["EZ bar curl",L.curl[w]]];
+      let inhoud;
+      if (w===4) inhoud = `<div class="lifts">Vakantie t/m do 29 okt. Geen leg day deze week.</div>` + lst("Upper body · vr 30 okt", upR);
+      else inhoud = (w===3?`<div class="lifts">Vakantie vanaf do 22 okt: upper body vervalt deze week.</div>`:"") + lst("Leg day · di", legsR) + (w===3?"":lst("Upper body · vr", upR)) + (w===3?lst("Conditioning", [condR[0]]):lst("Conditioning", condR));
+      return `<div class="wkrow"><h4>Week ${w} <span>vanaf ${ma.getDate()} ${MAANDEN[ma.getMonth()]}</span></h4>${inhoud}</div>`;
+    }).join("");
+    return `<section class="phase ${open?"open":""}"><button class="sum" data-ph="${fi}" aria-expanded="${open}">
+      <span><span class="pn">${esc(f.n)}</span><br><span class="pw">Week ${f.w.join("–").replace(/(\d+)–.*–(\d+)/,"$1–$2")}</span></span>${st}</button>
+      <div class="body"><p class="focus">${esc(f.focus)}</p>${weken}</div></section>`;
+  }).join("");
+  const goals = [
+    ["Military press","25 kg × 6","30 kg × 5"],["Push-ups","10","15 strikt"],["Lat pulldown","45 kg × 7","52,5 kg × 8"],
+    ["Squat","80 kg × 5","87,5 kg × 5"],["Plank","30 s","+50% t.o.v. week 1"],["Handstand","alleen muur","5 s vrij"],
+    ["Front walkover","tot brug","opstaan + met spot"],["Back tuck","nog niet","eerste met spot"],
+    ["Hardlopen","nieuw","20 min aaneen"],["Borstcrawl","nieuw","50 m aaneen"],["Taille","78 cm","75–76 cm"],["Eiwit","± 70 g","110–120 g"]
+  ].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
+  app.innerHTML = `
+    <div class="top"><span class="who">Hanne · blok 2</span><span class="wk">5 okt – 27 dec</span></div>
+    <div class="day-hero"><h1>12 weken</h1><div class="sub">Kracht met verwachte gewichten, plus je opbouw voor zwemmen en hardlopen.</div></div>
+    ${phases}
+    <section class="block"><h3>Doelen testweek<small>week 11</small></h3>
+      <div class="scroll" style="padding:0 10px 10px"><table class="goals"><thead><tr><th>Wat</th><th>Nu</th><th>Doel</th></tr></thead><tbody>${goals}</tbody></table></div>
+    </section>`;
 }
 
-// KALENDER
-var kalData=[
-  {w:1,start:'6 jul',end:'12 jul',phase:'f1',phaseLabel:'Fase 1 — aanloop',note:'Oefeningen leren, techniek eerst.'},
-  {w:2,start:'13 jul',end:'19 jul',phase:'f1',phaseLabel:'Fase 1 — opbouw',note:'Ritme vinden. Intensiteit iets omhoog.'},
-  {w:3,start:'20 jul',end:'26 jul',phase:'f1',phaseLabel:'Fase 1 — vastzetten',note:'Techniek vastzetten, gewichten opbouwen. Zwembad: geen maandag meer, do 19:45-21u optioneel.'},
-  {w:4,start:'27 jul',end:'2 aug',phase:'f2',phaseLabel:'Fase 2 — kracht',note:'⚡ Cheer workshop 1-2 aug. Jefferson curl introduceren. Zwembad: geen maandag, do optioneel.',type:'event'},
-  {w:5,start:'3 aug',end:'9 aug',phase:'f2',phaseLabel:'Fase 2',note:'🏖 Vakantie vanaf 5 aug. Zwembad t/m 6 aug beperkt open, daarna helemaal dicht.',type:'vacation'},
-  {w:6,start:'10 aug',end:'16 aug',phase:'f2',phaseLabel:'Fase 2',note:'🏖 Vakantie t/m 12 aug. Cheer event 14-16 aug. Zwembad dicht.',type:'vacation'},
-  {w:7,start:'17 aug',end:'23 aug',phase:'dl',phaseLabel:'Deload',note:'Volume 40% omlaag. Mobiliteit prioriteit. Zwembad nog dicht.',type:'deload'},
-  {w:8,start:'24 aug',end:'30 aug',phase:'f3',phaseLabel:'Fase 3 — intensivering',note:'Alle plyometrics. Bulgarian met jump. Zwembad dicht t/m 30 aug.'},
-  {w:9,start:'31 aug',end:'6 sep',phase:'f3',phaseLabel:'Fase 3 — piek',note:'Zwaarste fase. Zwembad weer open (aanname). Ring push-ups na polsgoedkeuring.'},
-  {w:10,start:'7 sep',end:'13 sep',phase:'f3',phaseLabel:'Fase 3',note:'Pieken. Eerste bodyweight pull-ups.'},
-  {w:11,start:'14 sep',end:'20 sep',phase:'fin',phaseLabel:'Finale — taper',note:'Volume omlaag. Kwaliteit omhoog.'},
-  {w:12,start:'21 sep',end:'27 sep',phase:'fin',phaseLabel:'Finale — showcase',note:'🏆 Push-up max, pull-up test, splits check.',type:'deload'}
-];
-
-// gedeelde week/fase-berekening — fix: programma start in 2026, niet 2025
-function getCurrentWeekInfo(){
-  var today=new Date();
-  var programStart=new Date('2026-07-06');
-  var diffDays=Math.floor((today-programStart)/(1000*60*60*24));
-  var currentWeek=Math.floor(diffDays/7)+1;
-  var wk=null;
-  for(var i=0;i<kalData.length;i++){if(kalData[i].w===currentWeek){wk=kalData[i];break;}}
-  return {week:currentWeek,data:wk};
+function renderEiwit(){
+  const key = dstr(view), w = Math.max(1, Math.min(12, weekVan(view)));
+  const f = S.food[key]||{};
+  const tot = FOODS.reduce((a,x)=>a+(f[x.id]||0)*x.g,0);
+  const doel = eiwitDoel(w);
+  const water = S.water[key]||0, sp = S.supps[key]||{};
+  const isToday = diffDagen(view,today0())===0;
+  const pct = Math.min(100, Math.round(tot/doel*100));
+  app.innerHTML = `
+    <div class="top"><span class="who">${isToday?"Vandaag":fmtDatum(view)}</span><span class="wk">Week ${w}</span></div>
+    <div class="pro-hero"><span class="big">${Math.round(tot)}</span><span class="of">van ${doel} g eiwit</span></div>
+    <div class="progress"><span style="width:${pct}%"></span></div>
+    <div class="meta">Calorieën deze week: ${kcal(w)}</div>
+    <div class="daynav" style="margin-bottom:14px">
+      <button class="pill" data-nav="-1">Vorige dag</button><button class="pill ${isToday?"on":""}" data-nav="0">Vandaag</button><button class="pill" data-nav="1">Volgende dag</button>
+    </div>
+    <section class="block"><h3>Eiwitbronnen<small>tik = +1, lang drukken = −1</small></h3>
+      ${GROEPEN.map((gn,gi)=>`<div class="grp">${gn}</div><div class="foods">${FOODS.filter(x=>x.grp===gi).map(x=>`<button class="food ${f[x.id]?"has":""}" data-food="${x.id}" aria-label="${esc(x.n)} ${esc(x.p)}, ${x.g} gram eiwit"><span class="cnt">${f[x.id]||""}</span><div class="fn">${esc(x.n)}</div><div class="fp">${esc(x.p)} · ${String(x.g).replace(".",",")} g</div></button>`).join("")}</div>`).join("")}
+      <div class="hint">Waarden zijn gemiddelden. Check het etiket als je een ander merk hebt.</div>
+    </section>
+    <section class="block"><h3>Water<small>${(water*0.25).toFixed(2).replace(".",",").replace(/,?0+$/,"")} L van 2–2,5 L</small></h3>
+      <div class="water">${Array.from({length:10},(_,i)=>`<button class="glass ${i<water?"on":""}" data-water="${i+1}" aria-label="${i+1} glazen"></button>`).join("")}</div>
+    </section>
+    <section class="block"><h3>Supplementen</h3>
+      <div class="supp">${SUPPS.map(s=>`<button class="pill ${sp[s.id]?"on":""}" data-supp="${s.id}">${esc(s.n)}</button>`).join("")}</div>
+    </section>
+    <div class="sync">${esc(syncTxt)}</div>`;
 }
 
-function initKalender(){
-  var containers=document.querySelectorAll('.wk-list[data-phase]');
-  if(!containers.length)return;
-  var currentWeek=getCurrentWeekInfo().week;
-  containers.forEach(function(container){
-    var phase=container.getAttribute('data-phase');
-    container.innerHTML='';
-    kalData.filter(function(wk){return wk.phase===phase;}).forEach(function(wk){
-      var row=document.createElement('div');
-      var cls='wk-row';
-      if(wk.w===currentWeek)cls+=' current';
-      else if(wk.type==='deload')cls+=' deload';
-      else if(wk.type==='event')cls+=' event';
-      else if(wk.type==='vacation')cls+=' vacation';
-      row.className=cls;
-      var nowLabel=wk.w===currentWeek?'<span class="wk-now">← je bent hier</span>':'';
-      row.innerHTML='<b>'+wk.w+'.</b><span>'+wk.start+' – '+wk.end+' — '+wk.note+'</span>'+nowLabel;
-      container.appendChild(row);
-    });
-  });
+function render(){
+  if(tab==="vandaag") renderVandaag(); else if(tab==="training") renderTraining(); else renderEiwit();
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on", b.dataset.t===tab));
 }
 
-// SKILL FOCUS — koppelt handstand/splits/brug expliciet aan de huidige fase,
-// zodat skills niet los van het trainingsschema staan
-var skillFocusByPhase={
-  f1:'Handstand: schoudercirkels + shrugs op vuisten tegen muur · Brug: dropback dichtbij muur · Splits: dagelijkse kern, nog geen doel',
-  f2:'Handstand: op vuisten tegen muur, shape leren, 10 sec vasthouden · Brug: dropback verder van muur, handen lager',
-  dl:'Onderhoudsweek — geen nieuwe progressie. Handstand/splits gewoon dagelijks blijven doen, niet pushen',
-  f3:'Handstand: focus op kick-up techniek, niet langer vasthouden · Splits: squared hips checken (niet schuin!), rechts plat (wk6-8 doel) · Push: extra aandacht, loopt achter op pull',
-  fin:'Handstand: eerste vrije pogingen · Splits: links plat + midden 80%+ testen (wk12) · Front walkover: gepauzeerd deze cyclus'
-};
-function renderSkillFocus(){
-  var info=getCurrentWeekInfo();
-  var els=document.querySelectorAll('.skill-focus-text');
-  if(!els.length)return;
-  var text=info.data?skillFocusByPhase[info.data.phase]:'';
-  var label=info.data?('Wk '+info.week+' · '+info.data.phaseLabel):'';
-  els.forEach(function(el){
-    el.innerHTML=text?('<b>'+label+'</b><br>'+text):'Buiten programmaperiode';
-  });
-}
-
-window.addEventListener('DOMContentLoaded',function(){
-  initChecklist();
-  refreshProtein();
-  initKalender();
-  renderSkillFocus();
+/* events */
+document.querySelector(".tabs").addEventListener("click", e=>{
+  const b = e.target.closest(".tab"); if(!b) return; tab = b.dataset.t; if(tab==="training") openWeek=null; render(); window.scrollTo(0,0);
 });
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./service-worker.js').catch(function (error) {
-      console.error('Service worker registration failed:', error);
-    });
-  });
+app.addEventListener("click", e=>{
+  const t = e.target.closest("[data-k],[data-nav],[data-go],[data-ph],[data-water],[data-supp]"); if(!t) return;
+  const key = dstr(view);
+  if(t.dataset.k){ S.checks[key]=S.checks[key]||{}; S.checks[key][t.dataset.k]=!S.checks[key][t.dataset.k]; save(); render(); }
+  else if(t.dataset.nav){ const n=+t.dataset.nav; view = n===0?today0():addDays(view,n); render(); }
+  else if(t.dataset.go){ const [y,m,d]=t.dataset.go.split("-").map(Number); view=new Date(y,m-1,d); tab="vandaag"; render(); window.scrollTo(0,0); }
+  else if(t.dataset.ph){ const fi=+t.dataset.ph; const wasOpen=t.parentElement.classList.contains("open"); openWeek = wasOpen?-1:fi; render(); }
+  else if(t.dataset.water){ const n=+t.dataset.water; S.water[key] = (S.water[key]===n)?n-1:n; save(); render(); }
+  else if(t.dataset.supp){ S.supps[key]=S.supps[key]||{}; S.supps[key][t.dataset.supp]=!S.supps[key][t.dataset.supp]; save(); render(); }
+});
+/* eiwit: tik +1, lang drukken −1 */
+let pressT=null, longDone=false;
+function foodChange(id,delta){
+  const key=dstr(view); S.food[key]=S.food[key]||{};
+  S.food[key][id]=Math.max(0,(S.food[key][id]||0)+delta); if(!S.food[key][id]) delete S.food[key][id];
+  save(); render();
 }
+app.addEventListener("pointerdown", e=>{
+  const b=e.target.closest("[data-food]"); if(!b) return; longDone=false;
+  pressT=setTimeout(()=>{ longDone=true; foodChange(b.dataset.food,-1); if(navigator.vibrate) try{navigator.vibrate(20)}catch(_){} },500);
+});
+["pointerup","pointerleave","pointercancel"].forEach(ev=>app.addEventListener(ev,()=>clearTimeout(pressT)));
+app.addEventListener("click", e=>{
+  const b=e.target.closest("[data-food]"); if(!b) return;
+  if(longDone){ longDone=false; return; } foodChange(b.dataset.food,1);
+});
+app.addEventListener("contextmenu", e=>{ if(e.target.closest("[data-food]")) e.preventDefault(); });
+
+lsGet(); render(); initDb();
+if ("serviceWorker" in navigator) { window.addEventListener("load", ()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }); }
 </script>
 </body>
 </html>
