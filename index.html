@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Cheer">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png">
 <title>Cheer blok 2 · Hanne</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -140,6 +140,42 @@ table.goals{width:100%;border-collapse:collapse;font-size:14px}
 .tab{flex:1;background:none;border:0;padding:12px 0 13px;font-weight:600;font-size:14.5px;color:var(--muted);cursor:pointer;border-top:2px solid transparent}
 .tab.on{color:var(--paars);border-top-color:var(--paars)}
 .sync{font-size:12px;color:var(--muted);text-align:center;margin-top:18px}
+.plan{font-size:14px;color:var(--muted);margin:10px 0 0}
+.energie{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 14px;font-size:14.5px;color:var(--muted)}
+.keuze{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:14.5px;color:var(--muted)}
+.item .ln{display:block;margin-top:6px;font-size:13.5px;color:var(--muted)}
+.item .ln span{display:block;padding:1px 0}
+.morebtn{width:100%;background:none;border:1px dashed var(--line);border-radius:16px;padding:12px;color:var(--muted);font-weight:600;cursor:pointer;margin:2px 0 12px}
+.morebtn:focus-visible{outline:2px solid var(--paars);outline-offset:2px}
+.empty{font-size:14px;color:var(--muted);text-align:center;margin:4px 0 14px}
+.wcb{padding:2px 16px 16px}
+.wcs{margin:4px 0 0;font-size:14.5px}
+.wcq{display:block;font-size:14px;font-weight:600;margin:14px 0 6px}
+.scale{display:flex;gap:6px;flex-wrap:wrap}
+textarea,input[type=text]{width:100%;font:inherit;font-size:15px;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:9px 11px;resize:vertical}
+textarea:focus-visible,input:focus-visible{outline:2px solid var(--paars);outline-offset:1px}
+.wcb .copy{margin-top:14px}
+.copytxt{white-space:pre-wrap;font:inherit;font-size:13.5px;background:var(--surface2);border-radius:10px;padding:10px;margin:10px 0 0;user-select:all;-webkit-user-select:all}
+.weekrows{padding:2px 16px 10px;font-size:14.5px}
+.weekrows div{display:grid;grid-template-columns:34px 1fr;padding:5px 0;border-top:1px solid var(--line)}
+.weekrows div:first-child{border-top:0}
+.weekrows span{color:var(--muted)}
+.field{padding:10px 16px 14px;border-top:1px solid var(--line)}
+.field label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.fyrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 16px;border-top:1px solid var(--line);font-size:14.5px}
+.fyrow small{color:var(--muted);display:block}
+.fyrow button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:13.5px;text-decoration:underline;padding:4px}
+.fyadd{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;padding:10px 16px 14px;border-top:1px solid var(--line)}
+@media (max-width:420px){.fyadd{grid-template-columns:1fr 1fr}.fyadd .pill{grid-column:1/-1}}
+.chart{display:block;width:100%;height:auto;padding:4px 10px 6px}
+.chart text{font-family:"Figtree",sans-serif;font-size:11px;fill:var(--muted)}
+.liftpills{display:flex;gap:6px;flex-wrap:wrap;padding:4px 16px 4px}
+.logrow{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:8px 16px;border-top:1px solid var(--line);font-size:14px}
+.logrow span{color:var(--muted)}
+.logrow b{font-weight:600;color:var(--ink)}
+.cmeta{font-size:13px;color:var(--muted);padding:0 16px 12px}
+.loadbtn{display:inline-block;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -149,6 +185,7 @@ table.goals{width:100%;border-collapse:collapse;font-size:14px}
   <button class="tab on" data-t="vandaag">Vandaag</button>
   <button class="tab" data-t="training">Training</button>
   <button class="tab" data-t="eiwit">Eiwit</button>
+  <button class="tab" data-t="terug">Terugblik</button>
 </div></nav>
 
 <script>
@@ -351,7 +388,7 @@ function metingen(w){
   ]};
 }
 
-function sessie(date){
+function sessieOud(date){
   const w = weekVan(date), d = dagIdx(date);
   if (w<1) return {titel:"Nog even rust", sub:"Het programma start maandag 5 oktober.", type:"rest", blocks:[
     {h:"Klaarzetten", s:"", items:[I("pre1","Nieuwe eiwitdoelen bekijken","",""),I("pre2","Straps in je gymtas","",""),I("pre3","Hevy-routines klaarzetten","","")]}]};
@@ -373,6 +410,86 @@ function sessie(date){
   if (w===4 && d===4) sub += " · herstart na vakantie";
   if (w===11 && (d===1||d===4||d===0||d===3)) sub += " · testweek";
   return {titel:t, sub, type, blocks};
+}
+
+
+/* ============ NIEUW WEEKSCHEMA (vanaf ma 16 nov) ============ */
+const NIEUW = new Date(2026,10,16);
+const sessie = date => date < NIEUW ? sessieOud(date) : sessieNieuw(date);
+function K(id,nm,ds,nt,o){ o=o||{}; return {id,nm,ds:ds||"",nt:nt||"",tag:o.tag||"",ln:o.ln||null,moe:o.moe}; }
+const cfg = () => Object.assign({vrCheer:false, plan:"Als ik mijn latte pak, open ik de app en kijk ik wat vandaag de kern is."}, S.cfg||{});
+const per = s => isTest(s) ? s : String(s).split("×").slice(1).join("×").trim();
+const lijnen = rows => rows.filter(r=>r[1]).map(r=>r[0]+": "+r[1]);
+
+function legsItem(w){ return K("legs","Leg day", lichtWeek(w)?"lichte week · ± 45 min":"± 60 min · log je sets in Hevy","Plyo eerst, dan kracht. Puffer bij de hand.",{
+  ln: lijnen([["Kneeling jump",L.kneel[w]],["Box jump",L.box[w]],["Back squat",L.squat[w]],["Hip thrust",L.hip[w]],["Romanian deadlift",L.rdl[w]],["Seated leg curl",L.ham[w]]]),
+  moe:"Alleen squat, hip thrust en RDL. De rest mag weg.", tag:isTest(L.squat[w])?"test":""}); }
+function upperItem(w){ return K("upper","Upper body","3 oefeningen · ± 30 min · log in Hevy","Alleen de lifts voor je doelen.",{
+  ln: lijnen([["Military press",L.press[w]],["Lat pulldown",L.pull[w]],["Push-ups",L.push[w]]]),
+  tag:(isTest(L.press[w])||isTest(L.push[w]))?"test":""}); }
+function coreItem(w){ return K("core","Core-rondje", lichtWeek(w)?"1 ronde · ± 5 min":"2 rondes · ± 10 min","Na het zwemmen, op de mat. Rustig ademen, onderrug laag.",{
+  ln:["Dead bug: 8× per kant","Hollow hold: "+per(L.hollow[w]),"Zijplank: "+per(L.side[w]),"Plank: "+per(L.plank[w])],
+  moe:"1 ronde, of overslaan", tag:(isTest(L.plank[w])||isTest(L.hollow[w]))?"test":""}); }
+function hsItem(w){ return K("hs","Handstand","± 10 min", w>=9?"Vrije pogingen. Tel je seconden en onthoud je beste.":"Muur als steun, opbouw naar los.",{
+  ln: w>=9 ? ["8 vrije pogingen","Pike fall out: 3× per kant"] : ["Chest-to-wall hold: "+(w===8?"2×20 s":"3×30 s"),"Pike shoulder taps: 8× per kant","Pike fall out: 3× per kant"],
+  moe:null, tag:w===11?"test":""}); }
+function fysioItems(){
+  const f = S.fysio||[];
+  if(!f.length) return [K("fy0","Fysio-oefeningen","± 10 min","Zet je oefeningen in Training › Fysio, dan staan ze hier los.")];
+  return f.map(x=>K("fy_"+x.id, x.n, x.d, ""));
+}
+function sessieNieuw(date){
+  const w = weekVan(date), d = dagIdx(date), key = dstr(date);
+  if (w>12) return {titel:"Blok afgerond", sub:"Tijd voor een terugblik en het volgende blok.", type:"rest", kern:[], bonus:[]};
+  let t, sub, type, kern=[], bonus=[], keuze=null;
+  const fysio = {h:"Fysio", items:fysioItems()};
+  switch(d){
+    case 0:
+      t="Zwemmen + core"; sub="Borstcrawl, daarna een kort core-rondje"; type="cond";
+      kern=[{h:"Kern", items:[
+        ...(w%2===1?[K("meet","Metingen","gewicht, taille, heupen","Na het opstaan, voor het drinken."+([5,9,11].includes(w)?" Ook foto's: voor, zij, achter.":""))]:[]),
+        K("zw","Zwemmen: borstcrawl", L.crawl[w], "Inzwemmen 100 m, crawl-drills, uitzwemmen.",{moe:"Rustig baantjes, zonder drills", tag:isTest(L.crawl[w])?"test":""}),
+        coreItem(w)]}, fysio];
+      break;
+    case 1:
+      keuze = (S.keuze||{})[key] || "legs";
+      type="gym";
+      if (keuze==="legs"){ t="Leg day"; sub="Plyo en kracht"; kern=[{h:"Kern", items:[legsItem(w), K("eiw","Eiwit na de training","clear whey of een maaltijd")]}]; }
+      else { t="Aqua bootcamp"; sub="Zware sessie, geen legs vandaag"; kern=[{h:"Kern", items:[K("aqua","Aqua bootcamp","± 45 min","Eet goed vooraf en drink genoeg.",{moe:"Rustig meedoen of overslaan, allebei goed."}), K("eiw","Eiwit na de training","clear whey of een maaltijd")]}]; }
+      bonus=[{h:"Als je zin hebt", items:[K("str","Stretch","10 min","Heupen en hamstrings."), K("rl","Rood licht: benen en billen")]}];
+      break;
+    case 2:
+      t="Boksen + cheer"; sub="Zware dag, dus verder niets extra"; type="cheer";
+      kern=[{h:"Kern", items:[
+        K("boks","Boksen","","Houd je schouders wat over voor het stunten.",{moe:"Overslaan. Bewaar je energie voor cheer."}),
+        K("eten","Eten tussen boksen en cheer","eiwit + koolhydraten"),
+        K("ch","Cheertraining","","Puffer mee. Benen eerst bij de push naar extension.")]}];
+      break;
+    case 3:
+      t="Pilates + fysio"; sub="Rustig weer instappen"; type="cond";
+      kern=[{h:"Kern", items:[K("pil","Reformer pilates","ochtend","De eerste twee weken: kies bij elke oefening de lichtere variant.")]}, fysio];
+      bonus=[{h:"Als je zin hebt", items:[hsItem(w)]}];
+      break;
+    case 4:
+      if (cfg().vrCheer){ t="Extra cheertraining"; sub="Eet goed vooraf, puffer mee"; type="cheer";
+        kern=[{h:"Kern", items:[K("chx","Extra cheertraining")]}]; }
+      else { t="Lichte dag"; sub="Handstand en splits, verder rust"; type="rest";
+        kern=[{h:"Kern", items:[hsItem(w), K("spl","Splits","± 10 min","Links extra aandacht, heup recht. Blokken onder je handen.",{moe:"5 min, alleen wat lekker voelt"})]}]; }
+      break;
+    case 5:
+      t="Cheer"; sub="Ochtendtraining, daarna kort handstand"; type="cheer";
+      kern=[{h:"Kern", items:[K("ch","Cheertraining","ochtend","Eet 1,5–2 uur vooraf. Puffer mee."), K("hsz","Handstand na cheer","5 pogingen","Je bent al warm: kort en scherp.",{moe:null})]}];
+      bonus=[{h:"Als je zin hebt", items:[K("rl","Rood licht: schouders en onderrug")]}];
+      break;
+    case 6:
+      t="Rust"; sub="Herstellen hoort bij het programma"; type="rest";
+      kern=[fysio];
+      bonus=[{h:"Upper, alleen als je je fris voelt", items:[upperItem(w)]}];
+      break;
+  }
+  if (lichtWeek(w) && w!==12) sub += " · lichte week";
+  if (w===11) sub += " · testweek";
+  return {titel:t, sub, type, kern, bonus, keuze};
 }
 
 /* ============ DATUMS ============ */
@@ -397,8 +514,10 @@ const FOODS = [
   {id:"kwark50",n:"Magere kwark",p:"50 g",g:4.5,grp:0},
   {id:"grieks50",n:"Griekse yoghurt",p:"50 g",g:3,grp:0},
   {id:"cottage50",n:"Cottage cheese",p:"50 g",g:5.5,grp:0},
-  {id:"sojacrisp50",n:"Soja crispies",p:"50 g",g:30,grp:0},
-  {id:"spelt50",n:"Gepofte spelt",p:"50 g",g:8,grp:0},
+  {id:"sojacrisp50",n:"Soja crispies",p:"50 g",g:30,grp:-1},
+  {id:"spelt50",n:"Gepofte spelt",p:"50 g",g:8,grp:-1},
+  {id:"sojacrisp10",n:"Soja crispies",p:"10 g",g:6,grp:1},
+  {id:"spelt10",n:"Gepofte spelt",p:"10 g",g:1.6,grp:1},
   {id:"kwarkel",n:"Magere kwark",p:"1 eetlepel",g:1.8,grp:1},
   {id:"grieksel",n:"Griekse yoghurt",p:"1 eetlepel",g:1.2,grp:1},
   {id:"cottageel",n:"Cottage cheese",p:"1 eetlepel",g:2.2,grp:1},
@@ -413,13 +532,13 @@ const FOODS = [
   {id:"melk",n:"Melk",p:"250 ml",g:8.5,grp:2}
 ];
 const GROEPEN = ["Per 50 g","Kleine porties","Per stuk"];
-const SUPPS = [{id:"creatine",n:"Creatine"},{id:"magnesium",n:"Magnesium"},{id:"multi",n:"Multivitamine"},{id:"omega3",n:"Omega 3"},{id:"collageen",n:"Collageen (optioneel)"}];
+const SUPPS = [{id:"creatine",n:"Creatine"},{id:"magnesium",n:"Magnesium"},{id:"omega3",n:"Omega 3"},{id:"collageen",n:"Collageen (optioneel)"}];
 const eiwitDoel = w => w<=1 ? 90 : w===2 ? 100 : 115;
 const kcal = w => (w>=5 && w<=11) ? "± 1900–1950 kcal (mild tekort)" : "± 2222 kcal (onderhoud)";
 const WATER_DOEL = 9;
 
 /* ============ OPSLAG ============ */
-let S = {checks:{}, food:{}, water:{}, supps:{}};
+let S = {checks:{}, food:{}, water:{}, supps:{}, energie:{}, keuze:{}, fysio:[], cfg:{}, wc:{}};
 let dbRef = null, saveT = null, syncTxt = "Opgeslagen op dit apparaat";
 function lsGet(){ try{ const r = localStorage.getItem("cheer-blok2"); if(r) S = Object.assign(S, JSON.parse(r)); }catch(e){} }
 function lsSet(){ try{ localStorage.setItem("cheer-blok2", JSON.stringify(S)); }catch(e){} }
@@ -436,7 +555,7 @@ async function initDb(){
     const id = await user.id(); if(!id) return;
     dbRef = db.doc("data/users/"+id+"/state/main");
     const snap = await dbRef.get();
-    if(snap.exists){ const d = snap.data()||{}; S = Object.assign({checks:{},food:{},water:{},supps:{}}, d); lsSet(); }
+    if(snap.exists){ const d = snap.data()||{}; S = Object.assign({checks:{},food:{},water:{},supps:{},energie:{},keuze:{},fysio:[],cfg:{},wc:{}}, d); lsSet(); }
     else { await dbRef.set(S); }
     syncTxt = "Opgeslagen in je account";
     render();
@@ -451,13 +570,23 @@ const app = document.getElementById("app");
 const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmtDatum = d => `${DAGEN_LANG[dagIdx(d)]} ${d.getDate()} ${MAANDEN[d.getMonth()]}`;
 
-function itemsVan(date){ return sessie(date).blocks.flatMap(b=>b.items.map(i=>b.h+"|"+i.id)); }
+function zichtbaar(s,en){ return s.kern.map(b=>({h:b.h, items:b.items.filter(i=>!(en==="moe" && i.moe===null))})).filter(b=>b.items.length); }
+function itemsVan(date){
+  const s = sessie(date);
+  if (s.blocks) return s.blocks.flatMap(b=>b.items.map(i=>b.h+"|"+i.id));
+  return zichtbaar(s,(S.energie||{})[dstr(date)]).flatMap(b=>b.items.map(i=>"n|"+i.id));
+}
+function weekStats(date){ const ma=maandag(date); let done=0,tot=0;
+  for(let i=0;i<7;i++){ const d=addDays(ma,i); const ids=itemsVan(d); const c=S.checks[dstr(d)]||{}; tot+=ids.length; done+=ids.filter(k=>c[k]).length; }
+  return {done,tot}; }
+function laatsteActief(voor){ let best=null; const v=dstr(voor);
+  for(const k in S.checks){ if(k<v && Object.values(S.checks[k]).some(Boolean) && (!best||k>best)) best=k; } return best; }
 function pctVan(date){
   const ids = itemsVan(date); if(!ids.length) return 0;
   const c = S.checks[dstr(date)]||{}; return ids.filter(k=>c[k]).length/ids.length;
 }
 
-function renderVandaag(){
+function renderVandaagOud(){
   const w = weekVan(view), s = sessie(view), key = dstr(view), c = S.checks[key]||{};
   const f = w>=1&&w<=12 ? faseVan(w) : null;
   const isToday = diffDagen(view,today0())===0;
@@ -501,6 +630,87 @@ function renderVandaag(){
     <div class="sync">${esc(syncTxt)}</div>`;
 }
 
+let bonusOpen = false;
+function itemHTML(i,k,ok,en){
+  const alt = en==="moe" && typeof i.moe==="string";
+  const ds = alt ? i.moe : i.ds;
+  return `<button class="item ${ok?"ok":""}" data-k="${esc(k)}" aria-pressed="${ok}">
+    <span class="box" aria-hidden="true"></span>
+    <span><span class="nm">${esc(i.nm)}</span>${i.tag==="test"?'<span class="tag test">test</span>':""}
+    ${ds?`<div class="ds">${esc(ds)}</div>`:""}${i.nt&&!alt?`<div class="nt">${esc(i.nt)}</div>`:""}
+    ${i.ln&&!alt?`<span class="ln">${i.ln.map(x=>`<span>${esc(x)}</span>`).join("")}</span>`:""}</span>
+  </button>`;
+}
+function weekTekst(){
+  const ma=maandag(view), zo=addDays(ma,6), st=weekStats(view), wc=(S.wc||{})[dstr(ma)]||{};
+  return [`Weekcheck ${ma.getDate()} ${MAANDEN[ma.getMonth()]} – ${zo.getDate()} ${MAANDEN[zo.getMonth()]}`,
+    `Kern gehaald: ${st.done} van ${st.tot}`, `Energie: ${wc.e?wc.e+"/5":"-"}`,
+    `Ging goed: ${wc.goed||"-"}`, `Volgende week laat ik vallen: ${wc.schrap||"-"}`].join("\n");
+}
+function renderVandaag(){
+  if (view < NIEUW) return renderVandaagOud();
+  const w = weekVan(view), s = sessie(view), key = dstr(view), c = S.checks[key]||{};
+  const f = w>=1&&w<=12 ? faseVan(w) : null;
+  const isToday = diffDagen(view,today0())===0;
+  const en = (S.energie||{})[key];
+  const ma = maandag(view);
+  let strip = "";
+  for(let i=0;i<7;i++){
+    const d = addDays(ma,i), ss = sessie(d);
+    const cls = ["sd", ss.type, dstr(d)===key?"cur":"", pctVan(d)===1?"full":""].join(" ");
+    strip += `<button class="${cls}" data-go="${dstr(d)}" aria-label="${fmtDatum(d)}: ${esc(ss.titel)}">${DAGEN[i]}<b>${d.getDate()}</b><i></i></button>`;
+  }
+  let notes = "";
+  const la = laatsteActief(view);
+  if (isToday && !Object.values(c).some(Boolean) && la && diffDagen(view, new Date(la+"T00:00"))>=3)
+    notes += `<div class="note"><b>Fijn dat je er weer bent.</b> Je hoeft niets in te halen. Begin gewoon bij vandaag.</div>`;
+  if (en==="moe") notes += `<div class="note"><b>Lichte versie.</b> Wat hier niet meer staat, mag vandaag echt weg. Herstel hoort bij je programma.</div>`;
+  if (w===11 && dagIdx(view)===0) notes += `<div class="note"><b>Testweek.</b> Goed slapen, goed eten, en laat zien wat je kunt.</div>`;
+  const kernB = zichtbaar(s,en).map(b=>`<section class="block"><h3>${esc(b.h)}</h3>${b.items.map(i=>{const k="n|"+i.id; return itemHTML(i,k,!!c[k],en)}).join("")}</section>`).join("");
+  let extra = "";
+  if (s.bonus && s.bonus.length){
+    if (en==="moe") extra = `<p class="empty">Extra's staan uit op een moe dag.</p>`;
+    else {
+      extra = `<button class="morebtn" data-bonus="1" aria-expanded="${bonusOpen}">${bonusOpen?"Extra's verbergen":"Meer doen? Bekijk de extra's"}</button>`;
+      if (bonusOpen) extra += s.bonus.map(b=>`<section class="block"><h3>${esc(b.h)}<small>optioneel</small></h3>${b.items.map(i=>{const k="b|"+i.id; return itemHTML(i,k,!!c[k],en)}).join("")}</section>`).join("");
+    }
+  } else if (dagIdx(view)===2) extra = `<p class="empty">Vandaag bewust geen extra's.</p>`;
+  let wcHTML = "";
+  if (dagIdx(view)===6){
+    const st = weekStats(view), wc = (S.wc||{})[dstr(ma)]||{};
+    wcHTML = `<section class="block"><h3>Weekcheck<small>± 2 min</small></h3><div class="wcb">
+      <p class="wcs">Kern gehaald deze week: <b>${st.done} van ${st.tot}</b></p>
+      <span class="wcq">Hoeveel energie had je deze week?</span>
+      <div class="scale">${[1,2,3,4,5].map(n=>`<button class="pill ${wc.e===n?"on":""}" data-wce="${n}" aria-label="Energie ${n} van 5">${n}</button>`).join("")}</div>
+      <label class="wcq" for="wcg">Wat ging goed?</label><textarea id="wcg" data-wc="goed" rows="2">${esc(wc.goed||"")}</textarea>
+      <label class="wcq" for="wcv">Wat laat je volgende week vallen?</label><textarea id="wcv" data-wc="schrap" rows="2">${esc(wc.schrap||"")}</textarea>
+      <button class="pill on copy" data-copy="1">Kopieer om te delen</button><div class="copytxt" hidden></div>
+    </div></section>`;
+  }
+  const p = Math.round(pctVan(view)*100);
+  app.innerHTML = `
+    <div class="top"><span class="who">Hanne · blok 2</span><span class="wk">${w>=1&&w<=12?`Week ${w} · ${esc(f.n)}`:"Afgerond"}</span></div>
+    <div class="day-hero">
+      <div class="date">${isToday?"Vandaag, ":""}${fmtDatum(view)}</div>
+      <h1>${esc(s.titel)}</h1>
+      <div class="sub">${esc(s.sub)}</div>
+      ${s.keuze?`<div class="keuze">Vandaag doe ik <button class="pill ${s.keuze==="legs"?"on":""}" data-kz="legs" aria-pressed="${s.keuze==="legs"}">Leg day</button><button class="pill ${s.keuze==="aqua"?"on":""}" data-kz="aqua" aria-pressed="${s.keuze==="aqua"}">Aqua bootcamp</button></div>`:""}
+      <div class="daynav">
+        <button class="pill" data-nav="-1" aria-label="Vorige dag">Vorige</button>
+        <button class="pill ${isToday?"on":""}" data-nav="0">Vandaag</button>
+        <button class="pill" data-nav="1" aria-label="Volgende dag">Volgende</button>
+      </div>
+      ${isToday?`<p class="plan">☕ ${esc(cfg().plan)}</p>`:""}
+    </div>
+    <div class="strip">${strip}</div>
+    <div class="energie">Hoe voel je je?
+      ${[["moe","Moe"],["oke","Oké"],["fit","Fit"]].map(([v,l])=>`<button class="pill ${en===v?"on":""}" data-en="${v}" aria-pressed="${en===v}">${l}</button>`).join("")}
+    </div>
+    ${s.kern.length?`<div class="progress" aria-label="${p}% van de kern afgevinkt"><span style="width:${p}%"></span></div>`:""}
+    ${notes}${kernB}${extra}${wcHTML}
+    <div class="sync">${esc(syncTxt)}</div>`;
+}
+
 function renderTraining(){
   const tw = weekVan(today0());
   const actief = tw<1 ? 1 : Math.min(tw,12);
@@ -515,7 +725,9 @@ function renderTraining(){
       const condR = [["Borstcrawl · ma",L.crawl[w]],["Hardlopen · do",L.run[w]]];
       const upR = [["Military press",L.press[w]],["Overhead hold",L.ohold[w]],["Lat pulldown",L.pull[w]],["Cable row",L.row[w]],["Push-ups",L.push[w]],["EZ bar curl",L.curl[w]]];
       let inhoud;
-      if (w===4) inhoud = `<div class="lifts">Vakantie t/m do 29 okt. Geen leg day deze week.</div>` + lst("Upper body · vr 30 okt", upR);
+      const upKort = upR.filter(r=>["Military press","Lat pulldown","Push-ups"].includes(r[0]));
+      if (w>=7) inhoud = lst("Leg day · di", legsR.filter(r=>!["Bulgarian split squat","Hip abduction","Calf + tibialis raise","Copenhagen plank"].includes(r[0]))) + lst("Upper · zo, als je fris bent", upKort) + lst("Zwemmen · ma", [condR[0]]);
+      else if (w===4) inhoud = `<div class="lifts">Vakantie t/m do 29 okt. Geen leg day deze week.</div>` + lst("Upper body · vr 30 okt", upR);
       else inhoud = (w===3?`<div class="lifts">Vakantie vanaf do 22 okt: upper body vervalt deze week.</div>`:"") + lst("Leg day · di", legsR) + (w===3?"":lst("Upper body · vr", upR)) + (w===3?lst("Conditioning", [condR[0]]):lst("Conditioning", condR));
       return `<div class="wkrow"><h4>Week ${w} <span>vanaf ${ma.getDate()} ${MAANDEN[ma.getMonth()]}</span></h4>${inhoud}</div>`;
     }).join("");
@@ -527,15 +739,166 @@ function renderTraining(){
     ["Military press","25 kg × 6","30 kg × 5"],["Push-ups","10","15 strikt"],["Lat pulldown","45 kg × 7","52,5 kg × 8"],
     ["Squat","80 kg × 5","87,5 kg × 5"],["Plank","30 s","+50% t.o.v. week 1"],["Handstand","alleen muur","5 s vrij"],
     ["Front walkover","tot brug","opstaan + met spot"],["Back tuck","nog niet","eerste met spot"],
-    ["Hardlopen","nieuw","20 min aaneen"],["Borstcrawl","nieuw","50 m aaneen"],["Taille","78 cm","75–76 cm"],["Eiwit","± 70 g","110–120 g"]
+["Borstcrawl","nieuw","50 m aaneen"],["Taille","78 cm","75–76 cm"],["Eiwit","± 70 g","110–120 g"]
   ].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
   app.innerHTML = `
     <div class="top"><span class="who">Hanne · blok 2</span><span class="wk">5 okt – 27 dec</span></div>
-    <div class="day-hero"><h1>12 weken</h1><div class="sub">Kracht met verwachte gewichten, plus je opbouw voor zwemmen en hardlopen.</div></div>
-    ${phases}
+    <div class="day-hero"><h1>Training</h1><div class="sub">Je week, wat je op je gymdagen doet en je doelen.</div></div>
+    ${instellingen()}
+    ${dagOverzicht(actief)}
     <section class="block"><h3>Doelen testweek<small>week 11</small></h3>
       <div class="scroll" style="padding:0 10px 10px"><table class="goals"><thead><tr><th>Wat</th><th>Nu</th><th>Doel</th></tr></thead><tbody>${goals}</tbody></table></div>
     </section>`;
+}
+
+function dagOverzicht(w){
+  const rij = ([n,v,nt]) => `<div class="krr"><span><span style="color:var(--ink);font-weight:600">${esc(n)}</span>${nt?`<br>${esc(nt)}`:""}</span><b>${esc(v||"")}</b></div>`;
+  const legs = [
+    ["Warming-up","8 min","Rustig fietsen of roeien, 90/90 heupwissel, world's greatest stretch. Puffer bij de hand."],
+    ["Kneeling jump",L.kneel[w],"Vanuit kniezit explosief naar squat."],
+    ["Box jump",L.box[w],"Zacht landen, stap naar beneden."],
+    ["Back squat",L.squat[w],"Rust 2–3 min. Snel omhoog, zoals in een stunt."],
+    ["Hip thrust (machine)",L.hip[w],"1 s vasthouden bovenin."],
+    ["Romanian deadlift",L.rdl[w],"Met straps voor je duim. Rust 2 min."],
+    ["Seated leg curl",L.ham[w],""],
+    ["Eiwit na de training","","Clear whey of een maaltijd."]];
+  const upper = [
+    ["Warming-up","8 min","Rustig roeien, band pull-aparts en wall slides."],
+    ["Military press (staand)",L.press[w],"Rust 2–3 min. Billen en buik aan, geen holle rug."],
+    ["Lat pulldown",L.pull[w],"Borst naar de stang, schouders omlaag."],
+    ["Push-ups",L.push[w],"Strikt: borst tot vuisthoogte van de grond."],
+    ["Eiwit na de training","","Clear whey of een maaltijd."]];
+  const blok = (h,s,rows,moe) => `<section class="block"><h3>${h}<small>${s}</small></h3><div style="padding:0 16px 12px">${rows.map(rij).join("")}${moe?`<p class="cmeta" style="padding:8px 0 0">${esc(moe)}</p>`:""}</div></section>`;
+  return blok("Leg day",`dinsdag · week ${w}`,legs,"Moe? Doe alleen squat, hip thrust en RDL.")
+       + blok("Upper",`zondag, als je fris bent · week ${w}`,upper,"Log je sets in Hevy, dan zie je ze terug in Terugblik.");
+}
+function instellingen(){
+  const c = cfg(), fy = S.fysio||[];
+  const rows = [["ma","Zwemmen + core + fysio"],["di","Leg day of aqua bootcamp"],["wo","Boksen + cheer"],["do","Pilates + fysio"],["vr",c.vrCheer?"Extra cheertraining":"Lichte dag: handstand + splits"],["za","Cheer + kort handstand"],["zo","Rust + fysio + weekcheck (upper als je fris bent)"]];
+  return `<section class="block"><h3>Jouw week<small>vanaf 16 nov</small></h3>
+    <div class="weekrows">${rows.map(r=>`<div><span>${r[0]}</span>${esc(r[1])}</div>`).join("")}</div>
+    <button class="item ${c.vrCheer?"ok":""}" data-vrcheer="1" aria-pressed="${c.vrCheer}"><span class="box" aria-hidden="true"></span><span><span class="nm">Extra cheertraining op vrijdag</span><div class="nt">Zet aan zodra die training start.</div></span></button>
+    <div class="field"><label for="plan">Jouw moment om de app te openen</label><textarea id="plan" data-plan="1" rows="2">${esc(c.plan)}</textarea></div>
+  </section>
+  <section class="block"><h3>Fysio<small>ma, do en zo</small></h3>
+    ${fy.length?fy.map(x=>`<div class="fyrow"><span>${esc(x.n)}${x.d?`<small>${esc(x.d)}</small>`:""}</span><button data-fydel="${esc(x.id)}" aria-label="${esc(x.n)} verwijderen">Verwijder</button></div>`).join(""):`<div class="fyrow"><span><small>Nog geen oefeningen. Voeg de oefeningen van je fysio toe, dan staan ze los op je fysiodagen.</small></span></div>`}
+    <div class="fyadd"><input type="text" id="fyN" placeholder="Oefening" aria-label="Oefening"><input type="text" id="fyD" placeholder="Hoeveel, bijv. 3×10" aria-label="Hoeveel"><button class="pill on" data-fyadd="1">Toevoegen</button></div>
+  </section>`;
+}
+
+/* ============ TERUGBLIK ============ */
+const HEVY_SNAPSHOT = [["2025-04-18","Pull",{"Pull Up (Assisted)":[[32,10,null],[23,6,null],[27,7,null],[27,8,null]],"Seated Cable Row - V Grip (Cable)":[[32,10,null],[41,12,null],[47.3,13,null]],"Seated Row (Machine)":[[32,10,null],[39,8,null],[39,10,null]],"Rope Straight Arm Pulldown":[[18,10,null],[23,8,null],[23,13,null]],"Bicep Curl (Dumbbell)":[[5,10,null],[5,10,null],[6,10,null]],"Back Extension (Weighted Hyperextension)":[[10,8,null],[10,6,null],[10,8,null]],"Hammer Curl (Dumbbell)":[[6,10,null],[6,9,null],[6,7,null]],"Weighted Marches":[[8,16,null],[8,16,null],[8,16,null]],"Decline Crunch":[[null,10,null],[null,8,null]]}],["2025-04-22","Legs",{"Hip Thrust (Barbell)":[[20,8,null],[30,8,null],[40,8,null],[20,8,null],[30,8,null],[40,3,null]],"Leg Press Horizontal (Machine)":[[55,10,null],[75,10,null],[85,10,null]],"Jump Squat":[[null,10,null],[null,10,null],[null,10,null]],"Hip Abduction (Machine)":[[37.5,14,null],[45,12,null],[52.5,4,null],[52.5,5,null]]}],["2025-04-27","Legs",{"Hip Thrust (Machine)":[[20,10,null],[40,10,null],[50,8,null]],"Leg Press Horizontal (Machine)":[[68,10,null],[77,12,null],[86,6,null]],"Weighted Inline Marches":[[8,32,null],[10,32,null]],"Goblet Squat":[[8,10,null],[10,8,null],[10,8,null]]}],["2025-04-29","Push",{"Bench Press (Smith Machine)":[[10,8,null],[10,8,null],[10,8,null]],"Standing Military Press (Barbell)":[[13.7,8,null],[13.7,8,null],[13.7,7,null]],"Chest Fly (Machine)":[[19,8,null],[19,8,null],[26,5,null]],"Triceps Dip (Assisted)":[[61,10,null],[54,9,null],[47,5,null]],"Single Arm Lateral Raise (Cable)":[[1.25,10,null],[1.25,10,null],[3.75,4,null],[1.25,10,null]],"Single Arm Triceps Pushdown (Cable)":[[3.75,11,null],[3.75,11,null],[3.75,11,null]]}],["2025-04-30","Legs",{"Hip Thrust (Machine)":[[15,8,null],[15,8,null],[15,6,null]],"Hack Squat (Machine)":[[0,4,null],[0,10,null],[0,8,null]],"Romanian Deadlift (Barbell)":[[0,8,null],[20,8,null],[20,8,null]],"Crunch (Machine)":[[15,20,null],[20,10,null],[20,5,null]]}],["2025-05-04","Pull",{"Pull Up (Assisted)":[[54,10,null],[54,8,null],[54,6,null]],"Lat Pulldown - Close Grip (Cable)":[[27.5,10,null],[35,10,null],[35,10,null]],"Straight Arm Lat Pulldown (Cable)":[[10,10,null],[10,10,null],[12.5,8,null]],"Hammer Curl (Cable)":[[7.5,12,null],[10,8,null],[12.5,7,null]],"Bicep Curl (Cable)":[[12.5,7,null],[10,6,null],[10,6,null]],"Back Extension (Weighted Hyperextension)":[[5,8,null],[5,8,null],[5,8,null]]}],["2025-05-06","Korte legday",{"Leg Press Horizontal (Machine)":[[65,12,null],[65,10,null],[75,8,null]],"Seated Leg Curl (Machine)":[[26,8,null],[26,8,null],[26,8,null]],"Hack Squat (Machine)":[[57.7,6,null],[57.7,6,null]],"Leg Raise Parallel Bars":[[null,8,null],[null,8,null]],"Treadmill":[[null,null,600]]}],["2025-05-08","Legs met raoul",{"Hack Squat (Machine)":[[47.6,10,null],[52.6,8,null],[57.6,8,null]],"Leg Press (Machine)":[[40,10,null],[80,10,null],[100,5,null]],"Leg Extension (Machine)":[[15,8,null],[20,5,null]],"Lying Leg Curl (Machine)":[[15,10,null],[20,10,null],[20,8,null]],"Crunch (Machine)":[[17.5,8,null],[20,6,null],[20,8,null]],"Calf Press (Machine)":[[50,10,null],[50,8,null],[50,8,null]],"Hip Abduction (Machine)":[[30,16,null],[45,9,null],[40,8,null]],"Hip Adduction (Machine)":[[15,16,null],[20,8,null],[20,5,null]]}],["2025-05-10","Pull",{"Pull Up (Assisted)":[[40,10,null],[40,10,null],[40,8,null]],"Dumbbell Row":[[8,8,null],[8,8,null],[8,10,null]],"Lat Pulldown - Close Grip (Cable)":[[24.8,10,null],[31.5,7,null],[31.5,6,null]],"Straight Arm Lat Pulldown (Cable)":[[11.3,12,null],[18,8,null],[24.8,6,null]],"Bicep Curl (Cable)":[[11.3,12,null],[18,8,null],[24.8,3,null]],"Hammer Curl (Dumbbell)":[[6,5,null],[6,5,null],[6,5,null]],"Back Extension (Machine)":[[10,10,null],[20,12,null],[41,12,null]],"Serve Rotations":[[3,8,null],[3,8,null]],"Crunch (Machine)":[[17.5,8,null],[20,6,null],[20,8,null]],"Leg Raise Parallel Bars":[[null,8,null],[null,8,null]]}],["2025-05-12","Push met sanne",{"Bench Press (Barbell)":[[20,13,null],[30,5,null],[30,7,null]],"Standing Military Press (Barbell)":[[15,8,null],[15,8,null],[15,6,null]],"Lateral Raise (Dumbbell)":[[3,13,null],[4,10,null],[4,8,null]],"Low Cable Fly Crossovers":[[2.5,8,null],[2.5,8,null],[2.5,8,null]],"Cable Fly Crossovers":[[3.75,10,null],[5,8,null]],"Triceps Pushdown":[[12.5,12,null],[15,9,null],[15,6,null]],"Crunch (Machine)":[[15,10,null],[17.5,10,null]]}],["2025-05-13","Legs met ramon",{"Hack Squat (Machine)":[[47.6,8,null],[57.6,8,null],[57.6,8,null]],"Hip Thrust (Machine)":[[22.7,8,null],[42.7,4,null],[37.7,6,null]],"Leg Extension (Machine)":[[18,8,null],[25,8,null],[25,10,null]],"Seated Leg Curl (Machine)":[[25,8,null],[25,8,null]],"Hip Adduction (Machine)":[[18,10,null],[25,6,null],[25,5,null]]}],["2025-05-20","Maandag zwemmen",{"Swimming":[[null,null,2700]]}],["2025-05-27","Full body",{"Pull Up (Assisted)":[[47,6,null],[54,8,null],[54,8,null]],"Leg Press Horizontal (Machine)":[[65,10,null],[85,10,null],[95,8,null]],"Lat Pulldown - Close Grip (Cable)":[[27.5,8,null],[35,8,null],[42.5,6,null]],"Standing Military Press (Barbell)":[[15,8,null],[20,5,null],[20,9,null]],"Bicep Curl (Dumbbell)":[[6,8,null],[6,8,null]],"Handstand Hold":[[null,null,10],[null,null,10]]}],["2025-06-02","Late night workout 🌙",{"Pull Up (Assisted)":[[47,5,null],[54,9,null],[47,5,null]],"Leg Press Horizontal (Machine)":[[75,10,null],[95,10,null],[105,8,null]],"Standing Military Press (Barbell)":[[15,8,null],[20,6,null],[20,7,null]],"Rear Delt Reverse Fly (Machine)":[[12,9,null],[12,8,null],[12,8,null]],"Kneeling Push Up":[[null,8,null],[null,8,null]],"Decline Crunch":[[null,10,null],[null,10,null]],"Leg Raise Parallel Bars":[[null,8,null],[null,8,null],[null,8,null]],"Swimming":[[null,null,4200]]}],["2025-06-06","Met Myrthe  fullbody",{"Pull Up (Assisted)":[[54,5,null],[54,5,null],[54,8,null]],"Hack Squat (Machine)":[[57,8,null],[67,10,null],[67,10,null]],"Standing Military Press (Barbell)":[[15,8,null],[15,10,null],[15,10,null]],"Triceps Rope Pushdown":[[7.5,8,null],[10,10,null],[10,8,null]],"Leg Raise Parallel Bars":[[null,8,null],[null,10,null],[null,8,null]],"Wall Ball":[[3,4,null],[6,2,null],[3,5,null]]}],["2025-06-15","Cardio en abs",{"Treadmill":[[null,null,600]],"Leg Raise Parallel Bars":[[null,10,null],[null,9,null],[null,8,null]],"Knee Raise Parallel Bars":[[null,8,null],[null,8,null]],"Flutter Kicks":[[null,20,null],[null,20,null]],"Heel Taps":[[null,10,null],[null,20,null],[null,12,null]],"Hollow Rock":[[null,null,10],[null,null,10],[null,null,20]],"Lying Knee Raise":[[null,15,null],[null,15,null],[null,6,null]],"Dead Bug":[[null,6,null],[null,6,null],[null,8,null]],"Stair Machine (Steps)":[[null,null,304]]}],["2025-06-17","Korte workout",{"Pull Up (Assisted)":[[54,12,null],[47,6,null],[47,8,null],[40,1,null]],"Standing Military Press (Barbell)":[[20,10,null],[20,8,null],[20,6,null]],"Seated Palms Up Wrist Curl":[[4,8,null],[4,8,null]],"Leg Press Horizontal (Machine)":[[85,8,null],[105,3,null]]}],["2025-06-26","Legs met ramon",{"Leg Press (Machine)":[[0,8,null],[40,8,null],[80,8,null]],"Hip Thrust (Barbell)":[[40,8,null],[50,12,null],[60,8,null]],"Seated Leg Curl (Machine)":[[18,8,null],[18,8,null],[25,10,null]],"Standing Calf Raise (Machine)":[[50,10,null],[50,15,null],[50,13,null]],"Hip Abduction (Machine)":[[32,10,null],[39,7,null]],"Knee Raise Parallel Bars":[[null,10,null],[null,10,null],[null,10,null],[null,10,null]],"Crunch":[[null,8,null],[null,8,null],[null,8,null]]}],["2025-06-27","Vergeten dat de gym al vroeg dicht ging vandaag",{"Kneeling Push Up":[[null,10,null],[null,7,null],[null,11,null]],"Plank":[[null,null,40],[null,null,40],[null,null,30]],"Flutter Kicks":[[null,30,null],[null,30,null],[null,20,null]],"Heel Taps":[[null,30,null],[null,30,null],[null,30,null]],"Lying Knee Raise":[[null,15,null],[null,12,null]]}],["2025-07-01","Mini pull buiten met myrthe",{"Inverted Row":[[null,8,null],[null,8,null],[null,8,null]],"Scapular Pull Ups":[[null,3,null],[null,3,null],[null,5,null],[null,4,null]],"Dead Hang":[[null,null,8],[null,null,3],[null,null,10],[null,null,8]],"Incline Push Ups":[[null,8,null],[null,8,null],[null,4,null]]}],["2025-07-10","Fullbody workout met myrthe",{"Rowing Machine":[[null,null,303]],"Pull Up (Assisted)":[[20,2,null],[20,3,null],[20,2,null],[20,2,null]],"Dead Hang":[[null,null,9],[null,null,10],[null,null,8]],"Hack Squat (Machine)":[[67,10,null],[72,10,null],[77,10,null]],"Seated Cable Row - V Grip (Cable)":[[35,8,null],[42.5,5,null],[35,6,null]],"Bulgarian Split Squat":[[0,10,null],[0,10,null],[8,8,null]],"Knee Raise Parallel Bars":[[null,14,null],[null,15,null],[null,12,null]],"Wall Sit":[[null,null,30],[null,null,30],[null,null,20]],"Bridge Oefenen":[[null,null,15],[null,null,20],[null,null,20]]}],["2025-07-14","Een beetje pull en zometeen zwemmen",{"Treadmill":[[null,null,600],[null,null,600]],"Standing Military Press (Barbell)":[[15,8,null],[20,10,null],[20,8,null]],"Chest Press (Machine)":[[19,8,null],[19,10,null],[19,8,null]],"Triceps Dip (Assisted)":[[54,7,null],[54,8,null],[54,8,null]],"Chin Up (Assisted)":[[54,8,null]],"Single Arm Lateral Raise (Cable)":[[2.5,8,null],[2.5,7,null],[2.5,5,null]],"Triceps Rope Pushdown":[[10,10,null],[10,8,null],[10,6,null]],"Knee Raise Parallel Bars":[[null,12,null],[null,12,null],[null,12,null]]}],["2025-07-14","Gezwommen",{"Swimming":[[null,null,3600]]}],["2025-07-15","Tijd voor legs?",{"Rear Delt Reverse Fly (Machine)":[[12,8,null],[19,8,null],[19,8,null]],"Hip Thrust (Barbell)":[[50,8,null],[60,9,null],[60,10,null]],"Kettlebell Goblet Squat":[[12,8,null],[12,8,null],[12,8,null]],"Lying Leg Curl (Machine)":[[20,8,null],[25,8,null],[20,4,null]],"Jump Squat":[[null,8,null],[null,8,null],[null,8,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]],"Leg Raise Parallel Bars":[[null,10,null],[null,10,null],[null,10,null]]}],["2025-07-17","Met Max",{"Chest Press (Machine)":[[19,12,null],[26,9,null],[26,7,null]],"Seated Row (Machine)":[[20,8,null],[40,8,null],[50,3,null],[40,4,null]],"Low Cable Fly Crossovers":[[3.75,8,null],[3.75,10,null],[4.35,8,null]],"Lat Pulldown (Cable)":[[35,6,null],[27.5,8,null],[27.5,8,null]],"Knee Raise Parallel Bars":[[null,10,null],[null,8,null],[null,12,null]]}],["2025-07-23","Met mirthe in London",{"Treadmill":[[null,null,600]],"Seated Cable Row - V Grip (Cable)":[[25,8,null],[25,8,null],[25,8,null]],"Goblet Squat":[[8,10,null],[8,10,null],[8,10,null]],"Bicep Curl (Dumbbell)":[[6,8,null],[6,8,null],[6,6,null]]}],["2025-07-29","Baantje in kroatie",{"Swimming":[[null,null,900],[null,null,780]]}],["2025-08-14","Fullbody",{"Pull Up (Assisted)":[[54,7,null],[54,6,null],[54,4,null],[54,5,null]],"Leg Press Horizontal (Machine)":[[95,10,null],[115,1,null],[105,2,null],[95,5,null]],"Seated Cable Row - V Grip (Cable)":[[35,8,null],[35,6,null],[35,4,null]],"Bulgarian Split Squat":[[10,5,null]],"Knee Raise Parallel Bars":[[null,8,null],[null,8,null],[null,8,null]]}],["2025-08-25","Fullbody",{"Goblet Squat":[[12,10,null],[14,8,null],[14,6,null],[14,6,null]],"Chest Press (Machine)":[[26,8,null],[26,11,null],[33,5,null]],"Standing Military Press (Barbell)":[[14,10,null],[14,8,null],[14,6,null]],"Hip Abduction (Machine)":[[41.25,10,null],[45,8,null],[52.5,8,null]],"Hip Adduction (Machine)":[[15,6,null],[15,8,null],[15,10,null]],"Seated Calf Raise":[[10,6,null],[10,6,null]],"Leg Raise Parallel Bars":[[null,10,null],[null,10,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]]}],["2025-08-31","Fullbody",{"Pull Up (Assisted)":[[54,10,null],[42,4,null],[42,4,null],[42,4,null]],"Standing Military Press (Barbell)":[[15,10,null],[20,8,null],[20,11,null]],"Preacher Curl (Barbell)":[[0,10,null],[5,4,null],[2.5,8,null],[2.5,9,null]],"Kneeling Push Up":[[null,5,null],[null,8,null],[null,8,null]],"Knee Raise Parallel Bars":[[null,8,null],[null,8,null]]}],["2025-09-27","Legday met Ramon",{"Bench Press (Barbell)":[[30,13,null],[40,3,null],[40,3,null]],"Hip Thrust (Barbell)":[[40,10,null],[60,12,null],[100,4,null],[100,6,null],[100,3,null]],"Hip Adduction (Machine)":[[18,16,null],[25,6,null],[25,6,null]],"Leg Extension (Machine)":[[11,12,null],[25,10,null],[25,12,null]],"Lying Leg Curl (Machine)":[[23,8,null],[27,12,null],[32,6,null]]}],["2025-09-28","Korte upperbody",{"Standing Military Press (Barbell)":[[15,10,null],[20,8,null],[20,6,null]],"Triceps Dip (Assisted)":[[54,10,null],[47,8,null],[40,7,null],[40,5,null]],"Seated Cable Row - V Grip (Cable)":[[35,10,null],[50,3,null],[42.5,7,null]],"Decline Crunch (Weighted)":[[0,8,null],[5,16,null],[5,16,null]]}],["2025-10-09","Fullbody",{"Pull Up (Assisted)":[[54,8,null],[54,4,null],[54,7,null]],"Leg Press Horizontal (Machine)":[[105,8,null],[105,9,null],[115,4,null]],"Triceps Rope Pushdown":[[11.25,8,null],[13.75,6,null],[13.75,7,null]],"Bicep Curl (Cable)":[[13.75,6,null],[13.75,8,null],[13.75,6,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null]]}],["2025-10-12","Cheer focus",{"Treadmill":[[null,null,900]],"Wall Ball":[[3,8,null],[3,10,null],[3,8,null],[6,4,null]],"Box Jump":[[null,4,null],[null,4,null],[null,5,null]],"Lateral Lunge":[[null,8,null],[null,8,null],[null,8,null]],"Straddle Leg Lifts":[[null,7,null],[null,8,null],[null,10,null],[null,12,null]],"Jackknife Sit Up":[[null,4,null],[null,3,null],[null,3,null]],"Hollow Rock":[[null,null,10],[null,null,10]],"Ab Wheel":[[null,2,null],[null,4,null],[null,6,null],[null,8,null]]}],["2025-10-13","Baantjes trekken met mama",{"Swimming":[[null,null,2700]]}],["2025-10-27","Klieder kledder klater, lekker in het water",{"Swimming":[[null,null,3240]]}],["2025-10-30","Beetje van alles wat?",{"Hip Thrust (Barbell)":[[60,10,null],[80,8,null]],"Seated Cable Row - V Grip (Cable)":[[35,9,null],[42.5,6,null],[42.5,7,null]],"Standing Military Press (Barbell)":[[20,8,null],[20,8,null],[20,6,null]],"Bicep Curl (Dumbbell)":[[6,10,null],[6,8,null],[7,4,null]],"Leg Raise Parallel Bars":[[null,8,null],[null,8,null],[null,8,null]],"Straddle Leg Lifts":[[null,10,null],[null,10,null],[null,10,null]]}],["2025-11-01","Halloweenparty met een dumbbell",{"Bicep Curl (Dumbbell)":[[8,8,null],[8,3,null]]}],["2025-11-03","Holy shit nieuw recordje met 46 baantje",{"Swimming":[[null,null,2820]]}],["2025-11-04","Dag 1, 75 soft challenge",{"Hip Thrust (Machine)":[[0,10,null],[10,8,null],[10,4,null],[10,7,null]],"Leg Press (Machine)":[[80,8,null],[120,8,null],[130,8,null]],"Lying Leg Curl (Machine)":[[25,8,null],[30,7,null],[25,8,null]],"Bulgarian Split Squat":[[0,8,null],[20,6,null],[20,8,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]]}],["2025-11-05","Dag 2 75 soft: vanaf nu zet ik cheer er ook in",{"Cheerleading":[[null,null,6300]]}],["2025-11-06","Dag 3 75 soft: Pullday",{"Treadmill":[[null,null,600]],"Pull Up (Assisted)":[[54,10,null],[47,6,null],[47,4,null]],"Bent Over Row (Barbell)":[[0,10,null],[10,8,null],[10,3,null]],"Seated Cable Row - V Grip (Cable)":[[35,8,null],[35,7,null],[35,6,null]],"Back Extension (Weighted Hyperextension)":[[5,8,null],[10,8,null],[10,10,null]],"Dead Hang":[[null,null,15],[null,null,14]],"Bicep Curl (Dumbbell)":[[7,7,null],[7,7,null],[8,3,null]],"Plank":[[null,null,30],[null,null,30]],"Heel Taps":[[null,20,null],[null,20,null],[null,30,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]]}],["2025-11-07","Dag 4 75 soft: pushday met Odilia",{"Bench Press (Barbell)":[[0,10,null],[40,6,null],[40,7,null],[40,3,null]],"Overhead Press (Smith Machine)":[[0,10,null],[5,6,null],[5,6,null]],"Seated Triceps Press":[[40,10,null],[60,8,null],[60,8,null]],"Single Arm Lateral Raise (Cable)":[[2.5,8,null],[2.5,8,null],[2.5,9,null]],"Chest Press (Machine)":[[25,8,null],[35,3,null],[30,5,null]],"Crunch (Machine)":[[20,16,null],[30,12,null],[35,10,null]]}],["2025-11-08","Dag 5 75 soft: stunts en tumbling",{"Cheerleading":[[null,null,9000]]}],["2025-11-10","Dag 7 75 soft: zwemmen",{"Swimming":[[null,null,2760]]}],["2025-11-11","Dag 8 75 soft: pullday",{"Lat Pulldown (Machine)":[[40,8,null],[60,3,null],[50,3,null],[40,6,null]],"Seated Cable Row - V Grip (Cable)":[[30,8,null],[35,7,null],[35,10,null]],"Bicep Curl (Dumbbell)":[[7,10,null],[8,7,null]],"Hammer Curl (Dumbbell)":[[8,2,null],[7,5,null],[7,3,null]],"Crunch (Machine)":[[20,8,null],[25,5,null],[25,3,null],[20,8,null]],"Back Extension (Weighted Hyperextension)":[[0,10,null],[10,8,null],[10,12,null],[0,8,null]],"Stair Machine (Steps)":[[null,null,391],[null,null,300]]}],["2025-11-14","Dag 11 75 soft: push met roellie",{"Incline Bench Press (Dumbbell)":[[14,3,null],[8,12,null],[10,10,null]],"Bench Press (Barbell)":[[40,4,null],[40,3,null]],"Triceps Pushdown":[[7,10,null],[16,10,null],[18,6,null]],"Single Arm Lateral Raise (Cable)":[[2.25,5,null],[4.75,3,null],[4.75,5,null]],"Seated Dip Machine":[[45,8,null],[41,4,null]],"Reverse Fly Single Arm (Cable)":[[2.25,6,null],[2.25,6,null]],"Standing Military Press (Barbell)":[[20,8,null],[20,6,null]],"Crunch (Machine)":[[23,8,null],[27,6,null],[36,2,null],[32,2,null]]}],["2025-11-17","Dag 14: zwemmen maar rustig aangedaan want buikpijn",{"Swimming":[[null,null,2700]]}],["2025-11-18","Dag 15: pull met Ramon",{"Lat Pulldown - Close Grip (Cable)":[[30,8,null],[40,8,null],[45,5,null]],"Seated Cable Row - V Grip (Cable)":[[35,8,null],[40,5,null],[40,8,null]],"Bicep Curl (Dumbbell)":[[8,8,null],[8,7,null]],"Hammer Curl (Dumbbell)":[[8,6,null],[8,5,null]],"Forearm nya":[[15,10,null],[15,10,null]],"Crunch (Machine)":[[25,20,null],[30,16,null],[35,12,null],[40,8,null]],"Flutter Kicks":[[null,20,null],[null,10,null]],"Lying Leg Raise":[[null,12,null],[null,12,null]]}],["2025-11-20","Dag 17: push met Nouk",{"Decline Bench Press (Machine)":[[0,8,null],[20,6,null],[20,6,null]],"Standing Military Press (Barbell)":[[20,6,null],[20,5,null],[20,4,null]],"Chest Fly (Machine)":[[21.5,8,null],[28.5,7,null],[28.5,8,null],[21.5,4,null]],"Seated Triceps Press":[[0,12,null],[20,8,null],[30,8,null]],"Single Arm Lateral Raise (Cable)":[[3,8,null],[3,6,null],[3,6,null]],"Triceps Pushdown":[[15.25,10,null],[17,7,null],[17,6,null]],"Crunch (Machine)":[[0,10,null],[0,8,null],[0,8,null]]}],["2025-11-24","Dag 21: zwemmen",{"Swimming":[[null,null,3180]]}],["2025-11-25","Dag 22: pull met odilia",{"Lat Pulldown (Cable)":[[25,12,null],[35,8,null],[40,5,null],[40,5,null]],"Seated Cable Row - V Grip (Cable)":[[40,9,null],[45,6,null],[45,8,null]],"Back Extension (Weighted Hyperextension)":[[0,12,null],[10,8,null],[10,10,null]],"Bicep Curl (Dumbbell)":[[8,7,null],[7,9,null]],"Hammer Curl (Dumbbell)":[[7,5,null],[6,10,null]]}],["2025-11-26","Dag 23: Cheer met de boys",{"Cheerleading":[[null,null,7200]]}],["2025-11-27","Dag 24: niet iets specifieks",{"Hip Thrust (Machine)":[[0,10,null],[30,8,null],[50,8,null],[60,8,null]],"Crunch Plate Machine":[[5,4,null],[5,4,null],[0,8,null],[0,8,null]],"Kneeling Push Up":[[null,12,null],[null,9,null]],"Push Up":[[null,5,null],[null,4,null]],"Side Plank":[[null,null,20],[null,null,20]]}],["2025-11-29","Dag 26: Cheer training",{"Cheerleading":[[null,null,9000]]}],["2025-11-30","Dag 27: cheer workshop",{"Cheerleading":[[null,null,21600]]}],["2025-12-02","Legs met Lars",{"Hip Thrust (Machine)":[[0,10,null],[10,8,null],[20,8,null]],"Bulgarian Split Squat":[[12,8,null],[12,8,null],[12,10,null]],"Leg Press (Machine)":[[40,10,null],[80,10,null],[120,10,null]],"Lying Leg Curl (Machine)":[[20,8,null],[20,8,null],[25,6,null]]}],["2025-12-08","Swimming",{"Swimming":[[null,null,1860]]}],["2025-12-12","Pushday met mijn zusje",{"Chest Fly (Machine)":[[26,10,null],[26,8,null],[33,5,null]],"Standing Military Press (Barbell)":[[20,11,null],[20,8,null],[25,3,null]],"Chest Press (Machine)":[[33,8,null],[40,3,null],[35.5,5,null]],"Triceps Pushdown":[[15,6,null],[15,8,null],[20,1,null],[15,6,null]],"Single Arm Lateral Raise (Cable)":[[2.5,8,null],[2.5,7,null],[2.5,10,null]],"Dead Bug":[[null,8,null],[null,22,null],[null,18,null]]}],["2025-12-13","Cheer",{"Cheerleading":[[null,null,9000]]}],["2025-12-15","Late night legs",{"Leg Press Horizontal (Machine)":[[105,12,null],[115,8,null],[125,5,null]],"Seated Leg Curl (Machine)":[[28.5,10,null],[35.5,8,null],[40,8,null]],"Leg Extension (Machine)":[[19,8,null],[19,10,null],[26,12,null]],"Hip Abduction (Machine)":[[52.75,8,null],[60.25,8,null],[68.75,8,null]],"Hip Adduction (Machine)":[[28.25,10,null],[38.75,10,null],[35,6,null]],"Straddle Leg Lifts":[[null,8,null]]}],["2025-12-16","Pull day",{"Lat Pulldown (Machine)":[[54,7,null],[54,8,null],[56.5,6,null]],"Seated Cable Row - V Grip (Cable)":[[42.5,5,null],[50,5,null],[50,4,null]],"Hammer Curl (Dumbbell)":[[6,10,null],[7,5,null],[7,7,null]],"Face Pull":[[21.25,7,null],[21.25,8,null],[23.75,3,null]],"Preacher Curl (Machine)":[[20,8,null],[20,8,null],[20,5,null]]}],["2025-12-22","Upper body plus een potje Twister",{"Bench Press (Barbell)":[[20,10,null],[40,8,null],[40,4,null],[35,8,null]],"Lat Pulldown (Cable)":[[35,6,null],[35,5,null],[30,7,null]],"Standing Military Press (Barbell)":[[20,8,null],[20,5,null],[20,7,null]],"Chest Fly (Machine)":[[10,8,null],[10,8,null],[10,8,null]],"Pull Up (Assisted)":[[54,10,null]],"Lateral Raise (Dumbbell)":[[4,12,null],[5,8,null],[5,9,null]]}],["2025-12-29","Legs met ramon",{"Hip Thrust (Machine)":[[20,10,null],[50,5,null],[100,3,null]],"Single Leg Extensions":[[12,8,null],[12,12,null],[14.5,10,null]],"Leg Extension (Machine)":[[28.5,10,null],[33,11,null]],"Lying Leg Curl (Machine)":[[25,8,null],[32,8,null],[32,7,null]],"Hip Adduction (Machine)":[[38.75,12,null],[46.25,8,null]],"Hip Abduction (Machine)":[[57.5,10,null],[72.5,5,null],[60,4,null],[76.25,9,null]],"Seated Calf Raise":[[25,8,null],[25,8,null]],"Knee Raise Parallel Bars":[[null,12,null],[null,12,null],[null,12,null]]}],["2026-01-14","Eindelijk weer begonnen met cheer en uberhaubt sporten",{"Cheerleading":[[null,null,7200]]}],["2026-01-18","Lower body met myrthe",{"Rowing Machine":[[null,null,120]],"Hip Thrust (Machine)":[[70,8,null],[90,5,null],[80,8,null]],"Single Leg Press (Machine)":[[15,8,null],[25,8,null],[35,4,null]],"Single Leg Extensions":[[12,8,null],[12,8,null],[12,8,null]],"Seated Leg Curl (Machine)":[[33,8,null],[33,6,null],[33,6,null]],"Hip Abduction (Machine)":[[65,8,null],[65,5,null],[69.25,8,null]]}],["2026-01-19","Zwemmen",{"Swimming":[[null,null,2700]]}],["2026-01-20","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-01-21","Pull met Ramon",{"Lat Pulldown - Close Grip (Cable)":[[35,8,null],[42.5,8,null],[50,6,null]],"Bent Over Row (Barbell)":[[0,10,null],[20,5,null],[20,8,null]],"Chin Up (Assisted)":[[54,8,null],[47,8,null],[47,10,null]],"Seated Incline Curl (Dumbbell)":[[7,8,null],[7,7,null]],"Hammer Curl (Dumbbell)":[[7,5,null],[7,4,null]]}],["2026-01-21","Cheer traning",{"Cheerleading":[[null,null,7200]]}],["2026-01-23","Vrijdag met Lina",{"Kneeling Push Up":[[null,15,null],[null,15,null]],"Plank":[[null,null,32],[null,null,32],[null,null,30]],"Leg Press Horizontal (Machine)":[[75,12,null],[125,6,null]],"Leg Extension (Machine)":[[26,12,null],[33,10,null],[40,8,null]],"Hip Abduction (Machine)":[[65,8,null],[68.75,10,null],[80,5,null]],"Hip Adduction (Machine)":[[42.5,7,null],[42.5,7,null]],"Preacher Curl (Machine)":[[20,8,null],[25,8,null],[27.5,5,null]],"Rear Delt Reverse Fly (Machine)":[[19,8,null]],"Chest Fly (Machine)":[[26,8,null],[33,8,null]]}],["2026-01-24","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-01-25","Abs en armen met Lina",{"Lateral Raise (Dumbbell)":[[4,8,null],[4,8,null],[4,8,null]],"Hip Thrust (Machine)":[[70,8,null],[80,5,null]],"Triceps Pushdown":[[15,8,null],[17.5,5,null],[17.5,5,null]],"Preacher Curl (Machine)":[[20,8,null],[27.5,6,null],[27.5,7,null]],"Triceps Extension (Machine)":[[15,8,null],[20,8,null]],"Hammer Curl (Dumbbell)":[[7,10,null],[7,8,null],[7,7,null]],"Knee Raise Parallel Bars":[[null,12,null],[null,12,null],[null,12,null]],"Dead Hang":[[null,null,20],[null,null,20]],"Plank":[[null,null,31],[null,null,31],[null,null,31]],"Dead Bug":[[null,8,null],[null,8,null],[null,10,null]],"Lying Leg Raise":[[null,8,null],[null,10,null],[null,12,null]],"Heel Taps":[[null,15,null],[null,20,null],[null,20,null]]}],["2026-01-26","Zwemmen met de fam",{"Swimming":[[null,null,2700]]}],["2026-01-29","Legs met Thijs",{"Leg Press (Machine)":[[80,10,null],[100,10,null],[120,8,null],[130,8,null]],"Leg Extension (Machine)":[[10,8,null],[15,8,null],[20,8,null]],"Seated Leg Curl (Machine)":[[20,8,null],[20,8,null],[15,8,null]],"Hip Abduction (Machine)":[[30,8,null],[35,8,null],[25,8,null]],"Hip Adduction (Machine)":[[10,8,null],[15,8,null],[10,8,null]],"Seated Calf Raise":[[20,8,null],[20,8,null],[20,8,null]],"Crunch (Machine)":[[15,8,null],[20,8,null],[20,8,null]]}],["2026-01-31","Pilates at home",{"Pilates":[[null,null,3000]]}],["2026-02-01","Legs met the girls",{"Leg Press Horizontal (Machine)":[[85,8,null],[95,8,null],[105,8,null]],"Seated Leg Curl (Machine)":[[33,8,null],[40,8,null],[42.5,8,null]],"Leg Extension (Machine)":[[33,8,null],[38,8,null],[42.5,9,null]],"Preacher Curl (Machine)":[[25,8,null],[27.5,7,null],[27.5,5,null]],"Hip Abduction (Machine)":[[72.5,8,null],[80,8,null],[80,8,null]],"Hip Adduction (Machine)":[[42.5,8,null],[50,5,null],[42.5,6,null]]}],["2026-02-02","Zwemmen",{"Swimming":[[null,null,2880]]}],["2026-02-03","Cheer training",{"Cheerleading":[[null,null,5400]]}],["2026-02-04","Cheer training",{"Cheerleading":[[null,null,7200]]}],["2026-02-05","Upperbody met Daniël",{"Treadmill":[[null,null,900]],"Chin Up (Assisted)":[[54,8,null],[47,8,null],[47,10,null]],"Bench Press (Barbell)":[[30,10,null],[30,12,null],[35,6,null]],"Seated Cable Row - V Grip (Cable)":[[35,8,null]],"Preacher Curl (Machine)":[[25,8,null],[27.5,7,null],[27.5,7,null]],"Triceps Extension (Machine)":[[10,12,null],[15,12,null],[12,8,null]],"Hammer Curl (Dumbbell)":[[7,8,null],[7,5,null],[7,4,null]],"Decline Crunch":[[null,18,null],[null,18,null],[null,25,null]]}],["2026-02-06","Vrijdag - legday met Marijn",{"Spinning":[[null,null,300]],"Hip Thrust (Machine)":[[70,8,null],[85,10,null]],"Leg Press (Machine)":[[80,8,null],[100,13,null],[130,4,null]],"Leg Extension (Machine)":[[35.5,8,null],[42.5,11,null],[47,8,null],[47,8,null]],"Seated Leg Curl (Machine)":[[40,9,null],[42.5,8,null],[47,8,null],[47,8,null]],"Dead Bug":[[null,8,null],[null,12,null],[null,18,null]],"Side Plank":[[null,null,31]],"Plank":[[null,null,31]],"Straddle Leg Lifts":[[null,8,null]],"Stretching":[[null,null,582]],"Treadmill":[[null,null,600]]}],["2026-02-07","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-02-08","Zondag - herstel + control",{"Treadmill":[[null,null,1200]],"Heel Taps":[[null,20,null],[null,30,null],[null,40,null]],"Bird Dog":[[null,12,null],[null,12,null]],"Glute Bridge March":[[null,12,null],[null,12,null]],"In & Outs":[[null,12,null],[null,20,null],[null,20,null]],"Dead Bug":[[null,8,null],[null,12,null]],"Preacher Curl (Machine)":[[27.5,8,null],[27.5,8,null],[27.5,6,null]],"Triceps Extension (Machine)":[[12.5,12,null],[17.5,10,null],[17.5,10,null]],"Hammer Curl (Cable)":[[13.75,8,null],[13.75,7,null]],"Stretching":[[null,null,762]]}],["2026-02-09","Zwemmen met fam",{"Swimming":[[null,null,2700]]}],["2026-02-11","Cheer training",{"Cheerleading":[[null,null,7200]]}],["2026-02-13","Vrijdag - legday + core",{"Spinning":[[null,null,240]],"Hip Thrust (Machine)":[[80,7,null],[80,7,null]],"Leg Press (Machine)":[[80,10,null]],"Leg Extension (Machine)":[[33,10,null],[47,8,null],[54,7,null]],"Seated Leg Curl (Machine)":[[40,8,null],[47,8,null]],"Dead Bug":[[null,8,null],[null,8,null]],"Stretching":[[null,null,551]]}],["2026-02-14","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-02-16","Gezellig met vlaggetjes gezwommen",{"Swimming":[[null,null,2700]]}],["2026-02-20","Vrijdag - legday + core",{"Spinning":[[null,null,180]],"Hip Thrust (Machine)":[[100,5,null],[100,5,null],[100,6,null]],"Seated Leg Curl (Machine)":[[49.5,6,null],[54,6,null]],"Leg Extension (Machine)":[[47,8,null],[54,8,null],[54,7,null]],"Leg Press (Machine)":[[100,8,null],[130,6,null]],"Dead Bug":[[null,12,null],[null,10,null],[null,12,null],[null,20,null]],"In & Outs":[[null,12,null],[null,16,null],[null,12,null]],"Heel Taps":[[null,12,null],[null,20,null],[null,20,null]],"Plank":[[null,null,31],[null,null,30]],"Stretching":[[null,null,584]],"Treadmill":[[null,null,1200]]}],["2026-02-22","Zondag - herstel + control",{"Treadmill":[[null,null,1200]],"Preacher Curl (Machine)":[[25,8,null],[32,6,null],[32,6,null]],"Triceps Extension (Machine)":[[15,10,null],[20,10,null],[22.5,8,null]],"Hammer Curl (Dumbbell)":[[7,10,null],[7,8,null],[8,8,null]],"Decline Crunch (Weighted)":[[0,12,null],[0,12,null],[5,12,null]],"Heel Taps":[[null,20,null],[null,20,null],[null,20,null]],"Glute Bridge March":[[null,12,null],[null,12,null],[null,12,null]],"Dead Bug":[[null,12,null],[null,12,null],[null,12,null]],"In & Outs":[[null,12,null],[null,12,null],[null,12,null]],"Stretching":[[null,null,539]]}],["2026-02-23","Swimming",{"Swimming":[[null,null,2700]]}],["2026-02-24","Cheer practice",{"Cheerleading":[[null,null,7200]]}],["2026-02-25","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-02-27","Zondag even om gewisseld",{"Preacher Curl (Barbell)":[[15,12,null],[15,10,null],[20,2,null]],"Triceps Pushdown":[[16.25,8,null],[18.75,7,null],[18.75,4,null]],"Hammer Curl (Dumbbell)":[[7,10,null],[8,8,null],[8,10,null]],"Decline Crunch (Weighted)":[[0,16,null],[0,16,null],[5,10,null]],"Heel Taps":[[null,30,null],[null,20,null]],"Dead Bug":[[null,18,null],[null,18,null],[null,16,null]],"Stretching":[[null,null,539]]}],["2026-03-04","Eigenlijk nog steeds ziek maar wilde de training niet missen",{"Cheerleading":[[null,null,7200]]}],["2026-03-05","Upperbody",{"Lat Pulldown (Machine)":[[54,4,null],[47,6,null],[47,6,null]],"Seated Row (Machine)":[[33,8,null],[26,8,null],[26,8,null]],"Chest Press (Machine)":[[26,10,null],[33,5,null],[26,5,null]],"Seated Shoulder Press (Machine)":[[15,6,null],[10,10,null],[15,8,null]],"Hammer Curl (Dumbbell)":[[6,10,null],[8,8,null]],"Preacher Curl (Machine)":[[20,10,null],[32,5,null],[32,4,null]],"Triceps Extension (Machine)":[[20,8,null],[25,5,null],[22.5,6,null]],"Dead Bug":[[null,12,null],[null,12,null],[null,12,null]],"Plank":[[null,null,31],[null,null,30]],"Stretching":[[null,null,468]]}],["2026-03-06","Vrijdag - legday met badaniel",{"Treadmill":[[null,null,600]],"Bench Press (Barbell)":[[40,6,null],[45,2,null]],"Hip Thrust (Machine)":[[100,7,null],[100,5,null]],"Leg Press Horizontal (Machine)":[[115,8,null],[135,10,null],[145,8,null]],"Decline Crunch":[[null,25,null],[null,16,null],[null,16,null]],"Stretching":[[null,null,605]]}],["2026-03-08","Legs met Ramon",{"Squat (Barbell)":[[40,8,null],[50,8,null],[60,8,null],[80,2,null]],"Leg Press (Machine)":[[100,2,null],[150,8,null],[150,9,null]],"Seated Leg Curl (Machine)":[[49.5,8,null],[54,7,null]],"Hanging Knee Raise":[[null,8,null],[null,10,null]],"Hip Abduction (Machine)":[[76.25,8,null],[83.75,10,null]],"Hip Adduction (Machine)":[[46.25,8,null],[53.75,7,null]]}],["2026-03-09","Zwemmen",{"Swimming":[[null,null,2400]],"Plank":[[null,null,35],[null,null,40]]}],["2026-03-10","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-03-11","Sanne, Philipp en ik hadden nog energie over na cheer",{"Cheerleading":[[null,null,7200]],"Pull Up (Assisted)":[[42.5,10,null],[30,6,null],[30,4,null]],"Leg Extension (Machine)":[[42.5,8,null],[50,8,null]],"Lying Leg Curl (Machine)":[[12.5,8,null],[25.5,8,null]],"Standing Military Press (Barbell)":[[15,5,null],[17.5,8,null],[25,4,null]],"Leg Press Horizontal (Machine)":[[130,9,null]]}],["2026-03-13","My girls",{"Treadmill":[[null,null,420]],"Squat (Barbell)":[[60,8,null],[40,8,null],[40,4,null]],"Romanian Deadlift (Barbell)":[[0,8,null],[0,8,null],[0,8,null]],"Hip Thrust (Machine)":[[90,8,null],[100,8,null]],"Hip Abduction (Machine)":[[80,8,null],[90.25,10,null],[95,8,null]],"Hip Adduction (Machine)":[[42.5,8,null],[46.25,7,null],[38.25,6,null]]}],["2026-03-14","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-03-14","Ik had nog even zin in wat beweging",{"Treadmill":[[null,null,1200]],"Hanging Knee Raise":[[null,10,null],[null,10,null],[null,10,null],[null,10,null]],"Decline Crunch (Weighted)":[[5,10,null],[5,10,null],[5,10,null]],"Dead Bug":[[null,10,null],[null,16,null],[null,10,null]]}],["2026-03-15","Zondag - herstel + control",{"Spinning":[[null,null,300]],"Triceps Extension (Machine)":[[22.5,8,null],[22.5,6,null],[20,8,null]],"Preacher Curl (Machine)":[[27.5,10,null],[32,6,null],[32,8,null]],"Cossack Squat":[[12,8,null],[12,8,null],[12,8,null]],"Straddle Leg Lifts":[[null,12,null],[null,8,null],[null,12,null],[null,8,null],[null,12,null],[null,10,null]],"Plank":[[null,null,50],[null,null,50]],"Trap Rehab":[[null,1,null]],"Stretching":[[null,null,601]],"Lying Leg Raise":[[null,10,null],[null,10,null],[null,10,null]],"Treadmill":[[null,null,1200]]}],["2026-03-16","Fullbody en 10k stappen",{"Treadmill":[[null,null,420],[null,null,1200],[null,null,1200]],"Squat (Barbell)":[[60,6,null],[60,6,null]],"Pull Up (Assisted)":[[47,8,null],[47,7,null],[40,4,null]],"Standing Military Press (Barbell)":[[20,8,null],[20,8,null],[20,8,null]],"Seated Cable Row - V Grip (Cable)":[[35,8,null],[50,6,null],[50,9,null]],"Hip Abduction (Machine)":[[87.5,8,null],[98.75,8,null],[102.5,7,null],[87.5,6,null]],"Hip Adduction (Machine)":[[42.5,8,null],[50,4,null],[38.75,6,null]],"Chest Press (Machine)":[[28.5,8,null],[40,4,null],[26,6,null]],"Plank":[[null,null,55],[null,null,30]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]],"Lying Knee Raise":[[null,16,null],[null,12,null]]}],["2026-03-17","I DID A PULLUP",{"Pull Up":[[null,1,null]],"Cheerleading":[[null,null,5400]]}],["2026-03-18","Cheer",{"Cheerleading":[[null,null,5400]]}],["2026-03-19","Vrijdag - legday + core",{"Treadmill":[[null,null,300]],"Hip Thrust (Machine)":[[100,10,null],[110,7,null]],"Romanian Deadlift (Dumbbell)":[[15,8,null],[15,8,null],[15,8,null]],"Leg Press (Machine)":[[100,8,null],[150,10,null],[160,8,null]],"Hip Abduction (Machine)":[[72.5,8,null],[102.5,8,null],[102.5,5,null],[57.5,8,null]],"Dead Bug":[[null,12,null],[null,12,null],[null,12,null]],"Stretching":[[null,null,605]],"Hip Adduction (Machine)":[[42.5,8,null],[42.5,8,null],[46.25,8,null]]}],["2026-03-20","Even snelle workout",{"Treadmill":[[null,null,1200]],"Knee Raise Parallel Bars":[[null,8,null],[null,12,null],[null,16,null]],"Chin Up (Assisted)":[[0,1,null],[40,6,null],[40,8,null]],"Seated Calf Raise":[[10,8,null],[20,8,null],[20,10,null],[30,10,null]],"Plank":[[null,null,32],[null,null,20]]}],["2026-03-21","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-03-22","Zondag - herstel + control",{"Treadmill":[[null,null,420]],"Stretching":[[null,null,361]],"Preacher Curl (Machine)":[[32,8,null],[34.5,4,null]],"Walking Lunge":[[null,20,null]],"Plank":[[null,null,64],[null,null,42]],"Hammer Curl (Dumbbell)":[[9,8,null],[9,6,null],[7,8,null],[9,8,null]],"Seated Palms Up Wrist Curl":[[3,8,null],[3,8,null],[5,8,null]],"Knee Raise Parallel Bars":[[null,8,null]],"Triceps Extension (Machine)":[[22.5,10,null],[25,8,null],[27.5,5,null]]}],["2026-03-23","Eindelijk weer zwemmen",{"Swimming":[[null,null,2700]]}],["2026-03-24","Cheer",{"Cheerleading":[[null,null,5400]]}],["2026-03-25","Cheer again of course",{"Cheerleading":[[null,null,5400]]}],["2026-03-28","Cheerleading",{"Cheerleading":[[null,null,9000]]}],["2026-03-29","Legday",{"Spinning":[[null,null,180]],"Hip Thrust (Machine)":[[110,8,null],[120,7,null]],"Leg Press (Machine)":[[160,8,null],[170,8,null]],"Romanian Deadlift (Dumbbell)":[[15,8,null],[21.25,8,null],[25,8,null]],"Leg Extension (Machine)":[[54,8,null],[56.5,6,null]],"Dead Bug":[[null,12,null],[null,18,null],[null,12,null]],"Heel Taps":[[null,20,null],[null,30,null]],"Stretching":[[null,null,586]],"Treadmill":[[null,null,1200]]}],["2026-03-30","Zwemmen",{"Swimming":[[null,null,2760]]}],["2026-03-31","Cheer",{"Cheerleading":[[null,null,5400]]}],["2026-04-03","Had geen energie vandaag",{"Spinning":[[null,null,180]],"Hip Thrust (Machine)":[[120,6,null],[120,7,null]],"Leg Press Horizontal (Machine)":[[145,3,null]],"Romanian Deadlift (Dumbbell)":[[15,8,null],[25,8,null],[28.75,8,null]],"Plank":[[null,null,71],[null,null,48]],"Stretching":[[null,null,289]]}],["2026-04-04","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-04-06","Abs en stretchen",{"Treadmill":[[null,null,600]],"Knee Raise Parallel Bars":[[null,8,null],[null,8,null],[null,8,null]],"Cable Crunch":[[23.75,8,null],[26.25,8,null],[28.75,8,null]],"Plank":[[null,null,75],[null,null,62]],"Dead Bug":[[null,12,null],[null,12,null],[null,12,null],[null,18,null]],"Heel Taps (Pilates Versie)":[[null,12,null],[null,16,null],[null,16,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]],"Stretching":[[null,null,1894]],"Stair Machine (Steps)":[[null,null,720]]}],["2026-04-07","Cheer",{"Cheerleading":[[null,null,5400]]}],["2026-04-08","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-04-11","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-04-12","Open gym team NL",{"Cheerleading":[[null,null,3600]]}],["2026-04-13","Zwemmen",{"Swimming":[[null,null,2700]]}],["2026-04-15","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-04-18","Meiden weekend",{"Pilates":[[null,null,2700]]}],["2026-04-21","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-04-22","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-04-24","Rustige legday",{"Treadmill":[[null,null,600]],"Hip Thrust (Machine)":[[130,5,null],[130,4,null]],"Single Leg Press (Machine)":[[25,8,null],[35,8,null]],"Walking Lunge":[[null,30,null],[null,251,null]],"Preacher Curl (Machine)":[[32,5,null],[32,6,null]],"Leg Extension (Machine)":[[47,8,null]],"Stretching":[[null,null,2430]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null],[null,8,null],[null,8,null],[null,8,null],[null,8,null],[null,10,null]]}],["2026-04-25","Cheer",{"Cheerleading":[[null,null,9180]]}],["2026-04-26","Zondag mix",{"Treadmill":[[null,null,600]],"Pull Up (Assisted)":[[40,7,null],[40,5,null]],"Triceps Extension (Machine)":[[22.5,8,null],[25,8,null]],"Standing Military Press (Barbell)":[[20,8,null],[25,8,null],[25,5,null]],"Decline Crunch (Weighted)":[[0,16,null],[5,16,null],[10,10,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null],[null,8,null],[null,8,null]],"Stretching":[[null,null,1230]]}],["2026-04-28","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-04-29","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-05-01","Legday",{"Spinning":[[null,null,180]],"Hip Thrust (Machine)":[[130,9,null],[130,3,null],[80,5,null]],"Hip Abduction (Machine)":[[72.5,8,null],[102.5,9,null],[106.25,5,null],[68.75,5,null]],"Hip Adduction (Machine)":[[42.5,8,null],[50,6,null],[46.25,9,null]],"Stretching":[[null,null,409]]}],["2026-05-02","Cheer training",{"Cheerleading":[[null,null,14400]]}],["2026-05-05","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-05-06","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-05-08","Legs met Odilia",{"Spinning":[[null,null,300]],"Hip Thrust (Barbell)":[[80,10,null],[110,1,null],[100,5,null]],"Leg Press (Machine)":[[120,10,null],[130,8,null]],"Leg Extension (Machine)":[[30,6,null],[30,8,null]],"Crunch (Machine)":[[30,17,null],[40,12,null],[45,8,null]],"Plank":[[null,null,61],[null,null,62]],"Stretching":[[null,null,2329]]}],["2026-05-09","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-05-10","Upper",{"Pull Up (Assisted)":[[42.5,6,null],[33,2,null]],"Standing Military Press (Barbell)":[[25,5,null],[25,3,null]],"Triceps Pushdown":[[17.5,8,null],[21.25,3,null],[17.5,8,null]],"Bicep Curl (Cable)":[[15,8,null],[17.5,8,null],[17.5,5,null]],"Chest Press (Machine)":[[28.5,8,null],[35.5,8,null],[35.5,10,null]],"Plank":[[null,null,61],[null,null,42]],"Push Up":[[null,10,null],[null,5,null]]}],["2026-05-11","Zwemmen met de fam",{"Swimming":[[null,null,2880]]}],["2026-05-12","Cheer training",{"Cheerleading":[[null,null,7200]]}],["2026-05-13","Competitie training",{"Cheerleading":[[null,null,7200]]}],["2026-05-14","Pull",{"Lat Pulldown (Cable)":[[17.5,8,null],[25,6,null],[25,8,null]],"Seated Row (Machine)":[[26,8,null],[33,8,null],[33,10,null]],"Single Arm Lat Pulldown":[[12.5,8,null],[15,9,null],[15,8,null]],"Bicep Curl (Dumbbell)":[[7,8,null],[7,8,null]],"Hammer Curl (Dumbbell)":[[7,8,null],[9,6,null]],"Stretching":[[null,null,1189]]}],["2026-05-18","Zwemmen",{"Swimming":[[null,null,2700]]}],["2026-05-19","Cheeeeer training",{"Cheerleading":[[null,null,7200]]}],["2026-05-21","Korte legs en abs",{"Cycling":[[null,null,180]],"Hip Thrust (Machine)":[[100,8,null],[80,6,null]],"Hip Abduction (Machine)":[[102.5,8,null],[106.25,6,null],[72.5,8,null]],"Hip Adduction (Machine)":[[46.25,8,null],[46.25,6,null]],"Crunch (Machine)":[[5,8,null],[20,8,null],[32,8,null]],"Knee Raise Parallel Bars":[[null,8,null],[null,10,null]],"Hanging Knee Raise":[[null,8,null]],"Dead Bug":[[null,10,null],[null,10,null],[null,10,null]]}],["2026-05-22","Upper met Lina",{"Rowing Machine":[[null,null,439]],"Pull Up (Assisted)":[[47,6,null],[47,6,null],[47,6,null]],"Standing Military Press (Barbell)":[[25,5,null],[20,6,null]],"Seated Cable Row - V Grip (Cable)":[[35,8,null],[42.5,8,null]],"Chest Fly (Machine)":[[26,8,null],[26,8,null]],"Preacher Curl (Machine)":[[15,8,null],[32,4,null],[20,5,null]],"Triceps Extension (Machine)":[[20,8,null],[22.5,8,null]]}],["2026-05-23","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-05-25","Full body pilates",{"Pilates":[[null,null,2400]]}],["2026-05-26","Cheer training",{"Cheerleading":[[null,null,5400]]}],["2026-05-27","Cheeerrrr",{"Cheerleading":[[null,null,7200]]}],["2026-05-28","Rustige leg day + stretchen",{"Treadmill":[[null,null,540],[null,null,900]],"Kettlebell Goblet Squat":[[24,6,null],[24,8,null],[24,8,null]],"Bulgarian Split Squat":[[0,8,null],[12,8,null],[14,8,null]],"Glute Bridge":[[null,20,null],[null,20,null],[null,20,null]],"Stretching":[[null,null,1800]],"Push Up":[[null,10,null],[null,10,null]]}],["2026-05-30","Laatste training voor competitie",{"Cheerleading":[[null,null,5400]]}],["2026-05-31","Cheer!",{"Cheerleading":[[null,null,21600]]}],["2026-06-03","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-06-06","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-06-07","Reformer proefles",{"Pilates":[[null,null,1800]]}],["2026-06-08","Zwemmen met de fam",{"Swimming":[[null,null,2700]]}],["2026-06-09","Upper body",{"Standing Military Press (Barbell)":[[25,7,null],[25,6,null],[25,4,null]],"Seated Cable Row - V Grip (Cable)":[[35,8,null],[42.5,8,null],[50,5,null]],"Chest Fly (Machine)":[[26,8,null],[33,6,null],[33,6,null]],"Bicep Curl (Dumbbell)":[[8,8,null],[8,7,null]],"Triceps Rope Pushdown":[[15,8,null],[15,7,null]],"Plank":[[null,null,42],[null,null,31]],"Stretching":[[null,null,917]]}],["2026-06-10","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-06-11","Reformer les",{"Pilates":[[null,null,3000]]}],["2026-06-13","Cheer",{"Cheerleading":[[null,null,9000]]}],["2026-06-14","Legs met Ramon",{"Squat (Barbell)":[[60,8,null],[80,3,null],[60,4,null],[60,12,null]],"Single Leg Extensions":[[10,8,null],[15,10,null],[20,8,null]],"Seated Leg Curl (Machine)":[[50,8,null],[60,10,null]],"Hip Adduction (Machine)":[[50,8,null],[60,8,null]],"Hip Abduction (Machine)":[[100,8,null],[110,10,null],[120,10,null]],"Standing Calf Raise (Machine)":[[23,15,null],[32,15,null],[77,6,null],[45,12,null]],"Crunch (Machine)":[[10,16,null],[15,16,null]]}],["2026-06-16","Upper met Daniel",{"Pull Up (Assisted)":[[47,8,null],[47,10,null],[40,5,null]],"Chin Up (Assisted)":[[40,2,null]],"Standing Military Press (Barbell)":[[25,7,null],[25,6,null]],"Bench Press (Barbell)":[[42.5,4,null],[45,3,null]],"Iso-Lateral Low Row":[[40,10,null],[50,9,null]],"Triceps Pushdown":[[21.25,6,null],[21.25,6,null]],"Bicep Curl (Dumbbell)":[[8,10,null],[9,5,null]],"Hammer Curl (Dumbbell)":[[8,6,null],[9,5,null]]}],["2026-06-17","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-06-18","Pilates reformer les",{"Pilates":[[null,null,3000]]}],["2026-06-21","Snelle leg workout",{"Leg Press Horizontal (Machine)":[[85,8,null],[135,11,null]],"Seated Leg Curl (Machine)":[[40,8,null],[54,5,null]],"Leg Extension (Machine)":[[33,8,null],[61,6,null]],"Hip Adduction (Machine)":[[50,6,null],[42.5,8,null]],"Hip Abduction (Machine)":[[95,8,null],[110,2,null],[95,5,null]],"Plank":[[null,null,31]]}],["2026-06-22","Zwemmen",{"Swimming":[[null,null,2700]]}],["2026-06-24","Cheer",{"Cheerleading":[[null,null,5400]]}],["2026-06-25","Reformer les",{"Pilates":[[null,null,3000]]}],["2026-06-27","Upper",{"Incline Bench Press (Smith Machine)":[[0,8,null],[20,8,null],[25,4,null],[20,8,null]],"Seated Cable Row - V Grip (Cable)":[[38.3,6,null],[31.5,8,null],[24.5,8,null]],"Cable Fly Crossovers":[[4,8,null],[4,8,null],[4,8,null]],"Single Arm Lateral Raise (Cable)":[[2.5,8,null],[3.5,8,null],[4.5,10,null]],"Upright Row (Barbell)":[[0,8,null],[10,10,null]],"Ring Push Up":[[null,1,null],[null,1,null],[null,5,null]],"Triceps Pushdown":[[21.5,4,null],[18,6,null]],"Bicep Curl (Cable)":[[9,10,null],[18,5,null],[15,6,null]],"Overhead Triceps Extension (Cable)":[[6.5,8,null],[6.5,8,null]],"Reverse Curl (Cable)":[[3.5,8,null],[4.5,10,null]]}],["2026-06-29","Zwemmen met de fam",{"Swimming":[[null,null,2700]]}],["2026-06-30","Legday",{"Front Squat":[[20,8,null],[20,8,null],[30,8,null]],"Squat (Barbell)":[[20,8,null],[50,8,null],[50,8,null]],"Romanian Deadlift (Dumbbell)":[[20,8,null],[20,8,null]],"Bulgarian Split Squat":[[20,8,null],[20,9,null]],"Seated Leg Curl (Machine)":[[40,8,null],[54,7,null]],"Standing Calf Raise (Machine)":[[57,8,null],[57,8,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null]]}],["2026-06-30","ABS en stretchen",{"Dead Bug":[[null,8,null],[null,10,null],[null,10,null]],"Hollow Rock":[[null,null,15],[null,null,20],[null,null,20]],"Side Plank":[[null,null,26],[null,null,26],[null,null,26]],"Stretching":[[null,null,2400]]}],["2026-07-01","Cheer plus extra sessie",{"Cheerleading":[[null,null,7200]],"Straddle Leg Lifts":[[null,10,null],[null,10,null],[null,10,null]],"Stretching":[[null,null,900]]}],["2026-07-05","Snelle workout, zometeen festival",{"Farmers Walk":[[20,null,null],[20,null,null]],"Pull Up (Assisted)":[[47,8,null],[40,5,null]],"Push Up":[[null,10,null],[null,8,null]],"Standing Military Press (Barbell)":[[25,5,null]],"Seated Cable Row - V Grip (Cable)":[[42.5,8,null],[50,5,null]],"Single Arm Lateral Raise (Cable)":[[2.5,7,null],[2.5,7,null]],"Triceps Pushdown":[[12.5,8,null]],"Bicep Curl (Dumbbell)":[[8,8,null],[8,7,null],[8,5,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]]}],["2026-07-07","Legs",{"Front Squat":[[20,8,null],[40,3,null],[40,8,null],[50,5,null]],"Hip Thrust (Machine)":[[80,7,null]],"Romanian Deadlift (Dumbbell)":[[16,8,null],[16,5,null]],"Seated Leg Curl (Machine)":[[47,8,null],[61,5,null],[47,3,null]],"Single Leg Press (Machine)":[[25,8,null],[25,5,null]],"Standing Calf Raise (Machine)":[[57,10,null],[67,9,null],[77,10,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]],"Dead Bug":[[null,10,null],[null,10,null],[null,10,null]],"Hollow Rock":[[null,null,20],[null,null,30],[null,null,13]],"Side Plank":[[null,null,21],[null,null,26]],"Stretching":[[null,null,900]]}],["2026-07-08","Cheerleading",{"Cheerleading":[[null,null,7200]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]]}],["2026-07-10","Stuntfest",{"Cheerleading":[[null,null,10800]]}],["2026-07-14","Legday",{"Front Squat":[[20,10,null],[40,4,null],[40,5,null]],"Hip Thrust (Machine)":[[70,8,null],[90,6,null]],"Leg Press (Machine)":[[150,8,null],[170,8,null]],"Hip Abduction (Machine)":[[80,8,null],[95,7,null],[102.5,4,null],[80,5,null]],"Hip Adduction (Machine)":[[42.5,8,null],[42.5,9,null]],"Standing Calf Raise (Machine)":[[67,10,null],[87,9,null],[97,6,null]],"Standing Cable Glute Kickbacks":[[5,8,null],[10,8,null],[15,8,null]]}],["2026-07-15","Kleine pull met heel veel stretchen",{"Lat Pulldown (Cable)":[[17.5,6,null],[25,3,null],[17.5,6,null]],"Seated Cable Row - V Grip (Cable)":[[17.5,8,null],[17.5,6,null]],"Bicep Curl (Cable)":[[7.5,9,null],[15,8,null],[25,1,null],[17.5,3,null]],"Plank":[[null,null,35],[null,null,31],[null,null,30]],"Dead Bug":[[null,10,null],[null,10,null],[null,10,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null],[null,10,null]],"Stretching":[[null,null,2400]],"Knee Raise Parallel Bars":[[null,12,null],[null,10,null],[null,8,null]]}],["2026-07-20","Plyo en stretchen",{"Back Extension (Weighted Hyperextension)":[[0,8,null],[15,9,null],[15,10,null],[15,8,null]],"Decline Crunch (Weighted)":[[0,16,null],[10,8,null],[0,4,null],[10,8,null],[0,4,null]],"Plyo":[[null,null,1800]],"Stretching":[[null,null,2400]]}],["2026-07-21","Legday was intens",{"Jump Squat":[[null,8,null],[null,8,null]],"Leg Press (Machine)":[[146,8,null],[156,8,null],[173,8,null]],"Romanian Deadlift (Barbell)":[[0,8,null],[20,5,null],[20,8,null],[40,8,null],[50,5,null]],"Bulgarian Split Squat (Barbell)":[[15,8,null]],"Bulgarian Split Squat (Dumbbell)":[[16,8,null]],"Hip Thrust (Machine)":[[130,4,null],[130,3,null],[100,6,null]],"Stretching":[[null,null,1800]]}],["2026-07-22","Pull",{"Chin Up":[[null,1,null],[null,1,null]],"Seated Cable Row - V Grip (Cable)":[[20,8,null],[42.5,8,null],[50,8,null]],"Back Extension (Weighted Hyperextension)":[[15,8,null],[15,9,null],[15,9,null]],"Hammer Curl (Dumbbell)":[[9,8,null],[9,5,null]],"Bicep Curl (Dumbbell)":[[9,8,null],[9,6,null]],"Straight Arm Lat Pulldown (Cable)":[[17.5,8,null],[17.5,8,null],[17.5,8,null]],"Decline Crunch":[[null,20,null],[null,20,null]],"Dead Hang":[[null,null,15]],"Cable Twist (Up to down)":[[5,8,null],[5,8,null]],"Stretching":[[null,null,900]]}],["2026-07-27","Push eindelijk weer eens geprobeerd",{"Push Up":[[null,10,null],[null,8,null],[null,10,null]],"Dead Bug":[[null,16,null],[null,16,null]],"Standing Military Press (Barbell)":[[25,6,null],[25,4,null]],"Chest Press (Machine)":[[26,3,null]],"Lateral Raise (Machine)":[[5,3,null],[15,5,null],[12.5,10,null]],"Triceps Extension (Machine)":[[20,8,null],[22.5,8,null]],"Stretching":[[null,null,2700]]}],["2026-07-28","Legday met/zonder Max",{"Jump Squat":[[null,10,null],[null,10,null]],"Plyo":[[null,null,600]],"Leg Press (Machine)":[[150,10,null],[170,10,null]],"Romanian Deadlift (Barbell)":[[50,6,null],[50,10,null]],"Bulgarian Split Squat (Barbell)":[[14,8,null],[16,5,null]],"Standing Cable Glute Kickbacks":[[11,8,null],[16,8,null]],"Stretching":[[null,null,600]]}],["2026-08-02","Cheer workshop",{"Cheerleading":[[null,null,25200]]}],["2026-08-08","Mini workout op vakantie",{"Jump Squat":[[null,10,null],[null,10,null]],"Push Up":[[null,8,null],[null,8,null]],"Plank":[[null,null,30],[null,null,30]],"Hollow Rock":[[null,null,30],[null,null,20]],"Lying Knee Raise":[[null,10,null],[null,10,null]],"Stretching":[[null,null,600]]}],["2026-08-15","Baltic stuntfest",{"Cheerleading":[[null,null,18000]]}],["2026-08-17","Baltic stuntfest dag 2",{"Cheerleading":[[null,null,14400]]}],["2026-08-18","Eerste workout na vakantie",{"Jump Squat":[[null,8,null],[null,8,null]],"Squat (Barbell)":[[0,10,null],[50,3,null],[40,8,null]],"Leg Press (Machine)":[[100,8,null],[100,8,null]],"Romanian Deadlift (Barbell)":[[0,8,null],[40,8,null],[50,6,null]],"Standing Calf Raise (Machine)":[[87,10,null],[97,11,null],[107,8,null]],"Knee Raise Parallel Bars":[[null,8,null],[null,8,null],[null,8,null]],"Stretching":[[null,null,600]]}],["2026-08-20","Reformer pilates",{"Pilates":[[null,null,3000]]}],["2026-08-27","Reformer pilates",{"Pilates":[[null,null,3000]]}],["2026-08-29","Upper",{"Pull Up (Assisted)":[[40,5,null],[47,8,null]],"Seated Cable Row - V Grip (Cable)":[[42.5,6,null],[42.5,5,null],[42.5,6,null]],"Standing Military Press (Barbell)":[[25,6,null],[25,5,null]],"Triceps Pushdown":[[15,8,null],[17.5,7,null]],"Single Arm Lateral Raise (Cable)":[[3.75,8,null],[6.25,7,null]],"Bicep Curl (Dumbbell)":[[9,10,null],[10,5,null]]}],["2026-09-01","Legsss",{"Jump Squat":[[null,12,null],[null,10,null]],"Front Squat":[[30,8,null],[40,9,null],[45,5,null]],"Squat (Barbell)":[[50,8,null],[70,7,null]],"Romanian Deadlift (Barbell)":[[30,8,null],[70,7,null],[80,3,null]],"Bulgarian Split Squat (Barbell)":[[0,8,null],[15,5,null],[15,8,null]],"Standing Calf Raise (Machine)":[[97,8,null],[97,8,null],[97,7,null]],"Stretching":[[null,null,2400]]}],["2026-09-02","Pull",{"Lat Pulldown (Cable)":[[20,8,null],[42.5,9,null],[50,6,null],[50,5,null]],"Lat Pulldown - Close Grip (Cable)":[[35,8,null],[50,8,null],[60,3,null],[35,6,null]],"Iso-Lateral Low Row":[[40,8,null],[40,12,null]],"Back Extension (Weighted Hyperextension)":[[0,8,null],[20,6,null],[0,6,null],[20,8,null]],"Face Pull":[[21.25,8,null],[21.25,8,null],[32.5,6,null]],"Bicep Curl (Dumbbell)":[[10,8,null],[10,5,null],[8,3,null]],"EZ Bar Biceps Curl":[[15,8,null],[15,7,null],[15,8,null],[15,7,null],[15,8,null],[15,7,null]],"Lateral Raise (Dumbbell)":[[6,8,null],[6,5,null],[5,8,null],[4,8,null]],"Front Raise (Dumbbell)":[[6,5,null],[5,8,null],[4,8,null]]}],["2026-09-03","Reformer pilates!",{"Pilates":[[null,null,3000]]}],["2026-09-03","We zijn herenigd",{"Bench Press (Barbell)":[[40,9,null],[45,4,null],[42.5,5,null]],"Standing Military Press (Barbell)":[[20,8,null],[20,8,null],[20,8,null]],"Triceps Pushdown":[[15.8,8,null],[18,6,null],[18,5,null]],"Chest Fly (Machine)":[[39,5,null],[39,8,null]],"Incline Bench Press (Barbell)":[[20,10,null],[30,6,null],[30,5,null]],"Stretching":[[null,null,600]]}],["2026-09-07","Later upper",{"Lat Pulldown (Cable)":[[50,8,null],[50,7,null]],"Seated Cable Row - V Grip (Cable)":[[42.5,8,null],[50,8,null]],"Standing Military Press (Barbell)":[[25,10,null],[30,3,null]],"Push Up":[[null,10,null],[null,10,null]],"Lateral Raise (Dumbbell)":[[6,7,null],[6,8,null],[5,6,null]],"Front Raise (Dumbbell)":[[6,7,null],[6,8,null],[5,6,null]],"Triceps Pushdown":[[15,8,null],[21.25,6,null],[21.25,8,null]],"EZ Bar Biceps Curl":[[15,8,null],[15,8,null],[20,5,null],[15,8,null],[20,6,null]],"Cable Fly Crossovers":[[6.25,8,null],[8.75,8,null],[8.75,5,null]],"Reverse Wrist Curl (Dumbbell)":[[1,10,null],[1,10,null],[2,10,null]],"Dead Bug":[[null,16,null],[null,16,null],[null,20,null],[null,10,null]],"Russian Twist (Weighted)":[[3,8,null],[3,10,null],[3,8,null]]}],["2026-09-08","Legs gecombineerd met rug",{"Squat (Barbell)":[[40,10,null],[60,9,null],[80,5,null]],"Romanian Deadlift (Barbell)":[[40,8,null],[70,9,null],[80,5,null]],"Bent Over Row (Barbell)":[[20,8,null],[40,5,null],[40,5,null]],"Back Extension (Weighted Hyperextension)":[[0,8,null],[20,8,null],[25,8,null]],"Leg Extension (Machine)":[[33,8,null],[47,8,null],[61,8,null]],"Hip Adduction (Machine)":[[42.5,10,null],[50,8,null]],"Calf Press (Machine)":[[53,8,null],[103,11,null],[123,8,null],[143,8,null],[153,8,null],[163,8,null]],"Knee Raise Parallel Bars":[[null,24,null],[null,24,null],[null,24,null]],"Stretching":[[null,null,900]]}],["2026-09-09","Cheer seizoen is weer begonnen",{"Cheerleading":[[null,null,7200]],"Knee Raise Parallel Bars":[[null,24,null],[null,16,null],[null,20,null]],"Leg Raise Parallel Bars":[[null,8,null],[null,8,null],[null,5,null]]}],["2026-09-10","Reformer pilates",{"Pilates":[[null,null,3000]]}],["2026-09-14","Rustige start",{"Swimming":[[null,null,1800]]}],["2026-09-15","Legs met noukie",{"Jump Squat":[[null,10,null],[null,10,null],[null,10,null]],"Leg Press (Machine)":[[140,9,null],[170,5,null],[100,8,null]],"Romanian Deadlift (Barbell)":[[40,8,null],[80,6,null],[80,3,null]],"Hip Adduction (Machine)":[[22.5,10,null],[22.5,8,null],[22.5,8,null]],"Hip Abduction (Machine)":[[60,8,null],[60,8,null],[52.5,8,null]],"Back Extension (Weighted Hyperextension)":[[0,8,null],[10,8,null],[10,8,null]],"Standing Calf Raise (Machine)":[[65,8,null],[95,8,null],[115,6,null]],"Stretching":[[null,null,900]]}],["2026-09-16","Cheer + abs",{"Cheerleading":[[null,null,7200]],"Knee Raise Parallel Bars":[[null,20,null],[null,20,null],[null,20,null]],"Hanging Leg Raise":[[null,2,null]]}],["2026-09-17","Pushhhhhh",{"Bench Press (Barbell)":[[45,5,null],[45,6,null],[45,2,null]],"Standing Military Press (Barbell)":[[25,6,null],[25,5,null]],"Push Up":[[null,10,null],[null,5,null],[null,2,null]],"Single Arm Lateral Raise (Cable)":[[3.75,8,null],[6.25,8,null],[6.25,8,null]],"Cable Fly Crossovers":[[6.25,10,null],[8.75,5,null],[8.75,7,null]],"Triceps Pushdown":[[15,10,null],[21.25,7,null],[17.5,6,null]],"Knee Raise Parallel Bars":[[null,24,null]],"Straddle Met Cable":[[5,8,null],[7.5,8,null],[10,8,null]],"Stretching":[[null,null,600]]}],["2026-09-19","Cheer plus pull sessie met Ramon er achteraan",{"Cheerleading":[[null,null,7200]],"Lat Pulldown (Cable)":[[45,6,null],[38,7,null]],"Seated Cable Row - V Grip (Cable)":[[45,8,null],[45,10,null]],"Bicep Curl (Cable)":[[18,8,null],[32,8,null],[38,4,null],[18,4,null]],"Reverse Wrist Curl (Dumbbell)":[[1,10,null],[1,10,null]],"Knee Raise Parallel Bars":[[null,24,null],[null,20,null]]}],["2026-09-22","Legday",{"Plyo":[[null,null,900]],"Hip Thrust (Machine)":[[40,8,null],[100,5,null]],"Romanian Deadlift (Barbell)":[[40,8,null],[70,8,null],[70,6,null]],"Hip Abduction (Machine)":[[65,8,null],[95,6,null]],"Hip Adduction (Machine)":[[35,8,null],[35,8,null]],"Straddle Met Cable":[[15,8,null],[15,8,null],[15,8,null]],"Stretching":[[null,null,600]]}],["2026-09-28","Monday swimming",{"Sit Up":[[null,16,null],[null,16,null],[null,16,null]],"Plank":[[null,null,30],[null,null,32]],"Swimming":[[null,null,2700]]}],["2026-09-29","Reformer pilates",{"Pilates":[[null,null,3000]]}],["2026-10-01","Leg day met stretch focus",{"Leg Press (Machine)":[[150,10,null],[170,8,null]],"Romanian Deadlift (Barbell)":[[40,8,null],[70,6,null],[70,8,null]],"Bulgarian Split Squat (Barbell)":[[15,8,null],[15,8,null]],"Stretching":[[null,null,2400]],"Straddle Leg Lifts":[[null,8,null],[null,8,null]]}],["2026-10-02","Upper + handstand en brug focus",{"Standing Military Press (Barbell)":[[25,8,null],[30,4,null],[15,5,null],[25,5,null]],"Lat Pulldown (Cable)":[[35,8,null],[50,6,null],[42.5,8,null]],"Seated Cable Row - V Grip (Cable)":[[42.5,8,null],[42.5,8,null]],"EZ Bar Biceps Curl":[[15,8,null],[20,8,null],[20,8,null]],"Push Up":[[null,20,null],[null,13,null],[null,8,null]],"Stretching":[[null,null,2400]]}],["2026-10-03","Cheer",{"Cheerleading":[[null,null,9000]],"Knee Raise Parallel Bars":[[null,16,null],[null,16,null],[null,16,null],[null,8,null]]}],["2026-10-05","Swimming",{"Swimming":[[null,null,2520]],"Crunch":[[null,10,null],[null,10,null],[null,10,null]]}],["2026-10-12","Ik ben vandaag begonnen met de borstcrawl leren",{"Plank":[[null,null,30],[null,null,37],[null,null,31]],"Sit Up":[[null,16,null],[null,16,null],[null,16,null]],"Swimming":[[null,null,45]]}],["2026-10-13","Leg day + 45 min aqua bootcamp",{"Treadmill":[[null,null,600],[null,null,900]],"Squat (Barbell)":[[20,8,null],[50,8,null],[70,9,null],[80,8,null]],"Romanian Deadlift (Barbell)":[[20,8,null],[50,10,null],[80,10,null]],"Bulgarian Split Squat (Dumbbell)":[[0,8,null],[20,8,null]],"Standing Calf Raise (Machine)":[[87,8,null],[107,8,null],[117,8,null]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]],"Stretching":[[null,null,3000]],"Swimming":[[null,null,300]]}],["2026-10-14","Cheer",{"Cheerleading":[[null,null,7200]]}],["2026-10-15","Reformer pilates",{"Pilates":[[null,null,3000]]}],["2026-10-20","Pull met Lars",{"Lat Pulldown (Cable)":[[30,10,null],[40,8,null],[45,6,null]],"Bent Over Row (Barbell)":[[20,8,null],[40,8,null],[45,10,null]],"Straight Arm Lat Pulldown (Cable)":[[13.5,8,null],[18,8,null],[20,4,null],[13.5,5,null]],"Bicep Curl (Dumbbell)":[[8,8,null],[8,8,null]],"Knee Raise Parallel Bars":[[null,16,null],[null,16,null]],"Rear Delt Reverse Fly (Machine)":[[10,8,null],[10,8,null]],"Stretching":[[null,null,1800]],"Treadmill":[[null,null,900]]}],["2026-10-27","New record",{"Push Up":[[null,21,null]]}],["2026-10-30","Kleine workout thuis",{"Squat (Bodyweight)":[[null,16,null],[null,16,null],[null,16,null]],"Push Up":[[null,10,null],[null,10,null]],"Jackknife Sit Up":[[null,8,null],[null,8,null],[null,8,null]]}],["2026-11-03","Legday",{"Leg Press (Machine)":[[100,8,null],[150,8,null],[150,6,null]],"Hip Abduction (Machine)":[[57.5,8,null],[95,9,null],[72.5,8,null]],"Hip Adduction (Machine)":[[35,8,null],[50,10,null]],"Standing Calf Raise (Machine)":[[87,8,null],[107,8,null],[107,8,null]],"Leg Raise Parallel Bars":[[null,8,null],[null,8,null],[null,8,null]],"Knee Raise Parallel Bars":[[null,8,null],[null,8,null],[null,8,null]],"Stretching":[[null,null,1200]]}],["2026-11-04","Ben met een bokscursus begonnen",{"Boksen":[[null,null,3600]],"Cheerleading":[[null,null,7200]]}],["2026-11-08","Snelle upper",{"Seated Cable Row - V Grip (Cable)":[[42.5,8,null],[50,6,null],[50,6,null]],"Standing Military Press (Barbell)":[[25,10,null],[30,3,null],[30,4,null]],"Lat Pulldown (Cable)":[[42.5,6,null],[42.5,6,null],[42.5,8,null]],"Cable Fly Crossovers":[[6.25,8,null],[8.75,8,null],[8.75,10,null]],"Triceps Pushdown":[[15,10,null],[20,6,null]],"Bicep Curl (Dumbbell)":[[9,8,null],[9,8,null]]}],["2026-11-09","Mini legs sessie en zwemmen",{"Romanian Deadlift (Barbell)":[[40,8,null],[60,9,null],[80,4,null]],"Single Leg Press (Machine)":[[25,8,null],[25,8,null]],"Stretching":[[null,null,900]],"Straddle Leg Lifts":[[null,8,null],[null,8,null],[null,8,null]],"Plank":[[null,null,32],[null,null,30]],"Swimming":[[null,null,2700]]}],["2026-11-10","Aqua bootcamp gedaan",{"Swimming":[[null,null,2700]]}]];
+let HEVY = HEVY_SNAPSHOT, hevyBron = "Hevy-export t/m 10 november";
+try{ const r = localStorage.getItem("cheer-hevy"); if(r){ const o=JSON.parse(r); if(o && o.s && o.s.length){ HEVY=o.s; hevyBron=o.b; } } }catch(e){}
+const LIFTS = [
+  {k:"Squat (Barbell)", n:"Squat"},
+  {k:"Romanian Deadlift (Barbell)", n:"RDL"},
+  {k:"Hip Thrust (Machine)", n:"Hip thrust"},
+  {k:"Leg Press (Machine)", n:"Leg press"},
+  {k:"Standing Military Press (Barbell)", n:"Military press"},
+  {k:"Lat Pulldown (Cable)", n:"Lat pulldown"},
+  {k:"Push Up", n:"Push-ups", reps:true}
+];
+let liftSel = 0, hevyFout = false;
+const nl = v => String(v).replace(".",",");
+const kortDatum = s => { const [y,m,d]=s.split("-").map(Number); return d+" "+MAANDEN[m-1].slice(0,3); };
+
+function parseCSV(t){ const rows=[]; let row=[],f="",q=false;
+  for(let i=0;i<t.length;i++){ const c=t[i];
+    if(q){ if(c==='"'){ if(t[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c==='"') q=true;
+    else if(c===','){ row.push(f); f=""; }
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&t[i+1]==='\n') i++; row.push(f); rows.push(row); row=[]; f=""; }
+    else f+=c; }
+  if(f||row.length){ row.push(f); rows.push(row); }
+  return rows; }
+const MND = {Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
+const numv = v => { if(v==null||v==="") return null; const n=parseFloat(v); return isNaN(n)?null:n; };
+function hevyNaarSessies(text){
+  const rows=parseCSV(text); if(rows.length<2) return [];
+  const hd=rows[0].map(x=>x.trim().replace(/^\uFEFF/,"")), ix=n=>hd.indexOf(n);
+  const need=["title","start_time","exercise_title","set_type","weight_kg","reps"]; if(need.some(n=>ix(n)<0)) return [];
+  const map=new Map();
+  rows.slice(1).forEach(r=>{
+    const st=r[ix("start_time")]; if(!st) return;
+    const m=st.match(/(\d{1,2}) (\w{3}) (\d{4}),? (\d{1,2}):(\d{2})/); if(!m||!MND[m[2]]) return;
+    if(r[ix("set_type")]==="warmup") return;
+    const dt=`${m[3]}-${String(MND[m[2]]).padStart(2,"0")}-${m[1].padStart(2,"0")}`, sk=dt+" "+m[4].padStart(2,"0")+m[5];
+    if(!map.has(sk)) map.set(sk,{sk, s:[dt, r[ix("title")], {}]});
+    const ex=map.get(sk).s[2], nm=r[ix("exercise_title")];
+    (ex[nm]=ex[nm]||[]).push([numv(r[ix("weight_kg")]), numv(r[ix("reps")]), ix("duration_seconds")>=0?numv(r[ix("duration_seconds")]):null]);
+  });
+  return [...map.values()].sort((a,b)=>a.sk<b.sk?-1:1).map(x=>x.s);
+}
+
+function svgBars(data, opts){
+  const W=340,H=150,pl=28,pr=6,pt=10,pb=22, max=Math.max(opts.max||0,...data.map(d=>d.v),1);
+  const bw=(W-pl-pr)/data.length, y=v=>pt+(H-pt-pb)*(1-v/max);
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.label)}">`;
+  [0,max/2,max].forEach(t=>{ s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(t)}" y2="${y(t)}" style="stroke:var(--line)"/><text x="${pl-5}" y="${y(t)+4}" text-anchor="end">${Math.round(t)}</text>`; });
+  if(opts.goal) s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(opts.goal)}" y2="${y(opts.goal)}" style="stroke:var(--warm);stroke-dasharray:4 3"/>`;
+  data.forEach((d,i)=>{ const x=pl+i*bw+bw*0.18, h=Math.max(0,H-pb-y(d.v));
+    s+=`<rect x="${x}" y="${y(d.v)}" width="${bw*0.64}" height="${h}" rx="3" style="fill:${d.cur?"var(--paars)":"var(--paars-soft)"}"><title>${esc(d.t)}: ${nl(Math.round(d.v*10)/10)}</title></rect>`;
+    if(d.lbl) s+=`<text x="${x+bw*0.32}" y="${H-6}" text-anchor="middle">${esc(d.lbl)}</text>`; });
+  return s+"</svg>";
+}
+function svgLine(pts, opts){
+  const W=340,H=170,pl=32,pr=10,pt=12,pb=22;
+  if(pts.length<2) return `<p class="cmeta">Nog te weinig sessies om een lijn te tekenen.</p>`;
+  const ys=pts.map(p=>p.v); let mn=Math.min(...ys), mx=Math.max(...ys); if(mn===mx){mn-=1;mx+=1;} const pad=(mx-mn)*0.12; mn=Math.max(0,mn-pad); mx+=pad;
+  const t0=pts[0].t, t1=pts[pts.length-1].t, span=Math.max(1,t1-t0);
+  const x=t=>pl+(W-pl-pr)*(t-t0)/span, y=v=>pt+(H-pt-pb)*(1-(v-mn)/(mx-mn));
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.label)}">`;
+  [mn,(mn+mx)/2,mx].forEach(t=>{ s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(t)}" y2="${y(t)}" style="stroke:var(--line)"/><text x="${pl-5}" y="${y(t)+4}" text-anchor="end">${Math.round(t)}</text>`; });
+  s+=`<polyline fill="none" points="${pts.map(p=>x(p.t)+","+y(p.v)).join(" ")}" style="stroke:var(--paars);stroke-width:2;stroke-linejoin:round"/>`;
+  pts.forEach(p=>{ s+=`<circle cx="${x(p.t)}" cy="${y(p.v)}" r="3.5" style="fill:var(--surface);stroke:var(--paars);stroke-width:2"><title>${esc(p.lbl)}</title></circle>`; });
+  s+=`<text x="${pl}" y="${H-6}">${esc(kortDatum(pts[0].d))}</text><text x="${W-pr}" y="${H-6}" text-anchor="end">${esc(kortDatum(pts[pts.length-1].d))}</text>`;
+  return s+"</svg>";
+}
+const tVan = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d).getTime(); };
+function setTekst(st, reps){ return st.map(([kg,r,sec])=> reps ? (r!=null?r+"×":(sec?sec+" s":"")) : (kg!=null?nl(kg)+(r!=null?"×"+r:""):(r!=null?r+"×":""))).filter(Boolean).join(" · "); }
+
+function renderTerug(){
+  // trainingen per week, laatste 16 weken
+  const ma0 = maandag(today0()), weken=[];
+  for(let i=15;i>=0;i--){ const a=addDays(ma0,-7*i), b=addDays(a,7); const n=HEVY.filter(s=>{const t=tVan(s[0]); return t>=a.getTime()&&t<b.getTime();}).length;
+    weken.push({v:n, t:"Week van "+a.getDate()+" "+MAANDEN[a.getMonth()], lbl:(i%4===0)?(a.getDate()+"/"+(a.getMonth()+1)):"", cur:i===0}); }
+  const beschikbaar = LIFTS.filter(l=>HEVY.some(s=>s[2][l.k]));
+  if(liftSel>=beschikbaar.length) liftSel=0;
+  const L0 = beschikbaar[liftSel];
+  let liftHTML = `<p class="cmeta">Geen lifts gevonden in je Hevy-data.</p>`;
+  if(L0){
+    const sess = HEVY.filter(s=>s[2][L0.k]).map(s=>({d:s[0], sets:s[2][L0.k]}));
+    const jaar = tVan(dstr(addDays(today0(),-365)));
+    const pts = sess.filter(x=>tVan(x.d)>=jaar).map(x=>{
+      const v = L0.reps ? Math.max(0,...x.sets.map(z=>z[1]||0)) : Math.max(0,...x.sets.map(z=>z[0]||0));
+      const best = L0.reps ? null : x.sets.filter(z=>z[0]===v).map(z=>z[1]).reduce((a,b)=>Math.max(a,b||0),0);
+      return {d:x.d, t:tVan(x.d), v, lbl:kortDatum(x.d)+": "+(L0.reps? v+" reps" : nl(v)+" kg"+(best?" × "+best:""))};
+    }).filter(p=>p.v>0);
+    const recent = sess.slice(-6).reverse();
+    liftHTML = svgLine(pts,{label:L0.n+" over het afgelopen jaar"}) +
+      `<p class="cmeta">${L0.reps?"Meeste reps per sessie":"Zwaarste set per sessie"}, afgelopen jaar. Tik op een punt voor de details.</p>` +
+      recent.map(x=>`<div class="logrow"><span>${esc(kortDatum(x.d))}</span><b>${esc(setTekst(x.sets,L0.reps))}</b></div>`).join("");
+  }
+  // uit de app
+  const dagen=[]; for(let i=13;i>=0;i--){ const d=addDays(today0(),-i), k=dstr(d), f=S.food[k]||{};
+    dagen.push({v:FOODS.reduce((a,x)=>a+(f[x.id]||0)*x.g,0), t:fmtDatum(d), lbl:(i%2===0)?DAGEN[dagIdx(d)]:"", cur:i===0}); }
+  const kernW=[]; for(let i=5;i>=0;i--){ const a=addDays(ma0,-7*i); if(a<NIEUW) continue; const st=weekStats(a);
+    kernW.push({v:st.tot?Math.round(st.done/st.tot*100):0, t:"Week van "+a.getDate()+" "+MAANDEN[a.getMonth()], lbl:a.getDate()+"/"+(a.getMonth()+1), cur:i===0}); }
+  const doel = eiwitDoel(Math.max(1,Math.min(12,weekVan(today0()))));
+  app.innerHTML = `
+    <div class="top"><span class="who">Terugblik</span><span class="wk">${esc(hevyBron)}</span></div>
+    <div class="day-hero"><h1>Terugblik</h1><div class="sub">Wat je in Hevy en in deze app hebt ingevuld.</div>${hevyFout?`<div class="note" style="margin-top:12px">Dit bestand is geen Hevy-export. Exporteer in Hevy je workoutdata als CSV en kies dat bestand.</div>`:""}
+      <div class="daynav"><label class="pill loadbtn">Nieuwe Hevy-export laden<input type="file" accept=".csv,text/csv" id="hevyFile" class="sr"></label></div></div>
+    <section class="block"><h3>Lifts</h3>
+      <div class="liftpills">${beschikbaar.map((l,i)=>`<button class="pill ${i===liftSel?"on":""}" data-lift="${i}" aria-pressed="${i===liftSel}">${esc(l.n)}</button>`).join("")}</div>
+      ${liftHTML}
+    </section>
+    <section class="block"><h3>Trainingen in Hevy<small>per week</small></h3>${svgBars(weken,{label:"Trainingen per week"})}</section>
+    <section class="block"><h3>Eiwit<small>laatste 14 dagen</small></h3>${svgBars(dagen,{label:"Eiwit per dag",goal:doel,max:doel})}
+      <p class="cmeta">Gestippelde lijn: je doel van ${doel} g.</p></section>
+    ${kernW.length?`<section class="block"><h3>Kern afgevinkt<small>% per week</small></h3>${svgBars(kernW,{label:"Kern afgevinkt per week",max:100})}</section>`:""}
+    <div class="sync">${esc(syncTxt)}</div>`;
 }
 
 function renderEiwit(){
@@ -568,7 +931,7 @@ function renderEiwit(){
 }
 
 function render(){
-  if(tab==="vandaag") renderVandaag(); else if(tab==="training") renderTraining(); else renderEiwit();
+  if(tab==="vandaag") renderVandaag(); else if(tab==="training") renderTraining(); else if(tab==="terug") renderTerug(); else renderEiwit();
   document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on", b.dataset.t===tab));
 }
 
@@ -577,13 +940,22 @@ document.querySelector(".tabs").addEventListener("click", e=>{
   const b = e.target.closest(".tab"); if(!b) return; tab = b.dataset.t; if(tab==="training") openWeek=null; render(); window.scrollTo(0,0);
 });
 app.addEventListener("click", e=>{
-  const t = e.target.closest("[data-k],[data-nav],[data-go],[data-ph],[data-water],[data-supp]"); if(!t) return;
+  const t = e.target.closest("[data-k],[data-nav],[data-go],[data-ph],[data-water],[data-supp],[data-en],[data-kz],[data-bonus],[data-wce],[data-copy],[data-vrcheer],[data-fyadd],[data-fydel],[data-lift]"); if(!t) return;
   const key = dstr(view);
   if(t.dataset.k){ S.checks[key]=S.checks[key]||{}; S.checks[key][t.dataset.k]=!S.checks[key][t.dataset.k]; save(); render(); }
   else if(t.dataset.nav){ const n=+t.dataset.nav; view = n===0?today0():addDays(view,n); render(); }
   else if(t.dataset.go){ const [y,m,d]=t.dataset.go.split("-").map(Number); view=new Date(y,m-1,d); tab="vandaag"; render(); window.scrollTo(0,0); }
   else if(t.dataset.ph){ const fi=+t.dataset.ph; const wasOpen=t.parentElement.classList.contains("open"); openWeek = wasOpen?-1:fi; render(); }
   else if(t.dataset.water){ const n=+t.dataset.water; S.water[key] = (S.water[key]===n)?n-1:n; save(); render(); }
+  else if(t.dataset.en){ S.energie=S.energie||{}; if(S.energie[key]===t.dataset.en) delete S.energie[key]; else S.energie[key]=t.dataset.en; save(); render(); }
+  else if(t.dataset.kz){ S.keuze=S.keuze||{}; S.keuze[key]=t.dataset.kz; save(); render(); }
+  else if(t.dataset.bonus){ bonusOpen=!bonusOpen; render(); }
+  else if(t.dataset.wce){ const wk=dstr(maandag(view)); S.wc=S.wc||{}; S.wc[wk]=S.wc[wk]||{}; S.wc[wk].e=+t.dataset.wce; save(); render(); }
+  else if(t.dataset.copy){ kopieer(t); }
+  else if(t.dataset.vrcheer){ S.cfg=S.cfg||{}; S.cfg.vrCheer=!cfg().vrCheer; save(); render(); }
+  else if(t.dataset.lift){ liftSel=+t.dataset.lift; render(); }
+  else if(t.dataset.fyadd){ voegFysioToe(); }
+  else if(t.dataset.fydel){ S.fysio=(S.fysio||[]).filter(x=>x.id!==t.dataset.fydel); save(); render(); }
   else if(t.dataset.supp){ S.supps[key]=S.supps[key]||{}; S.supps[key][t.dataset.supp]=!S.supps[key][t.dataset.supp]; save(); render(); }
 });
 /* eiwit: tik +1, lang drukken −1 */
@@ -603,6 +975,35 @@ app.addEventListener("click", e=>{
   if(longDone){ longDone=false; return; } foodChange(b.dataset.food,1);
 });
 app.addEventListener("contextmenu", e=>{ if(e.target.closest("[data-food]")) e.preventDefault(); });
+
+function voegFysioToe(){
+  const nEl=document.getElementById("fyN"), dEl=document.getElementById("fyD"); if(!nEl) return;
+  const n=nEl.value.trim(), d=dEl.value.trim(); if(!n){ nEl.focus(); return; }
+  S.fysio=S.fysio||[]; S.fysio.push({id:Date.now().toString(36), n, d}); save(); render();
+  const again=document.getElementById("fyN"); if(again) again.focus();
+}
+async function kopieer(btn){
+  const txt = weekTekst();
+  try{ await navigator.clipboard.writeText(txt); btn.textContent="Gekopieerd"; }
+  catch(e){ const box=btn.parentElement.querySelector(".copytxt"); box.hidden=false; box.textContent=txt; btn.textContent="Kopieer de tekst hieronder"; }
+}
+app.addEventListener("input", e=>{
+  const t=e.target;
+  if(t.dataset.wc){ const wk=dstr(maandag(view)); S.wc=S.wc||{}; S.wc[wk]=S.wc[wk]||{}; S.wc[wk][t.dataset.wc]=t.value; save(); }
+  else if(t.dataset.plan){ S.cfg=S.cfg||{}; S.cfg.plan=t.value; save(); }
+});
+app.addEventListener("change", e=>{
+  if(e.target.id!=="hevyFile" || !e.target.files[0]) return;
+  const fr=new FileReader();
+  fr.onload=()=>{ const s=hevyNaarSessies(String(fr.result));
+    if(!s.length){ hevyFout=true; render(); return; }
+    hevyFout=false;
+    HEVY=s; hevyBron="Hevy-export t/m "+kortDatum(s[s.length-1][0]);
+    try{ localStorage.setItem("cheer-hevy", JSON.stringify({s, b:hevyBron})); }catch(err){}
+    render(); };
+  fr.readAsText(e.target.files[0]);
+});
+app.addEventListener("keydown", e=>{ if(e.key==="Enter" && (e.target.id==="fyN"||e.target.id==="fyD")){ e.preventDefault(); voegFysioToe(); } });
 
 lsGet(); render(); initDb();
 if ("serviceWorker" in navigator) { window.addEventListener("load", ()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }); }
